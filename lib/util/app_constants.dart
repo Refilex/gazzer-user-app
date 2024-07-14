@@ -1,6 +1,6 @@
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/language/domain/models/language_model.dart';
 import 'package:stackfood_multivendor/util/images.dart';
-import 'package:get/get.dart';
 
 class AppConstants {
   static const String appName = 'Gazzer';
@@ -8,11 +8,11 @@ class AppConstants {
 
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
-  static const String webHostedUrl = 'https://stackfood-admin.6amtech.com';
+  static const String webHostedUrl = 'https://carrot.refilex.com';
 
-  // https://carrot.refilex.com/
+  // https://carrot.refilex.com
   // https://stackfood-admin.6amtech.com
-  static const String baseUrl = 'https://stackfood-admin.6amtech.com';
+  static const String baseUrl = 'https://carrot.refilex.com';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
   static const String restaurantProductUri = '/api/v1/products/latest';
