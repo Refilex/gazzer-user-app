@@ -1,5 +1,8 @@
 import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/widgets/no_internet_screen_widget.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
@@ -12,8 +15,6 @@ import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   final NotificationBodyModel? notificationBody;
@@ -182,10 +183,6 @@ class SplashScreenState extends State<SplashScreen> {
                         fontSize: 25.0,
                       ),
                     ),
-                    // Image.asset(Images.logoName, width: 150),
-
-                    /*SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-              Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),*/
                   ],
                 )
               : NoInternetScreen(

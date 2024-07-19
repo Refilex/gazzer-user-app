@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/auth/widgets/sign_in_widget.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool exitFromApp;
@@ -124,9 +126,15 @@ class SignInScreenState extends State<SignInScreen> {
                               ),
                             )
                           : const SizedBox(),
-                      Image.asset(Images.logo, width: 60),
-                      const SizedBox(height: Dimensions.paddingSizeSmall),
-                      Image.asset(Images.logoName, width: 100),
+                      Image.asset(Images.gazzerLogo, width: 100),
+                      const SizedBox(height: Dimensions.paddingSizeLarge),
+                      const Text(
+                        AppConstants.appName,
+                        style: TextStyle(
+                          color: Colors.deepOrange,
+                          fontSize: 25.0,
+                        ),
+                      ),
                       const SizedBox(height: Dimensions.paddingSizeExtraLarge),
                       Align(
                         alignment: Alignment.topLeft,

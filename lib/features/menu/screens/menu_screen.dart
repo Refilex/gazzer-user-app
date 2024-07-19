@@ -1,5 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:stackfood_multivendor/common/widgets/confirmation_dialog_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/features/auth/screens/sign_in_screen.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
 import 'package:stackfood_multivendor/features/language/widgets/language_bottom_sheet_widget.dart';
 import 'package:stackfood_multivendor/features/menu/widgets/portion_widget.dart';
@@ -7,8 +14,6 @@ import 'package:stackfood_multivendor/features/profile/controllers/profile_contr
 import 'package:stackfood_multivendor/features/profile/widgets/profile_button_widget.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/theme_controller.dart';
-import 'package:stackfood_multivendor/features/auth/screens/sign_in_screen.dart';
-import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/helper/auth_helper.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
@@ -17,11 +22,6 @@ import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/confirmation_dialog_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -277,72 +277,6 @@ class _MenuScreenState extends State<MenuScreen> {
                                               .userInfoModel!
                                               .walletBalance
                                           : 0),
-                            )
-                          : const SizedBox(),
-                    ]),
-                  )
-                ]),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeDefault),
-                    child: Text(
-                      'earnings'.tr,
-                      style: robotoMedium.copyWith(
-                          fontSize: Dimensions.fontSizeDefault,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5)),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: const Offset(0, 1))
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeLarge,
-                        vertical: Dimensions.paddingSizeDefault),
-                    margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                    child: Column(children: [
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .refEarningStatus ==
-                              1)
-                          ? PortionWidget(
-                              icon: Images.referIcon,
-                              title: 'refer_and_earn'.tr,
-                              route: RouteHelper.getReferAndEarnRoute(),
-                            )
-                          : const SizedBox(),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .toggleDmRegistration! &&
-                              !ResponsiveHelper.isDesktop(context))
-                          ? PortionWidget(
-                              icon: Images.dmIcon,
-                              title: 'join_as_a_delivery_man'.tr,
-                              route:
-                                  RouteHelper.getDeliverymanRegistrationRoute(),
-                            )
-                          : const SizedBox(),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .toggleRestaurantRegistration! &&
-                              !ResponsiveHelper.isDesktop(context))
-                          ? PortionWidget(
-                              icon: Images.storeIcon,
-                              title: 'open_store'.tr,
-                              hideDivider: true,
-                              route:
-                                  RouteHelper.getRestaurantRegistrationRoute(),
                             )
                           : const SizedBox(),
                     ]),
