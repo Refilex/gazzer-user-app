@@ -1,15 +1,13 @@
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
+import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
+import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
+import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/product/domain/services/product_service_interface.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/common/widgets/confirmation_dialog_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ProductController extends GetxController implements GetxService {
   final ProductServiceInterface productServiceInterface;
@@ -85,8 +83,7 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getPopularProductList(
-      bool reload, String type, bool notify) async {
+  Future<void> getPopularProductList(bool reload, String type, bool notify) async {
     _popularType = type;
     if (reload) {
       _popularProductList = null;
@@ -96,7 +93,7 @@ class ProductController extends GetxController implements GetxService {
     }
     if (_popularProductList == null || reload) {
       _popularProductList =
-          await productServiceInterface.getPopularProductList(type: type);
+      await productServiceInterface.getPopularProductList(type: type);
       update();
     }
   }
@@ -179,8 +176,7 @@ class ProductController extends GetxController implements GetxService {
     return _cartIndex;
   }
 
-  int setExistInCartForBottomSheet(
-      Product product, List<List<bool?>>? selectedVariations,
+  int setExistInCartForBottomSheet(Product product, List<List<bool?>>? selectedVariations,
       {bool notify = true}) {
     _cartIndex = productServiceInterface.isExistInCartForBottomSheet(
         Get.find<CartController>().cartList,
@@ -199,8 +195,7 @@ class ProductController extends GetxController implements GetxService {
     return _cartIndex;
   }
 
-  void setAddOnQuantity(
-      bool isIncrement, int index, String? stockType, int? addonStock) {
+  void setAddOnQuantity(bool isIncrement, int index, String? stockType, int? addonStock) {
     _addOnQtyList[index] = productServiceInterface.setAddonQuantity(
         _addOnQtyList[index]!, isIncrement, stockType, addonStock);
     update();
@@ -220,8 +215,7 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  void setCartVariationIndex(
-      int index, int i, Product? product, bool isMultiSelect) {
+  void setCartVariationIndex(int index, int i, Product? product, bool isMultiSelect) {
     _selectedVariations = productServiceInterface.setCartVariationIndex(
         index, i, product!.variations, isMultiSelect, _selectedVariations);
     update();
@@ -281,42 +275,43 @@ class ProductController extends GetxController implements GetxService {
       );
 
       setExistInCart(product);
-
-      if (Get.find<CartController>()
-          .existAnotherRestaurantProduct(cartModel.product!.restaurantId)) {
-        Get.dialog(
-            ConfirmationDialogWidget(
-              icon: Images.warning,
-              title: 'are_you_sure_to_reset'.tr,
-              description: 'if_you_continue'.tr,
-              onYesPressed: () {
-                Get.find<CartController>()
-                    .clearCartOnline()
-                    .then((success) async {
-                  if (success) {
-                    await Get.find<CartController>()
-                        .addToCartOnline(onlineCart, fromDirectlyAdd: true);
-                  }
-                });
-              },
-            ),
-            barrierDismissible: false);
-      } else {
-        Get.find<CartController>()
-            .addToCartOnline(onlineCart, fromDirectlyAdd: true);
-      }
+      Get.find<CartController>()
+          .addToCartOnline(onlineCart, fromDirectlyAdd: true);
+      // if (Get.find<CartController>()
+      //     .existAnotherRestaurantProduct(cartModel.product!.restaurantId)) {
+      //   Get.dialog(
+      //       ConfirmationDialogWidget(
+      //         icon: Images.warning,
+      //         title: 'are_you_sure_to_reset'.tr,
+      //         description: 'if_you_continue'.tr,
+      //         onYesPressed: () {
+      //           Get.find<CartController>()
+      //               .clearCartOnline()
+      //               .then((success) async {
+      //             if (success) {
+      //               await Get.find<CartController>()
+      //                   .addToCartOnline(onlineCart, fromDirectlyAdd: true);
+      //             }
+      //           });
+      //         },
+      //       ),
+      //       barrierDismissible: false);
+      // } else {
+      //   Get.find<CartController>()
+      //       .addToCartOnline(onlineCart, fromDirectlyAdd: true);
+      // }
     } else {
       ResponsiveHelper.isMobile(context)
           ? Get.bottomSheet(
-              ProductBottomSheetWidget(product: product, isCampaign: false),
-              backgroundColor: Colors.transparent,
-              isScrollControlled: true,
-            )
+        ProductBottomSheetWidget(product: product, isCampaign: false),
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+      )
           : Get.dialog(
-              Dialog(
-                  child: ProductBottomSheetWidget(
-                      product: product, isCampaign: false)),
-            );
+        Dialog(
+            child: ProductBottomSheetWidget(
+                product: product, isCampaign: false)),
+      );
     }
   }
 }
