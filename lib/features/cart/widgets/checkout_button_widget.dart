@@ -99,13 +99,13 @@ class CheckoutButtonWidget extends StatelessWidget {
                       style: robotoMedium.copyWith(
                           color: Theme.of(context).primaryColor)),
                   PriceConverter.convertAnimationPrice(
-                            15 +
-                                (Get.find<SplashController>()
-                                        .configModel!
-                                        .deliveryFeeMultiVendor! *
-                                    (cartController.cartList.length.toDouble() -
-                                        1)) +
-                                cartController.subTotal,
+                            // 15 +
+                            //     (Get.find<SplashController>()
+                            //             .configModel!
+                            //             .deliveryFeeMultiVendor! *
+                            //         (cartController.cartList.length.toDouble() -
+                            //             1)) +
+                            cartController.subTotal,
                             textStyle: robotoRegular.copyWith(
                                 color: Theme.of(context).primaryColor)),
                 ],
