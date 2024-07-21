@@ -56,11 +56,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
   final ScrollController scrollController = ScrollController();
 
   Product? product;
+  TextEditingController customValueController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
+    customValueController.text = '0.0';
     _initCall();
   }
 
@@ -117,7 +118,6 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         double addonsCost = _getAddonCost(product!, productController);
         List<AddOn> addOnIdList = _getAddonIdList(product!, productController);
         List<AddOns> addOnsList = _getAddonList(product!, productController);
-
         debugPrint(
             '===total : $addonsCost + (($variationPriceWithDiscount + $price) , $discount , $discountType ) * ${productController.quantity}');
         double priceWithAddonsVariationWithDiscount = addonsCost +
@@ -913,6 +913,48 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                           }
                                                         },
                                                       ),
+                                                      if (product!
+                                                                  .variations![
+                                                                      index]
+                                                                  .type ==
+                                                              "free_input" &&
+                                                          productController
+                                                              .selectedVariations[
+                                                                  index]
+                                                              .contains(true))
+                                                        Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              vertical: Dimensions
+                                                                  .paddingSizeSmall),
+                                                          child: TextFormField(
+                                                            controller:
+                                                                customValueController,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              labelText:
+                                                                  'enter_custom_value'
+                                                                      .tr,
+                                                              labelStyle: TextStyle(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor),
+                                                              border:
+                                                                  const OutlineInputBorder(),
+                                                              contentPadding: const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      Dimensions
+                                                                          .paddingSizeSmall,
+                                                                  vertical:
+                                                                      Dimensions
+                                                                          .paddingSizeSmall),
+                                                            ),
+                                                          ),
+                                                        ),
                                                     ]),
                                               );
                                             },
@@ -1288,11 +1330,22 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                       : const SizedBox(),
                                   const SizedBox(
                                       width: Dimensions.paddingSizeExtraSmall),
-                                  PriceConverter.convertAnimationPrice(
-                                    priceWithAddonsVariationWithDiscount,
-                                    textStyle: robotoBold.copyWith(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
+                                  if (product!.variations![0].type ==
+                                      "free_input")
+                                    Text(
+                                      "${priceWithAddonsVariationWithDiscount.toDouble() * double.tryParse(customValueController.text)!}E€",
+                                      style: robotoBold.copyWith(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                  if (product!.variations![0].type !=
+                                      "free_input")
+                                    PriceConverter.convertAnimationPrice(
+                                      priceWithAddonsVariationWithDiscount,
+                                      textStyle: robotoBold.copyWith(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
                                 ]),
                               ]),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
