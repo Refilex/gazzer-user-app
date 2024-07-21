@@ -88,6 +88,7 @@ class ConfigModel {
   bool? guestCheckoutStatus;
   String? favIcon;
   bool? extraPackagingChargeStatus;
+  int? deliveryFeeMultiVendor;
 
   ConfigModel({
     this.businessName,
@@ -179,6 +180,7 @@ class ConfigModel {
     this.guestCheckoutStatus,
     this.favIcon,
     this.extraPackagingChargeStatus,
+    this.deliveryFeeMultiVendor,
   });
 
   ConfigModel.fromJson(Map<String, dynamic> json) {
@@ -326,11 +328,13 @@ class ConfigModel {
     guestCheckoutStatus = json['guest_checkout_status'] == 1;
     favIcon = json['fav_icon'];
     extraPackagingChargeStatus = json['extra_packaging_charge'];
+    deliveryFeeMultiVendor = json['delivery_fee_multi_vendor'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['business_name'] = businessName;
+    data['delivery_fee_multi_vendor'] = deliveryFeeMultiVendor;
     data['logo'] = logo;
     data['address'] = address;
     data['phone'] = phone;

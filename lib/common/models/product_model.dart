@@ -214,7 +214,9 @@ class CategoryIds {
 }
 
 class Variation {
+  int? variationId;
   String? name;
+  String? type;
   bool? multiSelect;
   int? min;
   int? max;
@@ -222,7 +224,9 @@ class Variation {
   List<VariationValue>? variationValues;
 
   Variation(
-      {this.name,
+      {this.variationId,
+      this.name,
+      this.type,
       this.multiSelect,
       this.min,
       this.max,
@@ -231,7 +235,9 @@ class Variation {
 
   Variation.fromJson(Map<String, dynamic> json) {
     if (json['max'] != null) {
+      variationId = json['variation_id'];
       name = json['name'];
+      type = json['type'];
       multiSelect = json['type'] == 'multi';
       min = multiSelect! ? int.parse(json['min'].toString()) : 0;
       max = multiSelect! ? int.parse(json['max'].toString()) : 0;
