@@ -235,17 +235,6 @@ class _CartScreenState extends State<CartScreen> {
                                                                                             ]),
                                                                                           )
                                                                                     : const SizedBox(),
-                                                                                // Padding(
-                                                                                //   padding: const EdgeInsets.only(
-                                                                                //     left: Dimensions.paddingSizeDefault,
-                                                                                //     right: Dimensions.paddingSizeDefault,
-                                                                                //     top: Dimensions.paddingSizeDefault,
-                                                                                //   ),
-                                                                                //   child: Text(
-                                                                                //     "order_details".tr,
-                                                                                //     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                                                                                //   ),
-                                                                                // ),
                                                                                 ConstrainedBox(
                                                                                   constraints: BoxConstraints(maxHeight: isDesktop ? MediaQuery.of(context).size.height * 0.4 : double.infinity),
                                                                                   child: ListView.builder(

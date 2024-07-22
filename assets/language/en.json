@@ -1120,5 +1120,7 @@
   "only": "Only",
   "item_available": "item available",
   "recommend_for_you": "Recommend For You",
-  "enter_custom_value": "Enter custom value"
+  "enter_custom_value": "Enter custom value",
+  "pay": "Payment",
+  "payment_amount": "Amount Due for Payment"
 }

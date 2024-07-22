@@ -1119,5 +1119,7 @@
   "only": "Sólo",
   "item_available": "Artículo disponible",
   "recommend_for_you": "Recomendar para usted",
-  "enter_custom_value": "Introducir valor personalizado"
+  "enter_custom_value": "Introducir valor personalizado",
+  "pay": "Pago",
+  "payment_amount": "Cantidad debida para el pago"
 }
