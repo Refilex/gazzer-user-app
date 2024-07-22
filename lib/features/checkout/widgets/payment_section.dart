@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/payment_method_bottom_sheet.dart';
 import 'package:stackfood_multivendor/helper/extensions.dart';
@@ -6,8 +8,6 @@ import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class PaymentSection extends StatelessWidget {
   final bool isCashOnDeliveryActive;
@@ -50,7 +50,7 @@ class PaymentSection extends StatelessWidget {
           vertical: Dimensions.paddingSizeDefault),
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('payment_method'.tr, style: robotoMedium),
+          Text('payment_method'.tr, style: robotoBold),
           InkWell(
             onTap: () {
               if (ResponsiveHelper.isDesktop(context)) {
@@ -108,10 +108,10 @@ class PaymentSection extends StatelessWidget {
                   const SizedBox(width: Dimensions.paddingSizeSmall),
                   Expanded(
                       child: Text(
-                    'cash_on_delivery'.tr,
+                        'cash_on_delivery'.tr,
                     style: robotoMedium.copyWith(
-                        fontSize: Dimensions.fontSizeSmall,
-                        color: Theme.of(context).disabledColor),
+                        fontSize: Dimensions.fontSizeDefault,
+                        color: Colors.grey.shade700),
                   )),
                   Text(
                     PriceConverter.convertPrice(total),

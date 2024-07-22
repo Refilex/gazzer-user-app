@@ -100,7 +100,7 @@
   "take_away": "يبعد",
   "item_price": "سعر السلعة",
   "vat_tax": "ضريبة القيمة المضافة",
-  "subtotal": "المجموع الفرعي",
+  "subtotal": "المجموع الكلي",
   "discount": "خصم",
   "coupon_discount": "خصم القسيمة",
   "delivery_fee": "رسوم التوصيل",
@@ -1121,5 +1121,7 @@
   "only": "فقط",
   "item_available": "العنصر متاح",
   "recommend_for_you": "يوصي لك",
-  "enter_custom_value": "أدخل قيمة مخصصة"
+  "enter_custom_value": "أدخل قيمة مخصصة",
+  "pay": "الدفع",
+  "payment_amount": "المبلغ المستحق للدفع"
 }
