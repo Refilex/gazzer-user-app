@@ -602,18 +602,14 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                 ),
                                                 PriceConverter
                                                     .convertAnimationPrice(
-                                                  (Get.find<SplashController>()
+                                                  (subTotal + deliveryCharge) +
+                                                      ((_cartList!.length
+                                                                  .toDouble() -
+                                                              1) *
+                                                          Get.find<
+                                                                  SplashController>()
                                                               .configModel!
-                                                              .deliveryFeeMultiVendor! *
-                                                          2) +
-                                                      total *
-                                                          (checkoutController
-                                                                  .subscriptionOrder
-                                                              ? (subscriptionQty ==
-                                                                      0
-                                                                  ? 1
-                                                                  : subscriptionQty)
-                                                              : 1),
+                                                              .deliveryFeeMultiVendor!),
                                                   textStyle:
                                                       robotoMedium.copyWith(
                                                           fontSize: Dimensions

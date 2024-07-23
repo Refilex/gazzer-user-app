@@ -20,7 +20,8 @@ class AppConstants {
   static const String reviewedProductUri = '/api/v1/products/most-reviewed';
   static const String subCategoryUri = '/api/v1/categories/childes/';
   static const String categoryProductUri = '/api/v1/categories/products/';
-  static const String categoryRestaurantUri = '/api/v1/categories/restaurants/';
+  static const String categoryRestaurantUri =
+      '/api/v1/categories/restaurants/:';
   static const String configUri = '/api/v1/config';
   static const String trackUri = '/api/v1/customer/order/track?order_id=';
   static const String messageUri = '/api/v1/customer/message/get';
