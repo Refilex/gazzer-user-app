@@ -975,20 +975,30 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                 ),
                                                             onFieldSubmitted:
                                                                 (value) {
-                                                              product!.price =
-                                                                  double
-                                                                      .tryParse(
-                                                                      customValueController
-                                                                          .text);
-                                                            },
-                                                            onChanged: (value) {
-                                                              setState(() {
+                                                              if (product!.price !=
+                                                                      null &&
+                                                                  customValueController
+                                                                      .text
+                                                                      .isNotEmpty) {
                                                                 product!.price =
-                                                                    double
-                                                                        .tryParse(
+                                                                    double.tryParse(
                                                                         customValueController
                                                                             .text);
-                                                              });
+                                                              }
+                                                            },
+                                                            onChanged: (value) {
+                                                              if (product!.price !=
+                                                                      null &&
+                                                                  customValueController
+                                                                      .text
+                                                                      .isNotEmpty) {
+                                                                setState(() {
+                                                                  product!.price =
+                                                                      double.tryParse(
+                                                                          customValueController
+                                                                              .text);
+                                                                });
+                                                              }
                                                             },
                                                           ),
                                                         ),
