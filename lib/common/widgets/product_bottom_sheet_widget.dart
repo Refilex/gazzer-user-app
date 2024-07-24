@@ -970,15 +970,25 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                       Dimensions
                                                                           .paddingSizeSmall,
                                                                   vertical:
-                                                                      Dimensions
-                                                                          .paddingSizeSmall),
-                                                            ),
+                                                                  Dimensions
+                                                                      .paddingSizeSmall),
+                                                                ),
                                                             onFieldSubmitted:
                                                                 (value) {
                                                               product!.price =
-                                                                  double.tryParse(
+                                                                  double
+                                                                      .tryParse(
                                                                       customValueController
                                                                           .text);
+                                                            },
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                product!.price =
+                                                                    double
+                                                                        .tryParse(
+                                                                        customValueController
+                                                                            .text);
+                                                              });
                                                             },
                                                           ),
                                                         ),
