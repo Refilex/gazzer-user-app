@@ -1,9 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_favourite_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
@@ -11,12 +17,6 @@ import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' as html;
 
 class InfoViewWidget extends StatelessWidget {
@@ -132,7 +132,6 @@ class InfoViewWidget extends StatelessWidget {
                     ),
                   ]),
                 ])),
-            const SizedBox(width: Dimensions.paddingSizeSmall),
             Column(children: [
               GetBuilder<FavouriteController>(builder: (favouriteController) {
                 bool isWished =
@@ -170,10 +169,6 @@ class InfoViewWidget extends StatelessWidget {
             ]),
             const SizedBox(width: Dimensions.paddingSizeLarge),
           ]),
-          SizedBox(
-              height: Dimensions.paddingSizeLarge -
-                  (scrollingRate *
-                      (isDesktop ? 2 : Dimensions.paddingSizeLarge))),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             const Expanded(child: SizedBox()),
             Column(children: [
