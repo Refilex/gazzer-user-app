@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
@@ -10,19 +12,16 @@ import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CheckoutButtonWidget extends StatelessWidget {
   final CartController cartController;
   final List<bool> availableList;
   final bool isRestaurantOpen;
 
-  const CheckoutButtonWidget(
-      {super.key,
-      required this.cartController,
-      required this.availableList,
-      required this.isRestaurantOpen});
+  const CheckoutButtonWidget({super.key,
+    required this.cartController,
+    required this.availableList,
+    required this.isRestaurantOpen});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +36,11 @@ class CheckoutButtonWidget extends StatelessWidget {
       decoration: isDesktop
           ? null
           : BoxDecoration(
-              color: Theme.of(context).cardColor,
-            ),
+        color: Theme.of(context).cardColor,
+      ),
       child: SafeArea(
         child:
-            GetBuilder<RestaurantController>(builder: (restaurantController) {
+        GetBuilder<RestaurantController>(builder: (restaurantController) {
           if (Get.find<RestaurantController>().restaurant != null &&
               Get.find<RestaurantController>().restaurant!.freeDelivery !=
                   null &&
@@ -53,70 +52,70 @@ class CheckoutButtonWidget extends StatelessWidget {
           }
           return Column(mainAxisSize: MainAxisSize.min, children: [
             (restaurantController.restaurant != null &&
-                    restaurantController.restaurant!.freeDelivery != null &&
-                    !restaurantController.restaurant!.freeDelivery! &&
-                    Get.find<SplashController>()
-                            .configModel!
-                            .freeDeliveryOver !=
-                        null &&
-                    percentage < 1)
+                restaurantController.restaurant!.freeDelivery != null &&
+                !restaurantController.restaurant!.freeDelivery! &&
+                Get.find<SplashController>()
+                    .configModel!
+                    .freeDeliveryOver !=
+                    null &&
+                percentage < 1)
                 ? Padding(
-                    padding: EdgeInsets.only(
-                        bottom: isDesktop ? Dimensions.paddingSizeLarge : 0),
-                    child: Column(children: [
-                      Row(children: [
-                        Image.asset(Images.percentTag, height: 20, width: 20),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        PriceConverter.convertAnimationPrice(
-                          Get.find<SplashController>()
-                                  .configModel!
-                                  .freeDeliveryOver! -
-                              cartController.subTotal,
-                          textStyle: robotoMedium.copyWith(
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                        Text('more_for_free_delivery'.tr,
-                            style: robotoMedium.copyWith(
-                                color: Theme.of(context).disabledColor)),
-                      ]),
-                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                      LinearProgressIndicator(
-                        backgroundColor:
-                            Theme.of(context).primaryColor.withOpacity(0.2),
-                        value: percentage,
-                      ),
-                    ]),
-                  )
+              padding: EdgeInsets.only(
+                  bottom: isDesktop ? Dimensions.paddingSizeLarge : 0),
+              child: Column(children: [
+                Row(children: [
+                  Image.asset(Images.percentTag, height: 20, width: 20),
+                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  PriceConverter.convertAnimationPrice(
+                    Get.find<SplashController>()
+                        .configModel!
+                        .freeDeliveryOver! -
+                        cartController.subTotal,
+                    textStyle: robotoMedium.copyWith(
+                        color: Theme.of(context).primaryColor),
+                  ),
+                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  Text('more_for_free_delivery'.tr,
+                      style: robotoMedium.copyWith(
+                          color: Theme.of(context).disabledColor)),
+                ]),
+                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                LinearProgressIndicator(
+                  backgroundColor:
+                  Theme.of(context).primaryColor.withOpacity(0.2),
+                  value: percentage,
+                ),
+              ]),
+            )
                 : const SizedBox(),
             !isDesktop
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.paddingSizeSmall),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('subtotal'.tr,
-                            style: robotoMedium.copyWith(
-                                color: Theme.of(context).primaryColor)),
-                        PriceConverter.convertAnimationPrice(
+              padding: const EdgeInsets.symmetric(
+                  vertical: Dimensions.paddingSizeSmall),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('subtotal'.tr,
+                      style: robotoMedium.copyWith(
+                          color: Theme.of(context).primaryColor)),
+                  PriceConverter.convertAnimationPrice(
                             cartController.subTotal,
                             textStyle: robotoRegular.copyWith(
                                 color: Theme.of(context).primaryColor)),
-                      ],
-                    ),
-                  )
+                ],
+              ),
+            )
                 : const SizedBox(),
             GetBuilder<CartController>(builder: (cartController) {
               return CustomButtonWidget(
                 radius: 10,
                 buttonText: 'proceed_to_checkout'.tr,
                 onPressed: cartController.isLoading ||
-                        restaurantController.restaurant == null
+                    restaurantController.restaurant == null
                     ? null
                     : () {
-                        _processToCheckoutButtonPressed(restaurantController);
-                      },
+                  _processToCheckoutButtonPressed(restaurantController);
+                },
               );
             }),
             SizedBox(height: isDesktop ? Dimensions.paddingSizeExtraLarge : 0),
@@ -126,8 +125,7 @@ class CheckoutButtonWidget extends StatelessWidget {
     );
   }
 
-  void _processToCheckoutButtonPressed(
-      RestaurantController restaurantController) {
+  void _processToCheckoutButtonPressed(RestaurantController restaurantController) {
     if (!cartController.cartList.first.product!.scheduleOrder! &&
         cartController.availableList.contains(false)) {
       showCustomSnackBar('one_or_more_product_unavailable'.tr);

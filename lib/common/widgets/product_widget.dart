@@ -1,17 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/models/product_model.dart';
+import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_favourite_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_ink_well_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/discount_tag_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/discount_tag_without_image_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/not_available_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/home/widgets/overflow_container_widget.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
 import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
+import 'package:stackfood_multivendor/features/home/widgets/overflow_container_widget.dart';
 import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
+import 'package:stackfood_multivendor/features/restaurant/screens/restaurant_screen.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
@@ -19,13 +26,6 @@ import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/discount_tag_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/discount_tag_without_image_widget.dart';
-import 'package:stackfood_multivendor/features/restaurant/screens/restaurant_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ProductWidget extends StatelessWidget {
   final Product? product;
@@ -110,6 +110,7 @@ class ProductWidget extends StatelessWidget {
               }
             } else {
               if (product!.restaurantStatus == 1) {
+                //I will work here
                 ResponsiveHelper.isMobile(context)
                     ? Get.bottomSheet(
                         ProductBottomSheetWidget(

@@ -1,30 +1,26 @@
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_ink_well_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/cart/widgets/cart_product_widget.dart';
-import 'package:stackfood_multivendor/features/cart/widgets/cart_suggested_item_view_widget.dart';
-import 'package:stackfood_multivendor/features/cart/widgets/checkout_button_widget.dart';
-import 'package:stackfood_multivendor/features/cart/widgets/pricing_view_widget.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/no_data_screen_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/web_constrained_box.dart';
 import 'package:stackfood_multivendor/common/widgets/web_page_title_widget.dart';
-import 'package:stackfood_multivendor/features/restaurant/screens/restaurant_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/cart/widgets/cart_product_widget.dart';
+import 'package:stackfood_multivendor/features/cart/widgets/checkout_button_widget.dart';
+import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
+import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
+import 'package:stackfood_multivendor/helper/date_converter.dart';
+import 'package:stackfood_multivendor/helper/price_converter.dart';
+import 'package:stackfood_multivendor/helper/responsive_helper.dart';
+import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/styles.dart';
 
 class CartScreen extends StatefulWidget {
   final bool fromNav;
@@ -239,7 +235,6 @@ class _CartScreenState extends State<CartScreen> {
                                                                                             ]),
                                                                                           )
                                                                                     : const SizedBox(),
-
                                                                                 ConstrainedBox(
                                                                                   constraints: BoxConstraints(maxHeight: isDesktop ? MediaQuery.of(context).size.height * 0.4 : double.infinity),
                                                                                   child: ListView.builder(
@@ -300,69 +295,46 @@ class _CartScreenState extends State<CartScreen> {
 
                                                                                 SizedBox(height: isDesktop ? 40 : 0),
 
-                                                                                Container(
-                                                                                  alignment: Alignment.center,
-                                                                                  color: Theme.of(context).cardColor.withOpacity(0.6),
-                                                                                  child: TextButton.icon(
-                                                                                    onPressed: () {
-                                                                                      if (isRestaurantOpen) {
-                                                                                        Get.toNamed(
-                                                                                          RouteHelper.getRestaurantRoute(cartController.cartList[0].product!.restaurantId),
-                                                                                          arguments: RestaurantScreen(restaurant: Restaurant(id: cartController.cartList[0].product!.restaurantId)),
-                                                                                        );
-                                                                                      } else {
-                                                                                        Get.offAllNamed(RouteHelper.getInitialRoute(fromSplash: true));
-                                                                                      }
-                                                                                    },
-                                                                                    icon: Icon(Icons.add_circle_outline_sharp, color: Theme.of(context).primaryColor),
-                                                                                    label: Text(
-                                                                                      isRestaurantOpen ? 'add_more_items'.tr : 'add_from_another_restaurants'.tr,
-                                                                                      style: robotoMedium.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                SizedBox(height: !isDesktop ? 0 : 8),
-
-                                                                                !isDesktop ? CartSuggestedItemViewWidget(cartList: cartController.cartList) : const SizedBox(),
+                                                                                // !isDesktop ? CartSuggestedItemViewWidget(cartList: cartController.cartList) : const SizedBox(),
                                                                               ]),
                                                                         ),
-                                                                        const SizedBox(
-                                                                            height:
-                                                                                Dimensions.paddingSizeSmall),
-                                                                        !isDesktop
-                                                                            ? PricingViewWidget(
-                                                                                cartController: cartController,
-                                                                                isRestaurantOpen: isRestaurantOpen,
-                                                                              )
-                                                                            : const SizedBox(),
+                                                                        // const SizedBox(
+                                                                        //     height:
+                                                                        //         Dimensions.paddingSizeSmall),
+                                                                        // !isDesktop
+                                                                        //     ? PricingViewWidget(
+                                                                        //         cartController: cartController,
+                                                                        //         isRestaurantOpen: isRestaurantOpen,
+                                                                        //       )
+                                                                        //     : const SizedBox(),
                                                                       ]),
                                                                 ),
-                                                                const SizedBox(
-                                                                    height: Dimensions
-                                                                        .paddingSizeSmall),
-                                                                isDesktop
-                                                                    ? CartSuggestedItemViewWidget(
-                                                                        cartList:
-                                                                            cartController.cartList)
-                                                                    : const SizedBox(),
+                                                                // const SizedBox(
+                                                                //     height: Dimensions
+                                                                //         .paddingSizeSmall),
+                                                                // isDesktop
+                                                                //     ? CartSuggestedItemViewWidget(
+                                                                //         cartList:
+                                                                //             cartController.cartList)
+                                                                //     : const SizedBox(),
                                                               ]),
                                                         ),
-                                                        SizedBox(
-                                                            width: isDesktop
-                                                                ? Dimensions
-                                                                    .paddingSizeLarge
-                                                                : 0),
-                                                        isDesktop
-                                                            ? Expanded(
-                                                                flex: 4,
-                                                                child:
-                                                                    PricingViewWidget(
-                                                                  cartController:
-                                                                      cartController,
-                                                                  isRestaurantOpen:
-                                                                      isRestaurantOpen,
-                                                                ))
-                                                            : const SizedBox(),
+                                                        // SizedBox(
+                                                        //     width: isDesktop
+                                                        //         ? Dimensions
+                                                        //             .paddingSizeLarge
+                                                        //         : 0),
+                                                        // isDesktop
+                                                        //     ? Expanded(
+                                                        //         flex: 4,
+                                                        //         child:
+                                                        //             PricingViewWidget(
+                                                        //           cartController:
+                                                        //               cartController,
+                                                        //           isRestaurantOpen:
+                                                        //               isRestaurantOpen,
+                                                        //         ))
+                                                        //     : const SizedBox(),
                                                       ]),
                                                 ]),
                                           ),

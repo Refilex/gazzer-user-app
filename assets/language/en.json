@@ -52,7 +52,7 @@
   "find_your_desired_food_by_categories": "Find your desired food by categories",
   "popular_foods_nearby": "Popular Foods Nearby",
   "restaurants": "Restaurants",
-  "all_restaurants": "All Restaurants",
+  "all_restaurants": "All Places",
   "please_enter_mobile": "Please enter your registered Mobile Number so that we can help you to recover your password.",
   "done": "Done",
   "enter_new_password": "Enter your new password and confirm.",
@@ -895,7 +895,7 @@
   "are_you_hungry": "Are you hungry !!",
   "latest": "Latest",
   "top_rated": "Top Rated",
-  "restaurants_near_you": "Restaurants near you",
+  "restaurants_near_you": "Places near you",
   "your_location": "Your Location",
   "phone_verification": "Phone Verification",
   "resent_it": "Resend it",
@@ -967,7 +967,7 @@
   "restaurant_is_unavailable": "Restaurant is unavailable",
   "schedule": "Schedule",
   "currently_digital_payment_is_not_available": "Currently digital payment is not available",
-  "all_food_items": "All Food Items",
+  "all_food_items": "All Items",
   "this_is_my_refer_code": "This is my refer code",
   "instance_order_is_not_active": "Instance order is not active",
   "review_submitted_successfully": "Review submitted successfully",
@@ -1119,5 +1119,8 @@
   "show_less": "Show Less",
   "only": "Only",
   "item_available": "item available",
-  "recommend_for_you": "Recommend For You"
+  "recommend_for_you": "Recommend For You",
+  "enter_custom_value": "Enter custom value",
+  "pay": "Payment",
+  "payment_amount": "Amount Due for Payment"
 }

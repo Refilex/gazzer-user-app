@@ -1,10 +1,20 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
+import 'package:stackfood_multivendor/common/widgets/bottom_cart_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/paginated_list_view_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/product_view_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/veg_filter_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/web_menu_bar.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
 import 'package:stackfood_multivendor/features/home/widgets/arrow_icon_button_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/item_card_widget.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/widgets/restaurant_info_section_widget.dart';
 import 'package:stackfood_multivendor/features/restaurant/widgets/restaurant_screen_shimmer_widget.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
@@ -14,16 +24,6 @@ import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/bottom_cart_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/paginated_list_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/veg_filter_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/web_menu_bar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class RestaurantScreen extends StatefulWidget {
   final Restaurant? restaurant;
@@ -364,7 +364,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             ? SliverPersistentHeader(
                                 pinned: true,
                                 delegate: SliverDelegate(
-                                    height: 95,
+                                    height: 65,
                                     child: Center(
                                         child: Container(
                                       width: Dimensions.webMaxWidth,
@@ -582,77 +582,77 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                 : const SizedBox(),
                                           ]),
                                         ),
-                                        const Divider(
-                                            thickness: 0.2, height: 10),
-                                        SizedBox(
-                                          height: 30,
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: restController
-                                                .categoryList!.length,
-                                            padding: const EdgeInsets.only(
-                                                left: Dimensions
-                                                    .paddingSizeLarge),
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () => restController
-                                                    .setCategoryIndex(index),
-                                                child: Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeSmall,
-                                                      vertical: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  margin: const EdgeInsets.only(
-                                                      right: Dimensions
-                                                          .paddingSizeSmall),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            Dimensions
-                                                                .radiusDefault),
-                                                    color: index ==
-                                                            restController
-                                                                .categoryIndex
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(0.1)
-                                                        : Colors.transparent,
-                                                  ),
-                                                  child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          restController
-                                                              .categoryList![
-                                                                  index]
-                                                              .name!,
-                                                          style: index ==
-                                                                  restController
-                                                                      .categoryIndex
-                                                              ? robotoMedium.copyWith(
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeSmall,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor)
-                                                              : robotoRegular.copyWith(
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeSmall),
-                                                        ),
-                                                      ]),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
+                                        // const Divider(
+                                        //     thickness: 0.2, height: 10),
+                                        // SizedBox(
+                                        //   height: 30,
+                                        //   child: ListView.builder(
+                                        //     scrollDirection: Axis.horizontal,
+                                        //     itemCount: restController
+                                        //         .categoryList!.length,
+                                        //     padding: const EdgeInsets.only(
+                                        //         left: Dimensions
+                                        //             .paddingSizeLarge),
+                                        //     physics:
+                                        //         const BouncingScrollPhysics(),
+                                        //     itemBuilder: (context, index) {
+                                        //       return InkWell(
+                                        //         onTap: () => restController
+                                        //             .setCategoryIndex(index),
+                                        //         child: Container(
+                                        //           padding: const EdgeInsets
+                                        //               .symmetric(
+                                        //               horizontal: Dimensions
+                                        //                   .paddingSizeSmall,
+                                        //               vertical: Dimensions
+                                        //                   .paddingSizeExtraSmall),
+                                        //           margin: const EdgeInsets.only(
+                                        //               right: Dimensions
+                                        //                   .paddingSizeSmall),
+                                        //           decoration: BoxDecoration(
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     Dimensions
+                                        //                         .radiusDefault),
+                                        //             color: index ==
+                                        //                     restController
+                                        //                         .categoryIndex
+                                        //                 ? Theme.of(context)
+                                        //                     .primaryColor
+                                        //                     .withOpacity(0.1)
+                                        //                 : Colors.transparent,
+                                        //           ),
+                                        //           child: Column(
+                                        //               mainAxisAlignment:
+                                        //                   MainAxisAlignment
+                                        //                       .center,
+                                        //               children: [
+                                        //                 Text(
+                                        //                   restController
+                                        //                       .categoryList![
+                                        //                           index]
+                                        //                       .name!,
+                                        //                   style: index ==
+                                        //                           restController
+                                        //                               .categoryIndex
+                                        //                       ? robotoMedium.copyWith(
+                                        //                           fontSize:
+                                        //                               Dimensions
+                                        //                                   .fontSizeSmall,
+                                        //                           color: Theme.of(
+                                        //                                   context)
+                                        //                               .primaryColor)
+                                        //                       : robotoRegular.copyWith(
+                                        //                           fontSize:
+                                        //                               Dimensions
+                                        //                                   .fontSizeSmall),
+                                        //                 ),
+                                        //               ]),
+                                        //         ),
+                                        //       );
+                                        //     },
+                                        //   ),
+                                        // ),
                                       ]),
                                     ))),
                               )

@@ -1,8 +1,20 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/not_logged_in_screen.dart';
+import 'package:stackfood_multivendor/common/widgets/web_page_title_widget.dart';
+import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
+import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/bottom_section_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/checkout_screen_shimmer_view.dart';
@@ -10,14 +22,10 @@ import 'package:stackfood_multivendor/features/checkout/widgets/order_place_butt
 import 'package:stackfood_multivendor/features/checkout/widgets/top_section_widget.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
 import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
+import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:stackfood_multivendor/helper/auth_helper.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
@@ -26,14 +34,6 @@ import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/not_logged_in_screen.dart';
-import 'package:stackfood_multivendor/common/widgets/web_page_title_widget.dart';
-import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<CartModel>? cartList;
@@ -602,14 +602,14 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                 ),
                                                 PriceConverter
                                                     .convertAnimationPrice(
-                                                  total *
-                                                      (checkoutController
-                                                              .subscriptionOrder
-                                                          ? (subscriptionQty ==
-                                                                  0
-                                                              ? 1
-                                                              : subscriptionQty)
-                                                          : 1),
+                                                  (subTotal + deliveryCharge) +
+                                                      ((_cartList!.length
+                                                                  .toDouble() -
+                                                              1) *
+                                                          Get.find<
+                                                                  SplashController>()
+                                                              .configModel!
+                                                              .deliveryFeeMultiVendor!),
                                                   textStyle:
                                                       robotoMedium.copyWith(
                                                           fontSize: Dimensions

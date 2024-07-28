@@ -1,25 +1,25 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_ink_well_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/quantity_button_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/helper/cart_helper.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/images.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/quantity_button_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 
 class CartProductWidget extends StatelessWidget {
   final CartModel cart;
@@ -181,6 +181,16 @@ class CartProductWidget extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    Text(
+                                      cart.product!.restaurantName!,
+                                      style: robotoMedium.copyWith(
+                                          fontSize: Dimensions.fontSizeDefault),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(
+                                        height:
+                                            Dimensions.paddingSizeExtraSmall),
                                     Row(children: [
                                       Flexible(
                                         child: Text(
@@ -202,19 +212,19 @@ class CartProductWidget extends StatelessWidget {
                                         height: 11,
                                         width: 11,
                                       ),
-                                      SizedBox(
-                                          width: cart.product!
-                                                      .isRestaurantHalalActive! &&
-                                                  cart.product!.isHalalFood!
-                                              ? Dimensions.paddingSizeExtraSmall
-                                              : 0),
-                                      cart.product!.isRestaurantHalalActive! &&
-                                              cart.product!.isHalalFood!
-                                          ? const CustomAssetImageWidget(
-                                              Images.halalIcon,
-                                              height: 13,
-                                              width: 13)
-                                          : const SizedBox(),
+                                      // SizedBox(
+                                      //     width: cart.product!
+                                      //                 .isRestaurantHalalActive! &&
+                                      //             cart.product!.isHalalFood!
+                                      //         ? Dimensions.paddingSizeExtraSmall
+                                      //         : 0),
+                                      // cart.product!.isRestaurantHalalActive! &&
+                                      //         cart.product!.isHalalFood!
+                                      //     ? const CustomAssetImageWidget(
+                                      //         Images.halalIcon,
+                                      //         height: 13,
+                                      //         width: 13)
+                                      //     : const SizedBox(),
                                     ]),
                                     const SizedBox(height: 2),
                                     RatingBarWidget(
