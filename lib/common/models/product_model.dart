@@ -66,6 +66,7 @@ class Product {
   bool? isHalalFood;
   String? stockType;
   int? itemStock;
+  Category? category;
 
   Product({
     this.id,
@@ -96,6 +97,7 @@ class Product {
     this.isHalalFood,
     this.stockType,
     this.itemStock,
+    this.category,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -153,6 +155,8 @@ class Product {
     isHalalFood = json['is_halal'] == 1;
     stockType = json['stock_type'];
     itemStock = int.tryParse(json['item_stock'].toString());
+    category =
+        json['category'] != null ? Category.fromJson(json['category']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -173,6 +177,9 @@ class Product {
     }
     if (choiceOptions != null) {
       data['choice_options'] = choiceOptions!.map((v) => v.toJson()).toList();
+    }
+    if (category != null) {
+      data['category'] = category!.toJson();
     }
     data['price'] = price;
     data['tax'] = tax;
@@ -356,6 +363,115 @@ class ChoiceOptions {
     data['name'] = name;
     data['title'] = title;
     data['options'] = options;
+    return data;
+  }
+}
+
+class Category {
+  int? id;
+  String? name;
+  String? image;
+  int? parentId;
+  int? position;
+  int? status;
+  String? createdAt;
+  String? updatedAt;
+  int? priority;
+  String? slug;
+  List<Translations>? translations;
+
+  Category(
+      {this.id,
+      this.name,
+      this.image,
+      this.parentId,
+      this.position,
+      this.status,
+      this.createdAt,
+      this.updatedAt,
+      this.priority,
+      this.slug,
+      this.translations});
+
+  Category.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    image = json['image'];
+    parentId = json['parent_id'];
+    position = json['position'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    priority = json['priority'];
+    slug = json['slug'];
+    if (json['translations'] != null) {
+      translations = <Translations>[];
+      json['translations'].forEach((v) {
+        translations!.add(Translations.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['image'] = this.image;
+    data['parent_id'] = this.parentId;
+    data['position'] = this.position;
+    data['status'] = this.status;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['priority'] = this.priority;
+    data['slug'] = this.slug;
+    if (this.translations != null) {
+      data['translations'] = this.translations!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Translations {
+  int? id;
+  String? translationableType;
+  int? translationableId;
+  String? locale;
+  String? key;
+  String? value;
+  dynamic createdAt;
+  dynamic updatedAt;
+
+  Translations(
+      {this.id,
+      this.translationableType,
+      this.translationableId,
+      this.locale,
+      this.key,
+      this.value,
+      this.createdAt,
+      this.updatedAt});
+
+  Translations.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    translationableType = json['translationable_type'];
+    translationableId = json['translationable_id'];
+    locale = json['locale'];
+    key = json['key'];
+    value = json['value'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = this.id;
+    data['translationable_type'] = this.translationableType;
+    data['translationable_id'] = this.translationableId;
+    data['locale'] = this.locale;
+    data['key'] = this.key;
+    data['value'] = this.value;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

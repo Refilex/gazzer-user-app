@@ -573,10 +573,11 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                       color: Theme.of(context).cardColor,
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(0.1),
-                                            blurRadius: 10)
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.1),
+                                          blurRadius: 10,
+                                        ),
                                       ],
                                     ),
                                     child: Column(
@@ -588,37 +589,29 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                               vertical: Dimensions
                                                   .paddingSizeExtraSmall),
                                           child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'total_amount'.tr,
-                                                  style: robotoMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeLarge,
-                                                      color: Theme.of(context)
-                                                          .primaryColor),
-                                                ),
-                                                PriceConverter
-                                                    .convertAnimationPrice(
-                                                  (subTotal + deliveryCharge) +
-                                                      ((_cartList!.length
-                                                                  .toDouble() -
-                                                              1) *
-                                                          Get.find<
-                                                                  SplashController>()
-                                                              .configModel!
-                                                              .deliveryFeeMultiVendor!),
-                                                  textStyle:
-                                                      robotoMedium.copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeLarge,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                ),
-                                              ]),
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'total_amount'.tr,
+                                                style: robotoMedium.copyWith(
+                                                    fontSize: Dimensions
+                                                        .fontSizeLarge,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                              ),
+                                              PriceConverter
+                                                  .convertAnimationPrice(
+                                                calculateTotalAmount(),
+                                                textStyle:
+                                                    robotoMedium.copyWith(
+                                                        fontSize: Dimensions
+                                                            .fontSizeLarge,
+                                                        color: Theme.of(context)
+                                                            .primaryColor),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         OrderPlaceButton(
                                           checkoutController:
@@ -672,6 +665,42 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               setState(() {});
             }),
     );
+  }
+
+  double calculateTotalAmount() {
+    // Group cart items by restaurant
+    Map<String, List<CartModel>> restaurantGroupedCartList = {};
+    for (var cartItem in _cartList!) {
+      String restaurantName = cartItem.product!.restaurantName!;
+      if (!restaurantGroupedCartList.containsKey(restaurantName)) {
+        restaurantGroupedCartList[restaurantName] = [];
+      }
+      restaurantGroupedCartList[restaurantName]!.add(cartItem);
+    }
+
+    // Calculate total without extra fees for same restaurant
+    double totalAmount = 0.0;
+    for (var entries in restaurantGroupedCartList.entries) {
+      List<CartModel> items = entries.value;
+      double restaurantTotal = items.fold(
+        0.0,
+        (sum, item) => sum + (item.product!.price! * item.quantity!.toDouble()),
+      );
+
+      // Add the restaurant's total
+      totalAmount += restaurantTotal;
+    }
+
+    // Add base delivery charge and any additional charges
+    double additionalDeliveryFee = (restaurantGroupedCartList.length - 1) *
+        Get.find<SplashController>()
+            .configModel!
+            .deliveryFeeMultiVendor!
+            .toDouble(); // Convert to double
+
+    totalAmount += 15 + additionalDeliveryFee;
+
+    return totalAmount;
   }
 
   double? _getDeliveryCharge(

@@ -91,6 +91,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
             return GetBuilder<CategoryController>(
                 builder: (categoryController) {
               Restaurant? restaurant;
+              // final products = restController.restaurantProducts!
+              //     .where((product) =>
+              //         product.category!.id == 7
+              // )
+              //     .toList();
               if (restController.restaurant != null &&
                   restController.restaurant!.name != null &&
                   categoryController.categoryList != null) {
@@ -364,7 +369,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             ? SliverPersistentHeader(
                                 pinned: true,
                                 delegate: SliverDelegate(
-                                    height: 65,
+                                    height: 95,
                                     child: Center(
                                         child: Container(
                                       width: Dimensions.webMaxWidth,
@@ -391,103 +396,105 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                               right:
                                                   Dimensions.paddingSizeLarge,
                                               top: Dimensions.paddingSizeSmall),
-                                          child: Row(children: [
-                                            Text('all_food_items'.tr,
-                                                style: robotoBold.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeDefault)),
-                                            const Expanded(child: SizedBox()),
-                                            isDesktop
-                                                ? Container(
-                                                    padding: const EdgeInsets
-                                                        .all(Dimensions
-                                                            .paddingSizeExtraSmall),
-                                                    height: 35,
-                                                    width: 320,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: Theme.of(context)
-                                                          .cardColor,
-                                                      border: Border.all(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .primaryColor
-                                                                  .withOpacity(
-                                                                      0.40)),
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: TextField(
-                                                            controller:
-                                                                _searchController,
-                                                            textInputAction:
-                                                                TextInputAction
-                                                                    .search,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              contentPadding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          0,
-                                                                      vertical:
-                                                                          0),
-                                                              hintText:
-                                                                  'search_for_products'
-                                                                      .tr,
-                                                              hintStyle: robotoRegular.copyWith(
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeSmall,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .disabledColor),
-                                                              border: OutlineInputBorder(
+                                          child: Row(
+                                            children: [
+                                              Text('all_food_items'.tr,
+                                                  style: robotoBold.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeDefault)),
+                                              const Expanded(child: SizedBox()),
+                                              isDesktop
+                                                  ? Container(
+                                                      padding: const EdgeInsets
+                                                          .all(Dimensions
+                                                              .paddingSizeExtraSmall),
+                                                      height: 35,
+                                                      width: 320,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: Theme.of(context)
+                                                            .cardColor,
+                                                        border: Border.all(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor
+                                                                .withOpacity(
+                                                                    0.40)),
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: TextField(
+                                                              controller:
+                                                                  _searchController,
+                                                              textInputAction:
+                                                                  TextInputAction
+                                                                      .search,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            0,
+                                                                        vertical:
+                                                                            0),
+                                                                hintText:
+                                                                    'search_for_products'
+                                                                        .tr,
+                                                                hintStyle: robotoRegular.copyWith(
+                                                                    fontSize:
+                                                                        Dimensions
+                                                                            .fontSizeSmall,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .disabledColor),
+                                                                border:
+                                                                    OutlineInputBorder(
                                                                   borderRadius:
                                                                       BorderRadius.circular(
                                                                           Dimensions
                                                                               .radiusSmall),
                                                                   borderSide:
                                                                       BorderSide
-                                                                          .none),
-                                                              filled: true,
-                                                              fillColor: Theme.of(
-                                                                      context)
-                                                                  .cardColor,
-                                                              isDense: true,
-                                                              prefixIcon:
-                                                                  InkWell(
-                                                                onTap: () {
-                                                                  if (!restController
-                                                                      .isSearching) {
-                                                                    Get.find<
-                                                                            RestaurantController>()
-                                                                        .getRestaurantSearchProductList(
-                                                                      _searchController
-                                                                          .text
-                                                                          .trim(),
+                                                                          .none,
+                                                                ),
+                                                                filled: true,
+                                                                fillColor: Theme.of(
+                                                                        context)
+                                                                    .cardColor,
+                                                                isDense: true,
+                                                                prefixIcon:
+                                                                    InkWell(
+                                                                  onTap: () {
+                                                                    if (!restController
+                                                                        .isSearching) {
                                                                       Get.find<
                                                                               RestaurantController>()
-                                                                          .restaurant!
-                                                                          .id
-                                                                          .toString(),
-                                                                      1,
+                                                                          .getRestaurantSearchProductList(
+                                                                        _searchController
+                                                                            .text
+                                                                            .trim(),
+                                                                        Get.find<RestaurantController>()
+                                                                            .restaurant!
+                                                                            .id
+                                                                            .toString(),
+                                                                        1,
+                                                                        restController
+                                                                            .type,
+                                                                      );
+                                                                    } else {
+                                                                      _searchController
+                                                                          .text = '';
                                                                       restController
-                                                                          .type,
-                                                                    );
-                                                                  } else {
-                                                                    _searchController
-                                                                        .text = '';
-                                                                    restController
-                                                                        .initSearchData();
-                                                                    restController
-                                                                        .changeSearchStatus();
-                                                                  }
-                                                                },
-                                                                child: Icon(
+                                                                          .initSearchData();
+                                                                      restController
+                                                                          .changeSearchStatus();
+                                                                    }
+                                                                  },
+                                                                  child: Icon(
                                                                     restController
                                                                             .isSearching
                                                                         ? Icons
@@ -498,161 +505,193 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                                             context)
                                                                         .primaryColor
                                                                         .withOpacity(
-                                                                            0.50)),
+                                                                            0.50),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            onSubmitted:
-                                                                (String?
-                                                                    value) {
-                                                              if (value!
-                                                                  .isNotEmpty) {
-                                                                restController
-                                                                    .getRestaurantSearchProductList(
-                                                                  _searchController
-                                                                      .text
-                                                                      .trim(),
-                                                                  Get.find<
-                                                                          RestaurantController>()
-                                                                      .restaurant!
-                                                                      .id
-                                                                      .toString(),
-                                                                  1,
+                                                              onSubmitted:
+                                                                  (String?
+                                                                      value) {
+                                                                if (value!
+                                                                    .isNotEmpty) {
                                                                   restController
-                                                                      .type,
-                                                                );
-                                                              }
-                                                            },
-                                                            onChanged: (String?
-                                                                value) {},
+                                                                      .getRestaurantSearchProductList(
+                                                                    _searchController
+                                                                        .text
+                                                                        .trim(),
+                                                                    Get.find<
+                                                                            RestaurantController>()
+                                                                        .restaurant!
+                                                                        .id
+                                                                        .toString(),
+                                                                    1,
+                                                                    restController
+                                                                        .type,
+                                                                  );
+                                                                }
+                                                              },
+                                                              onChanged:
+                                                                  (String?
+                                                                      value) {},
+                                                            ),
                                                           ),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: Dimensions
-                                                                .paddingSizeSmall),
-                                                      ],
-                                                    ),
-                                                  )
-                                                : InkWell(
-                                                    onTap: () async {
-                                                      await Get.toNamed(RouteHelper
-                                                          .getSearchRestaurantProductRoute(
-                                                              restaurant!.id));
-                                                      if (restController
-                                                          .isSearching) {
-                                                        restController
-                                                            .changeSearchStatus();
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                .radiusDefault),
-                                                        color: Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(0.1),
+                                                          const SizedBox(
+                                                              width: Dimensions
+                                                                  .paddingSizeSmall),
+                                                        ],
                                                       ),
-                                                      padding: const EdgeInsets
-                                                          .all(Dimensions
-                                                              .paddingSizeExtraSmall),
-                                                      child: Image.asset(
+                                                    )
+                                                  : InkWell(
+                                                      onTap: () async {
+                                                        await Get.toNamed(
+                                                            RouteHelper
+                                                                .getSearchRestaurantProductRoute(
+                                                                    restaurant!
+                                                                        .id));
+                                                        if (restController
+                                                            .isSearching) {
+                                                          restController
+                                                              .changeSearchStatus();
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius: BorderRadius
+                                                              .circular(Dimensions
+                                                                  .radiusDefault),
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor
+                                                              .withOpacity(0.1),
+                                                        ),
+                                                        padding: const EdgeInsets
+                                                            .all(Dimensions
+                                                                .paddingSizeExtraSmall),
+                                                        child: Image.asset(
                                                           Images.search,
                                                           height: 25,
                                                           width: 25,
                                                           color:
                                                               Theme.of(context)
                                                                   .primaryColor,
-                                                          fit: BoxFit.cover),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                            restController.type.isNotEmpty
-                                                ? VegFilterWidget(
-                                                    type: restController.type,
-                                                    onSelected: (String type) {
-                                                      restController
-                                                          .getRestaurantProductList(
-                                                              restController
-                                                                  .restaurant!
-                                                                  .id,
-                                                              1,
-                                                              type,
-                                                              true);
-                                                    },
-                                                  )
-                                                : const SizedBox(),
-                                          ]),
+                                              restController.type.isNotEmpty
+                                                  ? VegFilterWidget(
+                                                      type: restController.type,
+                                                      onSelected:
+                                                          (String type) {
+                                                        restController
+                                                            .getRestaurantProductList(
+                                                                restController
+                                                                    .restaurant!
+                                                                    .id,
+                                                                1,
+                                                                type,
+                                                                true);
+                                                      },
+                                                    )
+                                                  : const SizedBox(),
+                                            ],
+                                          ),
                                         ),
-                                        // const Divider(
-                                        //     thickness: 0.2, height: 10),
-                                        // SizedBox(
-                                        //   height: 30,
-                                        //   child: ListView.builder(
-                                        //     scrollDirection: Axis.horizontal,
-                                        //     itemCount: restController
-                                        //         .categoryList!.length,
-                                        //     padding: const EdgeInsets.only(
-                                        //         left: Dimensions
-                                        //             .paddingSizeLarge),
-                                        //     physics:
-                                        //         const BouncingScrollPhysics(),
-                                        //     itemBuilder: (context, index) {
-                                        //       return InkWell(
-                                        //         onTap: () => restController
-                                        //             .setCategoryIndex(index),
-                                        //         child: Container(
-                                        //           padding: const EdgeInsets
-                                        //               .symmetric(
-                                        //               horizontal: Dimensions
-                                        //                   .paddingSizeSmall,
-                                        //               vertical: Dimensions
-                                        //                   .paddingSizeExtraSmall),
-                                        //           margin: const EdgeInsets.only(
-                                        //               right: Dimensions
-                                        //                   .paddingSizeSmall),
-                                        //           decoration: BoxDecoration(
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     Dimensions
-                                        //                         .radiusDefault),
-                                        //             color: index ==
-                                        //                     restController
-                                        //                         .categoryIndex
-                                        //                 ? Theme.of(context)
-                                        //                     .primaryColor
-                                        //                     .withOpacity(0.1)
-                                        //                 : Colors.transparent,
-                                        //           ),
-                                        //           child: Column(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment
-                                        //                       .center,
-                                        //               children: [
-                                        //                 Text(
-                                        //                   restController
-                                        //                       .categoryList![
-                                        //                           index]
-                                        //                       .name!,
-                                        //                   style: index ==
-                                        //                           restController
-                                        //                               .categoryIndex
-                                        //                       ? robotoMedium.copyWith(
-                                        //                           fontSize:
-                                        //                               Dimensions
-                                        //                                   .fontSizeSmall,
-                                        //                           color: Theme.of(
-                                        //                                   context)
-                                        //                               .primaryColor)
-                                        //                       : robotoRegular.copyWith(
-                                        //                           fontSize:
-                                        //                               Dimensions
-                                        //                                   .fontSizeSmall),
-                                        //                 ),
-                                        //               ]),
-                                        //         ),
-                                        //       );
-                                        //     },
-                                        //   ),
-                                        // ),
+                                        const Divider(
+                                            thickness: 0.2, height: 10),
+                                        SizedBox(
+                                          height: 30,
+                                          child: restController
+                                                      .restaurantProducts !=
+                                                  null
+                                              ? ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: restController
+                                                      .restaurantProducts!
+                                                      .length,
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: Dimensions
+                                                        .paddingSizeLarge,
+                                                  ),
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return InkWell(
+                                                      onTap: () =>
+                                                          restController
+                                                              .setCategoryIndex(
+                                                                  index),
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: Dimensions
+                                                              .paddingSizeSmall,
+                                                          vertical: Dimensions
+                                                              .paddingSizeExtraSmall,
+                                                        ),
+                                                        margin: const EdgeInsets
+                                                            .only(
+                                                          right: Dimensions
+                                                              .paddingSizeSmall,
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            Dimensions
+                                                                .radiusDefault,
+                                                          ),
+                                                          color: index ==
+                                                                  restController
+                                                                      .categoryIndex
+                                                              ? Theme.of(
+                                                                      context)
+                                                                  .primaryColor
+                                                                  .withOpacity(
+                                                                      0.1)
+                                                              : Colors
+                                                                  .transparent,
+                                                        ),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "${restController.restaurantProducts![index].category!.name}",
+                                                              style: index ==
+                                                                      restController
+                                                                          .categoryIndex
+                                                                  ? robotoMedium
+                                                                      .copyWith(
+                                                                      fontSize:
+                                                                          Dimensions
+                                                                              .fontSizeSmall,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .primaryColor,
+                                                                    )
+                                                                  : robotoRegular
+                                                                      .copyWith(
+                                                                      fontSize:
+                                                                          Dimensions
+                                                                              .fontSizeSmall,
+                                                                    ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              : const SizedBox(), // Show a loading indicator while the data is being loaded
+                                        ),
                                       ]),
                                     ))),
                               )
@@ -760,9 +799,3 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
         child != oldDelegate.child;
   }
 }
-
-// class CategoryProduct {
-//   CategoryModel category;
-//   List<Product> products;
-//   CategoryProduct(this.category, this.products);
-// }
