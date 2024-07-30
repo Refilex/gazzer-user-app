@@ -99,7 +99,8 @@ class CheckoutButtonWidget extends StatelessWidget {
                       style: robotoMedium.copyWith(
                           color: Theme.of(context).primaryColor)),
                   PriceConverter.convertAnimationPrice(
-                            cartController.subTotal,
+                            cartController.cartList
+                                .fold(0, (total, item) => total! + item.price!),
                             textStyle: robotoRegular.copyWith(
                                 color: Theme.of(context).primaryColor)),
                 ],

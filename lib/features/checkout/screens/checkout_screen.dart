@@ -284,12 +284,33 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
                   deliveryCharge = PriceConverter.toFixed(deliveryCharge);
 
+                  // Group the cartList by restaurant
+                  Map<String, List<CartModel>> restaurantGroupedCartList = {};
+                  for (var cartItem in _cartList!) {
+                    String restaurantName = cartItem.product!.restaurantName!;
+                    if (!restaurantGroupedCartList
+                        .containsKey(restaurantName)) {
+                      restaurantGroupedCartList[restaurantName] = [];
+                    }
+                    restaurantGroupedCartList[restaurantName]!.add(cartItem);
+                  }
+
+                  // Calculate delivery charge for grouped orders
+                  double groupedDeliveryCharge =
+                      restaurantGroupedCartList.length > 1
+                          ? deliveryCharge +
+                              (restaurantGroupedCartList.length - 1) *
+                                  Get.find<SplashController>()
+                                      .configModel!
+                                      .deliveryFeeMultiVendor!
+                          : deliveryCharge;
+
                   double extraPackagingCharge =
                       _calculateExtraPackagingCharge(checkoutController);
 
                   double total = _calculateTotal(
                       subTotal,
-                      deliveryCharge,
+                      groupedDeliveryCharge,
                       discount,
                       couponDiscount,
                       taxIncluded,
@@ -353,7 +374,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                       child: TopSectionWidget(
                                                         charge: charge,
                                                         deliveryCharge:
-                                                            deliveryCharge,
+                                                            groupedDeliveryCharge,
                                                         locationController:
                                                             locationController,
                                                         tomorrowClosed:
@@ -416,7 +437,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                       taxIncluded: taxIncluded,
                                                       tax: tax,
                                                       deliveryCharge:
-                                                          deliveryCharge,
+                                                          groupedDeliveryCharge,
                                                       checkoutController:
                                                           checkoutController,
                                                       locationController:
@@ -466,7 +487,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                 TopSectionWidget(
                                                   charge: charge,
                                                   deliveryCharge:
-                                                      deliveryCharge,
+                                                      groupedDeliveryCharge,
                                                   locationController:
                                                       locationController,
                                                   tomorrowClosed:
@@ -521,7 +542,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                   taxIncluded: taxIncluded,
                                                   tax: tax,
                                                   deliveryCharge:
-                                                      deliveryCharge,
+                                                      groupedDeliveryCharge,
                                                   checkoutController:
                                                       checkoutController,
                                                   locationController:
@@ -602,7 +623,13 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                               ),
                                               PriceConverter
                                                   .convertAnimationPrice(
-                                                calculateTotalAmount(),
+                                                _cartList!.fold(
+                                                        0.0,
+                                                        (total, item) =>
+                                                            total +
+                                                            (item.price ??
+                                                                0.0)) +
+                                                    groupedDeliveryCharge,
                                                 textStyle:
                                                     robotoMedium.copyWith(
                                                         fontSize: Dimensions
@@ -621,7 +648,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                           todayClosed: todayClosed,
                                           tomorrowClosed: tomorrowClosed,
                                           orderAmount: orderAmount,
-                                          deliveryCharge: deliveryCharge,
+                                          deliveryCharge: groupedDeliveryCharge,
                                           tax: tax,
                                           discount: discount,
                                           total: total,

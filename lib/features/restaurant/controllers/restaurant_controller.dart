@@ -1,20 +1,20 @@
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
+import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
+import 'package:stackfood_multivendor/features/category/domain/models/category_model.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
 import 'package:stackfood_multivendor/features/restaurant/domain/models/cart_suggested_item_model.dart';
 import 'package:stackfood_multivendor/features/restaurant/domain/models/recommended_product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/category/domain/models/category_model.dart';
 import 'package:stackfood_multivendor/features/restaurant/domain/services/restaurant_service_interface.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RestaurantController extends GetxController implements GetxService {
   final RestaurantServiceInterface restaurantServiceInterface;
@@ -60,8 +60,8 @@ class RestaurantController extends GetxController implements GetxService {
       _restaurantSearchProductModel;
 
   int _categoryIndex = 0;
-
   int get categoryIndex => _categoryIndex;
+  var selectedCategoryProducts = <Product>[].obs;
 
   List<CategoryModel>? _categoryList;
 
@@ -409,6 +409,9 @@ class RestaurantController extends GetxController implements GetxService {
         _foodPageOffset = productModel.offset;
         _foodPaginate = false;
         update();
+
+        // Apply category filter after fetching products
+        filterProductsByCategory(_categoryList![_categoryIndex].id!);
       }
     } else {
       if (_foodPaginate) {
@@ -473,12 +476,31 @@ class RestaurantController extends GetxController implements GetxService {
     _searchType = 'all';
   }
 
+  // void setCategoryIndex(int index) {
+  //   _categoryIndex = index;
+  //   _restaurantProducts = null;
+  //   getRestaurantProductList(
+  //       _restaurant!.id, 1, Get.find<RestaurantController>().type, false);
+  //   update();
+  // }
   void setCategoryIndex(int index) {
     _categoryIndex = index;
     _restaurantProducts = null;
     getRestaurantProductList(
-        _restaurant!.id, 1, Get.find<RestaurantController>().type, false);
+            _restaurant!.id, 1, Get.find<RestaurantController>().type, false)
+        .then((_) {
+      filterProductsByCategory(_categoryList![_categoryIndex].id!);
+    });
     update();
+  }
+
+  Future<void> filterProductsByCategory(int categoryId) async {
+    selectedCategoryProducts.clear();
+    if (restaurantProducts != null) {
+      selectedCategoryProducts.value = restaurantProducts!
+          .where((product) => product.categoryId == categoryId)
+          .toList();
+    }
   }
 
   bool isRestaurantClosed(
