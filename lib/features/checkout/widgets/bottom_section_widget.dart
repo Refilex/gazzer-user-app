@@ -162,7 +162,9 @@ class BottomSectionWidget extends StatelessWidget {
                       color: Theme.of(context).primaryColor),
                 ),
                 Text(
-                  PriceConverter.convertPrice(subTotal + groupedDeliveryCharge),
+                  PriceConverter.convertPrice((cartList.fold(
+                          0.0, (total, item) => total + (item.price ?? 0.0)) +
+                      deliveryCharge)),
                   textDirection: TextDirection.ltr,
                   style: robotoMedium.copyWith(
                       fontSize: Dimensions.fontSizeExtraLarge,
@@ -177,7 +179,9 @@ class BottomSectionWidget extends StatelessWidget {
                 isCashOnDeliveryActive: isCashOnDeliveryActive,
                 isDigitalPaymentActive: isDigitalPaymentActive,
                 isWalletActive: isWalletActive,
-                total: subTotal + groupedDeliveryCharge,
+                total: (cartList.fold(
+                        0.0, (total, item) => total + (item.price ?? 0.0)) +
+                    deliveryCharge),
                 checkoutController: checkoutController,
                 isOfflinePaymentActive: isOfflinePaymentActive,
               )
@@ -228,7 +232,9 @@ class BottomSectionWidget extends StatelessWidget {
                         ? 'subtotal'.tr
                         : 'item_price'.tr,
                     style: robotoRegular),
-                Text(PriceConverter.convertPrice(subTotal),
+                Text(
+                    PriceConverter.convertPrice(cartList.fold(
+                        0, (total, item) => total! + item.price!)),
                     style: robotoRegular, textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -268,7 +274,7 @@ class BottomSectionWidget extends StatelessWidget {
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('delivery_charge'.tr, style: robotoRegular),
-                Text(PriceConverter.convertPrice(groupedDeliveryCharge),
+                Text(PriceConverter.convertPrice(deliveryCharge),
                     style: robotoRegular, textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -343,7 +349,8 @@ class BottomSectionWidget extends StatelessWidget {
                     Text(
                       restaurantName,
                       style: robotoMedium.copyWith(
-                          fontSize: Dimensions.fontSizeLarge),
+                          fontSize: Dimensions.fontSizeLarge,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     ...groupedItems.map((cartItem) {
@@ -355,9 +362,8 @@ class BottomSectionWidget extends StatelessWidget {
                             style: robotoRegular,
                           ),
                           Text(
-                            PriceConverter.convertPrice(
-                                cartItem.product!.price! *
-                                    cartItem.quantity!.toDouble()),
+                            PriceConverter.convertPrice(cartItem.price! *
+                                cartItem.quantity!.toDouble()),
                             style: robotoRegular,
                           ),
                         ],

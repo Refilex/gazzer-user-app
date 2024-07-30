@@ -58,6 +58,7 @@ class ProductWidget extends StatelessWidget {
     String? image;
     double price = 0;
     double discountPrice = 0;
+
     if (isRestaurant) {
       image = restaurant!.logo;
       discount =
@@ -277,12 +278,6 @@ class ProductWidget extends StatelessWidget {
 
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
-                          // SizedBox(height: (desktop || isRestaurant) ? 5 : 0),
-
-                          // !isRestaurant ? RatingBar(
-                          //   rating: isRestaurant ? restaurant!.avgRating : product!.avgRating, size: desktop ? 15 : 12,
-                          //   ratingCount: isRestaurant ? restaurant!.ratingCount : product!.ratingCount,
-                          // ) : const SizedBox(),
                           !isRestaurant
                               ? Row(children: [
                                   Icon(Icons.star,
