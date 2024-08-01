@@ -236,7 +236,7 @@ class CartProductWidget extends StatelessWidget {
                                       children: [
                                         Text(
                                           PriceConverter.convertPrice(
-                                              cart.product!.price,
+                                              cart.price,
                                               discount: discount,
                                               discountType: discountType),
                                           style: robotoMedium.copyWith(
