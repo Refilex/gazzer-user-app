@@ -15,7 +15,7 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
 class BottomSectionWidget extends StatelessWidget {
-  CartModel? cart;
+  final CartModel? cart;
   final bool isCashOnDeliveryActive;
   final bool isDigitalPaymentActive;
   final bool isOfflinePaymentActive;
@@ -163,7 +163,9 @@ class BottomSectionWidget extends StatelessWidget {
                 ),
                 Text(
                   PriceConverter.convertPrice((cartList.fold(
-                          0.0, (total, item) => total + (item.price ?? 0.0)) +
+                        0.0,
+                        (total, item) => total + (item.price! * item.quantity!),
+                      ) +
                       deliveryCharge)),
                   textDirection: TextDirection.ltr,
                   style: robotoMedium.copyWith(
@@ -180,7 +182,9 @@ class BottomSectionWidget extends StatelessWidget {
                 isDigitalPaymentActive: isDigitalPaymentActive,
                 isWalletActive: isWalletActive,
                 total: (cartList.fold(
-                        0.0, (total, item) => total + (item.price ?? 0.0)) +
+                      0.0,
+                      (total, item) => total + (item.price! * item.quantity!),
+                    ) +
                     deliveryCharge),
                 checkoutController: checkoutController,
                 isOfflinePaymentActive: isOfflinePaymentActive,
@@ -234,8 +238,11 @@ class BottomSectionWidget extends StatelessWidget {
                     style: robotoRegular),
                 Text(
                     PriceConverter.convertPrice(cartList.fold(
-                        0, (total, item) => total! + item.price!)),
-                    style: robotoRegular, textDirection: TextDirection.ltr),
+                        0,
+                        (total, item) =>
+                            total! + (item.price! * item.quantity!))),
+                    style: robotoRegular,
+                    textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -247,7 +254,7 @@ class BottomSectionWidget extends StatelessWidget {
                 ]),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
-              (couponController.discount! > 0 || couponController.freeDelivery!)
+              (couponController.discount! > 0 || couponController.freeDelivery)
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -343,6 +350,12 @@ class BottomSectionWidget extends StatelessWidget {
               ...restaurantGroupedCartList.entries.map((entry) {
                 String restaurantName = entry.key;
                 List<CartModel> groupedItems = entry.value;
+                double restaurantTotal = groupedItems.fold(
+                  0.0,
+                  (total, item) =>
+                      total + (item.price! * item.quantity!.toDouble()),
+                );
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -368,11 +381,11 @@ class BottomSectionWidget extends StatelessWidget {
                           ),
                         ],
                       );
-                    }).toList(),
+                    }),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                   ],
                 );
-              }).toList(),
+              }),
             ]),
           ],
         ),

@@ -28,6 +28,12 @@ class CheckoutButtonWidget extends StatelessWidget {
     double percentage = 0;
     bool isDesktop = ResponsiveHelper.isDesktop(context);
 
+    // Calculate the total subtotal for all items
+    double totalSubtotal = cartController.cartList.fold(
+      0,
+      (sum, item) => sum + (item.price! * item.quantity!),
+    );
+
     return Container(
       width: Dimensions.webMaxWidth,
       padding: const EdgeInsets.symmetric(
@@ -47,7 +53,7 @@ class CheckoutButtonWidget extends StatelessWidget {
               !Get.find<RestaurantController>().restaurant!.freeDelivery! &&
               Get.find<SplashController>().configModel!.freeDeliveryOver !=
                   null) {
-            percentage = cartController.subTotal /
+            percentage = totalSubtotal /
                 Get.find<SplashController>().configModel!.freeDeliveryOver!;
           }
           return Column(mainAxisSize: MainAxisSize.min, children: [
@@ -70,8 +76,8 @@ class CheckoutButtonWidget extends StatelessWidget {
                     Get.find<SplashController>()
                         .configModel!
                         .freeDeliveryOver! -
-                        cartController.subTotal,
-                    textStyle: robotoMedium.copyWith(
+                              totalSubtotal,
+                          textStyle: robotoMedium.copyWith(
                         color: Theme.of(context).primaryColor),
                   ),
                   const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -99,11 +105,11 @@ class CheckoutButtonWidget extends StatelessWidget {
                       style: robotoMedium.copyWith(
                           color: Theme.of(context).primaryColor)),
                   PriceConverter.convertAnimationPrice(
-                            cartController.cartList
-                                .fold(0, (total, item) => total! + item.price!),
-                            textStyle: robotoRegular.copyWith(
-                                color: Theme.of(context).primaryColor)),
-                ],
+                          totalSubtotal,
+                          textStyle: robotoRegular.copyWith(
+                              color: Theme.of(context).primaryColor),
+                        ),
+                      ],
               ),
             )
                 : const SizedBox(),

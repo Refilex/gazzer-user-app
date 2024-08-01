@@ -627,8 +627,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                         0.0,
                                                         (total, item) =>
                                                             total +
-                                                            (item.price ??
-                                                                0.0)) +
+                                                            (item.price! *
+                                                                item.quantity!)) +
                                                     groupedDeliveryCharge,
                                                 textStyle:
                                                     robotoMedium.copyWith(
@@ -648,7 +648,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                           todayClosed: todayClosed,
                                           tomorrowClosed: tomorrowClosed,
                                           orderAmount: orderAmount,
-                                          deliveryCharge: groupedDeliveryCharge,
+                                          deliveryCharge: deliveryCharge,
                                           tax: tax,
                                           discount: discount,
                                           total: total,

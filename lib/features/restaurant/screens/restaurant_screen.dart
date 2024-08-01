@@ -627,25 +627,26 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                             restController
                                                                 .setCategoryIndex(
                                                                     index);
-                                                            Get.find<
-                                                                    RestaurantController>()
-                                                                .getRestaurantProductList(
-                                                                    widget.restaurant!
-                                                                            .id ??
-                                                                        Get.find<RestaurantController>()
-                                                                            .restaurant!
-                                                                            .id!,
-                                                                    1,
-                                                                    'all',
-                                                                    false)
-                                                                .then((_) {
-                                                              // After fetching, apply the filter to update the UI
-                                                              restController.filterProductsByCategory(
-                                                                  restController
-                                                                      .categoryList![
-                                                                          index]
-                                                                      .id!);
-                                                            });
+                                                            // restController.restaurantProducts![index].categoryId!
+                                                            // Get.find<
+                                                            //         RestaurantController>()
+                                                            //     .getRestaurantProductList(
+                                                            //         widget.restaurant!
+                                                            //                 .id ??
+                                                            //             Get.find<RestaurantController>()
+                                                            //                 .restaurant!
+                                                            //                 .id!,
+                                                            //         1,
+                                                            //         'all',
+                                                            //         false)
+                                                            //     .then((_) {
+                                                            //   // After fetching, apply the filter to update the UI
+                                                            //   restController.filterProductsByCategory(
+                                                            //       restController
+                                                            //           .categoryList![
+                                                            //               index]
+                                                            //           .id!);
+                                                            // });
                                                           },
                                                           child: Container(
                                                             padding:
