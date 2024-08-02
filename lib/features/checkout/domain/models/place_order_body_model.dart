@@ -422,15 +422,19 @@ class OrderVariation {
 class OrderVariationValue {
   List<String?>? label;
 
+  // int? qty;
+  // ,this.qty
   OrderVariationValue({this.label});
 
   OrderVariationValue.fromJson(Map<String, dynamic> json) {
     label = json['label'].cast<String>();
+    // qty = json['qty'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['label'] = label;
+    // data['qty'] = qty;
     return data;
   }
 }
