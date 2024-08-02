@@ -1,17 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
+import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart'
     as place_order_model;
+import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/checkout/domain/models/pricing_view_model.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/payment_method_bottom_sheet.dart';
 import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
+import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
 import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/helper/address_helper.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
@@ -19,10 +23,6 @@ import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class OrderPlaceButton extends StatelessWidget {
   final CheckoutController checkoutController;
@@ -391,12 +391,15 @@ class OrderPlaceButton extends StatelessWidget {
             variations.add(place_order_model.OrderVariation(
                 name: cart.product!.variations![i].name,
                 values: place_order_model.OrderVariationValue(label: [])));
+            // ,qty: 0
             for (int j = 0;
                 j < cart.product!.variations![i].variationValues!.length;
                 j++) {
               if (cart.variations![i][j]!) {
                 variations[variations.length - 1].values!.label!.add(
                     cart.product!.variations![i].variationValues![j].level);
+                //I will try it later
+                // variations[variations.length - 1].values!.qty = cart.price!.toInt();
                 if (cart.product!.variations![i].variationValues![j].optionId !=
                     null) {
                   optionIds.add(cart

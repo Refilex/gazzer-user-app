@@ -60,6 +60,7 @@ class RestaurantController extends GetxController implements GetxService {
       _restaurantSearchProductModel;
 
   int _categoryIndex = 0;
+
   int get categoryIndex => _categoryIndex;
   var selectedCategoryProducts = <Product>[].obs;
 
@@ -378,26 +379,34 @@ class RestaurantController extends GetxController implements GetxService {
   Future<void> getRestaurantProductList(
       int? restaurantID, int offset, String type, bool notify) async {
     _foodOffset = offset;
+
+    // Print debug information
+    print('restaurantProducts length: ${restaurantProducts?.length}');
+    print('Requested category ID: $_categoryIndex');
+
+    // Reset the list if it's the first page or if the product list is null
     if (offset == 1 || _restaurantProducts == null) {
       _type = type;
       _foodOffsetList = [];
-      _restaurantProducts = null;
+      _restaurantProducts = [];
       _foodOffset = 1;
       if (notify) {
         update();
       }
     }
+
+    // Avoid fetching duplicate offsets
     if (!_foodOffsetList.contains(offset)) {
       _foodOffsetList.add(offset);
+
+      // Determine the category ID for the API call
+      int categoryId = _categoryIndex; // Use the category ID directly
+
       ProductModel? productModel =
           await restaurantServiceInterface.getRestaurantProductList(
               restaurantID,
               offset,
-              (_restaurant != null &&
-                      _restaurant!.categoryIds!.isNotEmpty &&
-                      _categoryIndex != 0)
-                  ? _categoryList![_categoryIndex].id
-                  : 0,
+              categoryId, // Use the correct category ID
               type);
 
       if (productModel != null) {
@@ -409,9 +418,6 @@ class RestaurantController extends GetxController implements GetxService {
         _foodPageOffset = productModel.offset;
         _foodPaginate = false;
         update();
-
-        // Apply category filter after fetching products
-        filterProductsByCategory(_categoryList![_categoryIndex].id!);
       }
     } else {
       if (_foodPaginate) {
@@ -476,31 +482,17 @@ class RestaurantController extends GetxController implements GetxService {
     _searchType = 'all';
   }
 
-  // void setCategoryIndex(int index) {
-  //   _categoryIndex = index;
-  //   _restaurantProducts = null;
-  //   getRestaurantProductList(
-  //       _restaurant!.id, 1, Get.find<RestaurantController>().type, false);
-  //   update();
-  // }
-  void setCategoryIndex(int index) {
-    _categoryIndex = index;
+  void setCategoryIndex(int categoryId) {
+    // Print debug information
+    print('Set category ID: $categoryId');
+    print('restaurantProducts length: ${restaurantProducts?.length}');
+
+    _categoryIndex = categoryId; // Set to the category ID directly
+
     _restaurantProducts = null;
     getRestaurantProductList(
-            _restaurant!.id, 1, Get.find<RestaurantController>().type, false)
-        .then((_) {
-      filterProductsByCategory(_categoryList![_categoryIndex].id!);
-    });
+        _restaurant!.id, 1, Get.find<RestaurantController>().type, false);
     update();
-  }
-
-  Future<void> filterProductsByCategory(int categoryId) async {
-    selectedCategoryProducts.clear();
-    if (restaurantProducts != null) {
-      selectedCategoryProducts.value = restaurantProducts!
-          .where((product) => product.categoryId == categoryId)
-          .toList();
-    }
   }
 
   bool isRestaurantClosed(
