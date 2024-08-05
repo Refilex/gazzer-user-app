@@ -2000,7 +2000,10 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     CartHelper.getSelectedAddonIds(addOnIdList: addOnIdList);
     List<int?> listOfAddOnQty =
     CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
-
+    if (product!.variations![0].type ==
+        "free_input") {
+    variations[0].qty = int.parse(customValueController.text);
+    }
     OnlineCart onlineCart = OnlineCart(
         (widget.cart != null || productController.cartIndex != -1)
             ? widget.cart?.id ??
@@ -2016,6 +2019,9 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         listOfAddOnQty,
         'Food',
         variationOptionIds: optionsIdList);
+
+
+
     return onlineCart;
   }
 
