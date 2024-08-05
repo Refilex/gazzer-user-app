@@ -127,8 +127,6 @@ class ProductWidget extends StatelessWidget {
                                 product: product,
                                 inRestaurantPage: inRestaurant)),
                       );
-              } else {
-                showCustomSnackBar('item_is_not_available'.tr);
               }
             }
           },
