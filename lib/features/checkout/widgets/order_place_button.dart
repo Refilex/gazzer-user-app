@@ -149,7 +149,7 @@ class OrderPlaceButton extends StatelessWidget {
                   checkoutController.placeOrder(
                       placeOrderBody,
                       checkoutController.restaurant!.zoneId!,
-                      total,
+                      orderAmount,
                       maxCodOrderAmount,
                       fromCart,
                       isCashOnDeliveryActive);
@@ -467,7 +467,7 @@ class OrderPlaceButton extends StatelessWidget {
                   checkoutController.selectedTimeSlot == 0)
               ? null
               : DateConverter.dateToDateAndTime(scheduleStartDate),
-      orderAmount: total,
+      orderAmount: orderAmount,
       orderNote: checkoutController.noteController.text,
       orderType: checkoutController.orderType,
       paymentMethod: checkoutController.paymentMethodIndex == 0

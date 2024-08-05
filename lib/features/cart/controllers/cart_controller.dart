@@ -1,18 +1,18 @@
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/api/api_checker.dart';
 import 'package:stackfood_multivendor/common/models/online_cart_model.dart';
 import 'package:stackfood_multivendor/common/models/product_model.dart';
 import 'package:stackfood_multivendor/common/widgets/cart_snackbar_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
 import 'package:stackfood_multivendor/features/cart/domain/services/cart_service_interface.dart';
+import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:stackfood_multivendor/helper/auth_helper.dart';
 import 'package:stackfood_multivendor/helper/date_converter.dart';
 import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 
 class CartController extends GetxController implements GetxService {
   final CartServiceInterface cartServiceInterface;
@@ -123,10 +123,10 @@ class CartController extends GetxController implements GetxService {
       variationPrice = cartServiceInterface.calculateVariationPrice(
           cartModel, variationPrice);
 
-      double price = (cartModel.product!.price! * cartModel.quantity!);
+      double price = (cartModel.price! * cartModel.quantity!);
       double discountPrice = (price -
           (PriceConverter.convertWithDiscount(
-                  cartModel.product!.price!, discount, discountType)! *
+                  cartModel.price!, discount, discountType)! *
               cartModel.quantity!));
 
       _variationPrice += variationPrice;
