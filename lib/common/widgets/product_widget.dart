@@ -110,7 +110,8 @@ class ProductWidget extends StatelessWidget {
                 showCustomSnackBar('restaurant_is_not_available'.tr);
               }
             } else {
-              if (product!.restaurantStatus == 1) {
+              if (product!.restaurantStatus == 1 &&
+                  product!.variations!.isNotEmpty) {
                 ResponsiveHelper.isMobile(context)
                     ? Get.bottomSheet(
                         ProductBottomSheetWidget(
