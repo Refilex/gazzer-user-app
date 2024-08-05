@@ -77,17 +77,20 @@ class OnlineCartModel {
 class Variation {
   String? name;
   Value? values;
+  int? qty;
 
-  Variation({this.name, this.values});
+  Variation({this.name, this.values, this.qty});
 
   Variation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     values = json['values'] != null ? Value.fromJson(json['values']) : null;
+    qty = json['qty'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
+    data['qty'] = qty;
     if (values != null) {
       data['values'] = values!.toJson();
     }

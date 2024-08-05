@@ -399,11 +399,13 @@ class Cart {
 class OrderVariation {
   String? name;
   OrderVariationValue? values;
+  int? qty;
 
-  OrderVariation({this.name, this.values});
+  OrderVariation({this.name, this.values, this.qty});
 
   OrderVariation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    qty = json['qty'];
     values = json['values'] != null
         ? OrderVariationValue.fromJson(json['values'])
         : null;
@@ -412,6 +414,7 @@ class OrderVariation {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
+    data['qty'] = qty;
     if (values != null) {
       data['values'] = values!.toJson();
     }

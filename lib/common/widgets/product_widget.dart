@@ -111,7 +111,6 @@ class ProductWidget extends StatelessWidget {
               }
             } else {
               if (product!.restaurantStatus == 1) {
-                //I will work here
                 ResponsiveHelper.isMobile(context)
                     ? Get.bottomSheet(
                         ProductBottomSheetWidget(

@@ -697,6 +697,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   double calculateTotalAmount() {
     // Group cart items by restaurant
     Map<String, List<CartModel>> restaurantGroupedCartList = {};
+
     for (var cartItem in _cartList!) {
       String restaurantName = cartItem.product!.restaurantName!;
       if (!restaurantGroupedCartList.containsKey(restaurantName)) {
@@ -707,14 +708,14 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
     // Calculate total without extra fees for same restaurant
     double totalAmount = 0.0;
+
     for (var entries in restaurantGroupedCartList.entries) {
       List<CartModel> items = entries.value;
-      double restaurantTotal = items.fold(
-        0.0,
-        (sum, item) => sum + (item.product!.price! * item.quantity!.toDouble()),
-      );
+      double restaurantTotalPrice = _calculatePrice(items);
+      double restaurantTotalAddOns = _calculateAddonsPrice(items);
 
-      // Add the restaurant's total
+      double restaurantTotal =
+          _calculateSubTotal(restaurantTotalPrice, restaurantTotalAddOns);
       totalAmount += restaurantTotal;
     }
 
@@ -811,9 +812,11 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   double _calculatePrice(List<CartModel>? cartList) {
     double price = 0;
     double variationPrice = 0;
-    for (var cartModel in cartList!) {
-      price = price + (cartModel.product!.price! * cartModel.quantity!);
 
+    for (var cartModel in cartList!) {
+      price += (cartModel.price! * cartModel.quantity!);
+
+      // Calculate variation price
       for (int index = 0;
           index < cartModel.product!.variations!.length;
           index++) {
@@ -828,13 +831,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
         }
       }
     }
+
     return PriceConverter.toFixed(price + variationPrice);
   }
 
   double _calculateAddonsPrice(List<CartModel>? cartList) {
     double addonPrice = 0;
+
     for (var cartModel in cartList!) {
       List<AddOns> addOnList = [];
+
       for (var addOnId in cartModel.addOnIds!) {
         for (AddOns addOns in cartModel.product!.addOns!) {
           if (addOns.id == addOnId.id) {
@@ -843,11 +849,13 @@ class CheckoutScreenState extends State<CheckoutScreen> {
           }
         }
       }
+
       for (int index = 0; index < addOnList.length; index++) {
-        addonPrice = addonPrice +
+        addonPrice +=
             (addOnList[index].price! * cartModel.addOnIds![index].quantity!);
       }
     }
+
     return PriceConverter.toFixed(addonPrice);
   }
 

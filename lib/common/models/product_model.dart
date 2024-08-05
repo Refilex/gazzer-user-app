@@ -229,7 +229,7 @@ class Variation {
   int? max;
   bool? required;
   List<VariationValue>? variationValues;
-
+  int? qty;
   Variation(
       {this.variationId,
       this.name,
@@ -238,7 +238,9 @@ class Variation {
       this.min,
       this.max,
       this.required,
-      this.variationValues});
+    this.variationValues,
+    this.qty,
+  });
 
   Variation.fromJson(Map<String, dynamic> json) {
     if (json['max'] != null) {
@@ -255,6 +257,7 @@ class Variation {
           variationValues!.add(VariationValue.fromJson(v));
         });
       }
+      qty = json['qty'];
     }
   }
 
@@ -268,6 +271,7 @@ class Variation {
     if (variationValues != null) {
       data['values'] = variationValues!.map((v) => v.toJson()).toList();
     }
+    data['qty'] = qty;
     return data;
   }
 }
