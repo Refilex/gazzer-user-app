@@ -124,14 +124,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         double addonsCost = _getAddonCost(product!, productController);
         List<AddOn> addOnIdList = _getAddonIdList(product!, productController);
         List<AddOns> addOnsList = _getAddonList(product!, productController);
-        if (product!.variations![0].type ==
-            "free_input") {
+        if (product!.variations!.isNotEmpty) {
           debugPrint(
               '===total : $addonsCost + (($variationPriceWithDiscount * $price) , $discount , $discountType ) * ${productController
                   .quantity}');
         }
-        if (product!.variations![0].type !=
-            "free_input") {
+        if (product!.variations!.isEmpty) {
           debugPrint(
               '===total : $addonsCost + (($variationPriceWithDiscount + $price) , $discount , $discountType ) * ${productController
                   .quantity}');
@@ -339,9 +337,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                         discount: discount,
                                                         discountType:
                                                         discountType),
-                                                    if (product!.variations![0]
-                                                        .type ==
-                                                        "free_input")
+                                                    if (product!.variations!
+                                                        .isNotEmpty &&
+                                                        product!.variations![0]
+                                                            .type ==
+                                                            "free_input")
                                                       Text(
                                                         "${priceWithAddonsVariationWithDiscount
                                                             .toDouble()}E€",
@@ -352,9 +352,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                             fontSize: Dimensions
                                                                 .fontSizeLarge),
                                                       ),
-                                                    if (product!.variations![0]
-                                                        .type !=
-                                                        "free_input")
+                                                    if (product!.variations!
+                                                        .isNotEmpty &&
+                                                        product!.variations![0]
+                                                            .type !=
+                                                            "free_input")
                                                       Text(
                                                         PriceConverter
                                                             .convertPrice(
@@ -556,7 +558,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                         : const SizedBox(),
 
                                     /// Variation
-                                    product!.variations != null
+                                    product!.variations != null &&
+                                        product!.variations!.isNotEmpty
                                         ? ListView.builder(
                                       shrinkWrap: true,
                                       itemCount:
@@ -1705,8 +1708,9 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                       : const SizedBox(),
                                   const SizedBox(
                                       width: Dimensions.paddingSizeExtraSmall),
-                                  if (product!.variations![0].type ==
-                                      "free_input")
+                                  if (product!.variations!.isNotEmpty &&
+                                      product!.variations![0].type ==
+                                          "free_input")
                                     Text(
                                       "${priceWithAddonsVariationWithDiscount
                                           .toDouble()}E€",
@@ -1716,8 +1720,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                               .of(context)
                                               .primaryColor),
                                     ),
-                                  if (product!.variations![0].type !=
-                                      "free_input")
+                                  if (product!.variations!.isEmpty)
                                     PriceConverter.convertAnimationPrice(
                                       price + variationPrice,
                                       textStyle: robotoBold.copyWith(
@@ -1799,6 +1802,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                     null)
                                             ? null
                                             : () async {
+                                          if (product!.variations!.isEmpty) {
+                                            Get.find<ProductController>()
+                                                .productDirectlyAddToCart(
+                                                product, context);
+                                            Get.back();
+                                          }
                                           if (product!.variations![0].type ==
                                               "free_input") {
                                             _onButtonPressed(
@@ -2002,7 +2011,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
     if (product!.variations![0].type ==
         "free_input") {
-    variations[0].qty = int.parse(customValueController.text);
+      variations[0].qty = int.parse(customValueController.text);
     }
     OnlineCart onlineCart = OnlineCart(
         (widget.cart != null || productController.cartIndex != -1)
@@ -2019,7 +2028,6 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         listOfAddOnQty,
         'Food',
         variationOptionIds: optionsIdList);
-
 
 
     return onlineCart;

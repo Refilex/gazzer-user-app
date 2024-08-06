@@ -97,29 +97,27 @@ class CartProductWidget extends StatelessWidget {
                   ),
                   child: CustomInkWellWidget(
                     onTap: () {
-                      if (cart.product!.variations!.isNotEmpty) {
-                        ResponsiveHelper.isMobile(context)
-                            ? showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (con) => ProductBottomSheetWidget(
-                                    product: cart.product,
-                                    cartIndex: cartIndex,
-                                    cart: cart),
-                              ).then(
-                                (value) => Get.find<CartController>()
-                                    .getCartDataOnline(),
-                              )
-                            : showDialog(
-                                context: context,
-                                builder: (con) => Dialog(
-                                      child: ProductBottomSheetWidget(
-                                          product: cart.product,
-                                          cartIndex: cartIndex,
-                                          cart: cart),
-                                    ));
-                      }
+                      ResponsiveHelper.isMobile(context)
+                          ? showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (con) => ProductBottomSheetWidget(
+                                  product: cart.product,
+                                  cartIndex: cartIndex,
+                                  cart: cart),
+                            ).then(
+                              (value) => Get.find<CartController>()
+                                  .getCartDataOnline(),
+                            )
+                          : showDialog(
+                              context: context,
+                              builder: (con) => Dialog(
+                                    child: ProductBottomSheetWidget(
+                                        product: cart.product,
+                                        cartIndex: cartIndex,
+                                        cart: cart),
+                                  ));
                     },
                     radius: Dimensions.radiusDefault,
                     child: Padding(

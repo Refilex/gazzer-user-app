@@ -192,7 +192,8 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
           body: Column(
             children: [
               (catController.subCategoryList != null &&
-                      !catController.isSearching)
+                      !catController.isSearching &&
+                      catController.subCategoryList![0].id == 1)
                   ? Center(
                       child: Container(
                         height: 40,
