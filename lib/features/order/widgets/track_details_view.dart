@@ -51,26 +51,12 @@ class TrackDetailsView extends StatelessWidget {
               child: Column(children: [
                 Text('estimate_delivery_time'.tr, style: robotoRegular),
                 Center(
-                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text(
-                      DateConverter.differenceInMinute(
-                                  track.restaurant!.deliveryTime,
-                                  track.createdAt,
-                                  track.processingTime,
-                                  track.scheduleAt) <
-                              5
-                          ? '1 - 5'
-                          : '${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt) - 5} '
-                              '- ${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt)}',
-                      style: robotoBold.copyWith(
-                          fontSize: Dimensions.fontSizeOverLarge),
-                      textDirection: TextDirection.ltr,
-                    ),
-                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                    Text('min'.tr,
-                        style: robotoBold.copyWith(
-                            fontSize: Dimensions.fontSizeOverLarge)),
-                  ]),
+                  child: Text(
+                    "${track.totalDeliveryTime!} Mins",
+                    style: robotoBold.copyWith(
+                        fontSize: Dimensions.fontSizeOverLarge),
+                    textDirection: TextDirection.ltr,
+                  ),
                 ),
               ]),
             )
@@ -86,26 +72,12 @@ class TrackDetailsView extends StatelessWidget {
               const SizedBox(height: Dimensions.paddingSizeLarge),
               Text('estimate_delivery_time'.tr, style: robotoRegular),
               Center(
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Text(
-                    DateConverter.differenceInMinute(
-                                track.restaurant!.deliveryTime,
-                                track.createdAt,
-                                track.processingTime,
-                                track.scheduleAt) <
-                            5
-                        ? '1 - 5'
-                        : '${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt) - 5} '
-                            '- ${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt)}',
-                    style: robotoBold.copyWith(
-                        fontSize: Dimensions.fontSizeOverLarge),
-                    textDirection: TextDirection.ltr,
-                  ),
-                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                  Text('min'.tr,
-                      style: robotoBold.copyWith(
-                          fontSize: Dimensions.fontSizeOverLarge)),
-                ]),
+                child: Text(
+                  "${track.totalDeliveryTime!} Mins",
+                  style: robotoBold.copyWith(
+                      fontSize: Dimensions.fontSizeOverLarge),
+                  textDirection: TextDirection.ltr,
+                ),
               ),
               Divider(
                   color: Theme.of(context).disabledColor.withOpacity(0.3),
