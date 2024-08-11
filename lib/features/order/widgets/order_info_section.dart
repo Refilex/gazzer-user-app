@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stackfood_multivendor/common/models/review_model.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
@@ -114,18 +115,12 @@ class OrderInfoSection extends StatelessWidget {
             : null,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           DateConverter.isBeforeTime(order.scheduleAt)
-              ? (!cancelled && ongoing && !subscription)
+              ? (order.orderStatus == 'confirmed' &&
+                      order.totalDeliveryTime != null)
                   ? Column(children: [
                       ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                              order.orderStatus == 'pending'
-                                  ? Images.pendingOrderDetails
-                                  : (order.orderStatus == 'confirmed' ||
-                                          order.orderStatus == 'processing' ||
-                                          order.orderStatus == 'handover')
-                                      ? Images.preparingFoodOrderDetails
-                                      : Images.animateDeliveryMan,
+                          child: Image.asset(Images.animateDeliveryMan,
                               fit: BoxFit.contain,
                               height: 180)),
                       const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -135,28 +130,25 @@ class OrderInfoSection extends StatelessWidget {
                               color: Theme.of(context).disabledColor)),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                       Center(
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text(
-                            DateConverter.differenceInMinute(
-                                        order.restaurant!.deliveryTime,
-                                        order.createdAt,
-                                        order.processingTime,
-                                        order.scheduleAt) <
-                                    5
-                                ? '1 - 5'
-                                : '${DateConverter.differenceInMinute(order.restaurant!.deliveryTime, order.createdAt, order.processingTime, order.scheduleAt) - 5} '
-                                    '- ${DateConverter.differenceInMinute(order.restaurant!.deliveryTime, order.createdAt, order.processingTime, order.scheduleAt)}',
-                            style: robotoBold.copyWith(
-                                fontSize: Dimensions.fontSizeExtraLarge),
-                            textDirection: TextDirection.ltr,
-                          ),
-                          const SizedBox(
-                              width: Dimensions.paddingSizeExtraSmall),
-                          Text('min'.tr,
-                              style: robotoMedium.copyWith(
-                                  fontSize: Dimensions.fontSizeLarge,
-                                  color: Theme.of(context).primaryColor)),
-                        ]),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${order.totalDeliveryTime! - int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(order.confirmed!)))}",
+                              style: robotoBold.copyWith(
+                                  fontSize: Dimensions.fontSizeOverLarge),
+                              // textDirection: TextDirection.ltr,
+                            ),
+                            const SizedBox(
+                                width: Dimensions.paddingSizeExtraSmall),
+                            Text(
+                              "min".tr,
+                              style: robotoBold.copyWith(
+                                  fontSize: Dimensions.fontSizeLarge),
+                              // textDirection: TextDirection.ltr,
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: Dimensions.paddingSizeExtraLarge),
                     ])
@@ -208,19 +200,25 @@ class OrderInfoSection extends StatelessWidget {
                               order.createdAt!),
                           style: robotoRegular),
                     ])
-                  : Row(children: [
-                      Text('${'order_id'.tr}:', style: robotoRegular),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                      Text(order.id.toString(), style: robotoMedium),
-                      const Expanded(child: SizedBox()),
-                      const Icon(Icons.watch_later, size: 17),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                      Text(
-                        DateConverter.dateTimeStringToDateTime(
-                            order.createdAt!),
-                        style: robotoRegular,
-                      ),
-                    ]),
+                  : Row(
+                      children: [
+                        Text('${'order_id'.tr}:', style: robotoRegular),
+                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        Text(order.id.toString(), style: robotoMedium),
+                        const SizedBox(width: 5),
+                        // Ensures remaining space is filled
+                        const Icon(Icons.watch_later, size: 17),
+                        // Adjust size if needed
+                        const SizedBox(width: 5),
+                        Text(
+                          DateConverter.dateTimeStringToDateTime(
+                              order.createdAt!),
+                          style: robotoRegular.copyWith(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
               const Divider(height: Dimensions.paddingSizeLarge),
               subscription
                   ? Row(children: [

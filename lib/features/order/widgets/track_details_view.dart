@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
 import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
@@ -52,10 +53,11 @@ class TrackDetailsView extends StatelessWidget {
                 Text('estimate_delivery_time'.tr, style: robotoRegular),
                 Center(
                   child: Text(
-                    "${track.totalDeliveryTime!} Mins",
+                    track.orderStatus == "confirmed"
+                        ? "${track.totalDeliveryTime! - int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(track.confirmed!)))} Mins"
+                        : "${track.totalDeliveryTime!} Mins",
                     style: robotoBold.copyWith(
                         fontSize: Dimensions.fontSizeOverLarge),
-                    textDirection: TextDirection.ltr,
                   ),
                 ),
               ]),
@@ -76,7 +78,6 @@ class TrackDetailsView extends StatelessWidget {
                   "${track.totalDeliveryTime!} Mins",
                   style: robotoBold.copyWith(
                       fontSize: Dimensions.fontSizeOverLarge),
-                  textDirection: TextDirection.ltr,
                 ),
               ),
               Divider(
