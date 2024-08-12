@@ -51,20 +51,20 @@ Future<void> main() async {
 
   if (GetPlatform.isWeb) {
     await Firebase.initializeApp(
-        options: const FirebaseOptions(
-      apiKey: 'AIzaSyCeaw_gVN0iQwFHyuF8pQ6PbVDmSVQw8AY',
-      appId: '1:1049699819506:web:a4b5e3bedc729aab89956b',
-      messagingSenderId: '1049699819506',
-      projectId: 'stackfood-bd3ee',
+      options: const FirebaseOptions(
+      apiKey: 'AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw',
+      appId: '1:671839887516:android:2cd563c7493816c8798d59',
+      messagingSenderId: '671839887516',
+      projectId: 'gazzer-app',
     ));
     MetaSEO().config();
   } else if (GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: 'AIzaSyBScz65YN8J9YoKdtKPl4ecCB3Vkc7iNL8',
-        appId: '1:1049699819506:android:c80cf797b22c81f089956b',
-        messagingSenderId: '1049699819506',
-        projectId: 'stackfood-bd3ee',
+        apiKey: 'AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw',
+        appId: '1:671839887516:android:2cd563c7493816c8798d59',
+        messagingSenderId: '671839887516',
+        projectId: 'gazzer-app',
       ),
     );
 
