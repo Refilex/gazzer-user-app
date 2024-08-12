@@ -1,19 +1,18 @@
-import 'package:intl/intl.dart';
-import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/features/order/widgets/address_details_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
+import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
+import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
+import 'package:stackfood_multivendor/features/order/widgets/address_details_widget.dart';
+import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
+import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:stackfood_multivendor/util/images.dart';
+import 'package:stackfood_multivendor/util/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class TrackDetailsView extends StatelessWidget {
@@ -75,7 +74,9 @@ class TrackDetailsView extends StatelessWidget {
               Text('estimate_delivery_time'.tr, style: robotoRegular),
               Center(
                 child: Text(
-                  "${track.totalDeliveryTime!} Mins",
+                  track.orderStatus == "confirmed"
+                      ? "${track.totalDeliveryTime! - int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(track.confirmed!)))} Mins"
+                      : "${track.totalDeliveryTime!} Mins",
                   style: robotoBold.copyWith(
                       fontSize: Dimensions.fontSizeOverLarge),
                 ),

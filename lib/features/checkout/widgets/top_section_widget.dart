@@ -6,7 +6,6 @@ import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.
 import 'package:stackfood_multivendor/features/auth/widgets/auth_dialog_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/coupon_section.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/delivery_section.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/guest_login_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/order_type_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/partial_pay_view.dart';
@@ -236,7 +235,7 @@ class TopSectionWidget extends StatelessWidget {
                 controller: checkoutController.noteController,
                 hintText: 'share_any_specific_delivery_details_here'.tr,
                 showLabelText: false,
-                maxLines: 3,
+                maxLines: 1,
                 inputType: TextInputType.multiline,
                 inputAction: TextInputAction.done,
                 capitalization: TextCapitalization.sentences,

@@ -162,11 +162,20 @@ class BottomSectionWidget extends StatelessWidget {
                       color: Theme.of(context).primaryColor),
                 ),
                 Text(
-                  PriceConverter.convertPrice((cartList.fold(
-                        0.0,
-                        (total, item) => total + (item.price! * item.quantity!),
-                      ) +
-                      deliveryCharge)),
+                  couponController.discount! > 0
+                      ? PriceConverter.convertPrice((cartList.fold(
+                            0.0,
+                            (total, item) =>
+                                total + (item.price! * item.quantity!),
+                          ) +
+                          deliveryCharge -
+                          couponController.discount!))
+                      : PriceConverter.convertPrice((cartList.fold(
+                            0.0,
+                            (total, item) =>
+                                total + (item.price! * item.quantity!),
+                          ) +
+                          deliveryCharge)),
                   textDirection: TextDirection.ltr,
                   style: robotoMedium.copyWith(
                       fontSize: Dimensions.fontSizeExtraLarge,
@@ -181,11 +190,20 @@ class BottomSectionWidget extends StatelessWidget {
                 isCashOnDeliveryActive: isCashOnDeliveryActive,
                 isDigitalPaymentActive: isDigitalPaymentActive,
                 isWalletActive: isWalletActive,
-                total: (cartList.fold(
-                      0.0,
-                      (total, item) => total + (item.price! * item.quantity!),
-                    ) +
-                    deliveryCharge),
+                total: couponController.discount! > 0
+                    ? (cartList.fold(
+                          0.0,
+                          (total, item) =>
+                              total + (item.price! * item.quantity!),
+                        ) +
+                        deliveryCharge -
+                        couponController.discount!)
+                    : (cartList.fold(
+                          0.0,
+                          (total, item) =>
+                              total + (item.price! * item.quantity!),
+                        ) +
+                        deliveryCharge),
                 checkoutController: checkoutController,
                 isOfflinePaymentActive: isOfflinePaymentActive,
               )
