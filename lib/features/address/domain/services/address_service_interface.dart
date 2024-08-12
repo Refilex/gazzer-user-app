@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
 
 abstract class AddressServiceInterface {
   Future<List<AddressModel>?> getList({bool isLocal = false});

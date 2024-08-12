@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/features/wallet/domain/models/fund_bonus_model.dart';
+import 'package:gazzer_userapp/features/wallet/domain/models/fund_bonus_model.dart';
 
 class RestaurantModel {
   int? totalSize;

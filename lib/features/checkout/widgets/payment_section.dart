@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/payment_method_bottom_sheet.dart';
-import 'package:stackfood_multivendor/helper/extensions.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/payment_method_bottom_sheet.dart';
+import 'package:gazzer_userapp/helper/extensions.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 
 class PaymentSection extends StatelessWidget {
   final bool isCashOnDeliveryActive;

@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/restaurant/domain/models/recommended_product_model.dart';
-import 'package:stackfood_multivendor/features/restaurant/domain/repositories/restaurant_repository_interface.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/restaurant/domain/models/recommended_product_model.dart';
+import 'package:gazzer_userapp/features/restaurant/domain/repositories/restaurant_repository_interface.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:get/get_connect.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

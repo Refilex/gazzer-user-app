@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/partial_pay_view.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/payment_section.dart';
-import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/partial_pay_view.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/payment_section.dart';
+import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 
 class BottomSectionWidget extends StatelessWidget {
   final CartModel? cart;

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
 
 class PlaceOrderBodyModel {
   List<OnlineCart>? _cart;

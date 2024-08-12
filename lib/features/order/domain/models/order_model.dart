@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
 
 class PaginatedOrderModel {
   int? totalSize;

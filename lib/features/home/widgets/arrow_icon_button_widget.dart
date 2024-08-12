@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class ArrowIconButtonWidget extends StatelessWidget {

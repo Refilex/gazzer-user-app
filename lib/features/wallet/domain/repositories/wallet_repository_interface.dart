@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/features/wallet/domain/models/fund_bonus_model.dart';
-import 'package:stackfood_multivendor/features/wallet/domain/models/wallet_model.dart';
-import 'package:stackfood_multivendor/interface/repository_interface.dart';
+import 'package:gazzer_userapp/features/wallet/domain/models/fund_bonus_model.dart';
+import 'package:gazzer_userapp/features/wallet/domain/models/wallet_model.dart';
+import 'package:gazzer_userapp/interface/repository_interface.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
 abstract class WalletRepositoryInterface extends RepositoryInterface {

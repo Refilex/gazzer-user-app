@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/features/loyalty/domain/repositories/loyalty_repository_interface.dart';
-import 'package:stackfood_multivendor/features/loyalty/domain/services/loyalty_service_interface.dart';
-import 'package:stackfood_multivendor/features/wallet/domain/models/wallet_model.dart';
+import 'package:gazzer_userapp/features/loyalty/domain/repositories/loyalty_repository_interface.dart';
+import 'package:gazzer_userapp/features/loyalty/domain/services/loyalty_service_interface.dart';
+import 'package:gazzer_userapp/features/wallet/domain/models/wallet_model.dart';
 import 'package:get/get_connect.dart';
 
 class LoyaltyService implements LoyaltyServiceInterface {

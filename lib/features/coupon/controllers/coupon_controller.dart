@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/coupon/domain/models/coupon_model.dart';
-import 'package:stackfood_multivendor/features/coupon/domain/services/coupon_service_interface.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/coupon/domain/models/coupon_model.dart';
+import 'package:gazzer_userapp/features/coupon/domain/services/coupon_service_interface.dart';
+import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 
 class CouponController extends GetxController implements GetxService {

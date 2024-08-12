@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/delivery_log_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_cancellation_body.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/pause_log_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/refund_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/repositories/order_repository_interface.dart';
-import 'package:stackfood_multivendor/helper/auth_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/order/domain/models/delivery_log_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_cancellation_body.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/pause_log_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/refund_model.dart';
+import 'package:gazzer_userapp/features/order/domain/repositories/order_repository_interface.dart';
+import 'package:gazzer_userapp/helper/auth_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:get/get_connect.dart';
 import 'package:image_picker/image_picker.dart';
 

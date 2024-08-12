@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/features/home/widgets/restaurants_view_widget.dart';
-import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/common/widgets/paginated_list_view_widget.dart';
+import 'package:gazzer_userapp/features/home/widgets/restaurants_view_widget.dart';
+import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
+import 'package:gazzer_userapp/common/widgets/paginated_list_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

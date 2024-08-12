@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/features/loyalty/domain/services/loyalty_service_interface.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/features/wallet/domain/models/wallet_model.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/loyalty/domain/services/loyalty_service_interface.dart';
+import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/features/wallet/domain/models/wallet_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 
 class LoyaltyController extends GetxController implements GetxService {

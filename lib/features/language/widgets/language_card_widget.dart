@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
-import 'package:stackfood_multivendor/features/language/domain/models/language_model.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
+import 'package:gazzer_userapp/features/language/domain/models/language_model.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 
 class LanguageCardWidget extends StatelessWidget {
   final LanguageModel languageModel;

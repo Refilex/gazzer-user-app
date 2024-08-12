@@ -1,14 +1,14 @@
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/interest/controllers/interest_controller.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/no_data_screen_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/web_menu_bar.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/features/interest/controllers/interest_controller.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
+import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/no_data_screen_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_menu_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

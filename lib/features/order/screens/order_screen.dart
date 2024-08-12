@@ -1,12 +1,12 @@
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/order/widgets/guest_track_order_input_view_widget.dart';
-import 'package:stackfood_multivendor/features/order/widgets/order_view_widget.dart';
-import 'package:stackfood_multivendor/helper/auth_helper.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
+import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/widgets/guest_track_order_input_view_widget.dart';
+import 'package:gazzer_userapp/features/order/widgets/order_view_widget.dart';
+import 'package:gazzer_userapp/helper/auth_helper.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
+import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

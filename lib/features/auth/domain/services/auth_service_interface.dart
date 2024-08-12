@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/signup_body_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/social_log_in_body_model.dart';
 
 abstract class AuthServiceInterface {
   Future<ResponseModel> registration(

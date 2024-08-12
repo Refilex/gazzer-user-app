@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
+import 'package:gazzer_userapp/features/location/domain/models/zone_response_model.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:flutter/material.dart';
 
 class BadWeatherWidget extends StatefulWidget {

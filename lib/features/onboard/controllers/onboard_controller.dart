@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/features/onboard/domain/models/onboarding_model.dart';
-import 'package:stackfood_multivendor/features/onboard/domain/service/onboard_service_interface.dart';
+import 'package:gazzer_userapp/features/onboard/domain/models/onboarding_model.dart';
+import 'package:gazzer_userapp/features/onboard/domain/service/onboard_service_interface.dart';
 import 'package:get/get.dart';
 
 class OnBoardingController extends GetxController implements GetxService {

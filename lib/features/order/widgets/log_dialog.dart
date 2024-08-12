@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/delivery_log_model.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/paginated_list_view_widget.dart';
+import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/delivery_log_model.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
+import 'package:gazzer_userapp/common/widgets/paginated_list_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';

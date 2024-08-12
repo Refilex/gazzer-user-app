@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/features/search/domain/models/search_suggestion_model.dart';
-import 'package:stackfood_multivendor/features/search/domain/services/search_service_interface.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/features/search/domain/models/search_suggestion_model.dart';
+import 'package:gazzer_userapp/features/search/domain/services/search_service_interface.dart';
 import 'package:get/get.dart';
 
 class SearchController extends GetxController implements GetxService {

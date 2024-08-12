@@ -1,8 +1,8 @@
 import 'package:get/get_connect/http/src/response/response.dart';
-import 'package:stackfood_multivendor/common/models/online_cart_model.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/common/models/online_cart_model.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
 
 abstract class CartServiceInterface {
   Future<Response> addMultipleCartItemOnline(List<OnlineCart> carts);

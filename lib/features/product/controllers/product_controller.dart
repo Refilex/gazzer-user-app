@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/product/domain/services/product_service_interface.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/widgets/product_bottom_sheet_widget.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/product/domain/services/product_service_interface.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
 
 class ProductController extends GetxController implements GetxService {
   final ProductServiceInterface productServiceInterface;

@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 
 class CuisineRestaurantModel {
   int? totalSize;

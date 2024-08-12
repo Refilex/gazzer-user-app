@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 
 class CustomToolTip extends StatefulWidget {
   final String message;

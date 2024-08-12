@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
-import 'package:stackfood_multivendor/features/splash/domain/repositories/splash_repository_interface.dart';
-import 'package:stackfood_multivendor/features/splash/domain/services/splash_service_interface.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/splash/domain/models/config_model.dart';
+import 'package:gazzer_userapp/features/splash/domain/repositories/splash_repository_interface.dart';
+import 'package:gazzer_userapp/features/splash/domain/services/splash_service_interface.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 
 class SplashService implements SplashServiceInterface {

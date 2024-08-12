@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/features/business/domain/models/business_plan_body.dart';
-import 'package:stackfood_multivendor/features/business/domain/models/package_model.dart';
+import 'package:gazzer_userapp/features/business/domain/models/business_plan_body.dart';
+import 'package:gazzer_userapp/features/business/domain/models/package_model.dart';
 
 abstract class BusinessServiceInterface {
   Future<PackageModel?> getPackageList();

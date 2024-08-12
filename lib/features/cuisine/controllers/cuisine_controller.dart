@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/features/cuisine/domain/models/cuisine_model.dart';
-import 'package:stackfood_multivendor/features/cuisine/domain/models/cuisine_restaurants_model.dart';
-import 'package:stackfood_multivendor/features/cuisine/domain/services/cuisine_service_interface.dart';
+import 'package:gazzer_userapp/features/cuisine/domain/models/cuisine_model.dart';
+import 'package:gazzer_userapp/features/cuisine/domain/models/cuisine_restaurants_model.dart';
+import 'package:gazzer_userapp/features/cuisine/domain/services/cuisine_service_interface.dart';
 import 'package:get/get.dart';
 
 class CuisineController extends GetxController implements GetxService {

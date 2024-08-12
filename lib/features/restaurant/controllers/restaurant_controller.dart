@@ -1,20 +1,20 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
-import 'package:stackfood_multivendor/features/category/domain/models/category_model.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
-import 'package:stackfood_multivendor/features/restaurant/domain/models/cart_suggested_item_model.dart';
-import 'package:stackfood_multivendor/features/restaurant/domain/models/recommended_product_model.dart';
-import 'package:stackfood_multivendor/features/restaurant/domain/services/restaurant_service_interface.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/category/controllers/category_controller.dart';
+import 'package:gazzer_userapp/features/category/domain/models/category_model.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
+import 'package:gazzer_userapp/features/location/domain/models/zone_response_model.dart';
+import 'package:gazzer_userapp/features/restaurant/domain/models/cart_suggested_item_model.dart';
+import 'package:gazzer_userapp/features/restaurant/domain/models/recommended_product_model.dart';
+import 'package:gazzer_userapp/features/restaurant/domain/services/restaurant_service_interface.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
 
 class RestaurantController extends GetxController implements GetxService {
   final RestaurantServiceInterface restaurantServiceInterface;

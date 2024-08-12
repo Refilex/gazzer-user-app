@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/features/notification/domain/models/notification_model.dart';
-import 'package:stackfood_multivendor/features/notification/domain/service/notification_service_interface.dart';
+import 'package:gazzer_userapp/features/notification/domain/models/notification_model.dart';
+import 'package:gazzer_userapp/features/notification/domain/service/notification_service_interface.dart';
 import 'package:get/get.dart';
 
 class NotificationController extends GetxController implements GetxService {

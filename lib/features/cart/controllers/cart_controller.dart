@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/api/api_checker.dart';
-import 'package:stackfood_multivendor/common/models/online_cart_model.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/widgets/cart_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/services/cart_service_interface.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
-import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/helper/auth_helper.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
+import 'package:gazzer_userapp/api/api_checker.dart';
+import 'package:gazzer_userapp/common/models/online_cart_model.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/widgets/cart_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/cart/domain/services/cart_service_interface.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/product/controllers/product_controller.dart';
+import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
+import 'package:gazzer_userapp/helper/auth_helper.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
 
 class CartController extends GetxController implements GetxService {
   final CartServiceInterface cartServiceInterface;

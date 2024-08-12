@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/verification/domein/reposotories/verification_repo_interface.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/verification/domein/reposotories/verification_repo_interface.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

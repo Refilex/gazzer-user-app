@@ -1,10 +1,10 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/services/auth_service_interface.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/signup_body_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/social_log_in_body_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/services/auth_service_interface.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController implements GetxService {

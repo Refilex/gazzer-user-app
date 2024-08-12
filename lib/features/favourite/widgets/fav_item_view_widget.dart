@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/common/widgets/product_view_widget.dart';
+import 'package:gazzer_userapp/features/favourite/controllers/favourite_controller.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/common/widgets/product_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

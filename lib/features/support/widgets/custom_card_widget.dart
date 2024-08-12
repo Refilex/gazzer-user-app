@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class CustomCardWidget extends StatelessWidget {

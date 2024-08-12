@@ -1,8 +1,8 @@
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/chat/domain/models/conversation_model.dart';
-import 'package:stackfood_multivendor/features/chat/domain/models/message_model.dart';
-import 'package:stackfood_multivendor/features/chat/enums/user_type_enum.dart';
-import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/chat/domain/models/conversation_model.dart';
+import 'package:gazzer_userapp/features/chat/domain/models/message_model.dart';
+import 'package:gazzer_userapp/features/chat/enums/user_type_enum.dart';
+import 'package:gazzer_userapp/features/notification/domain/models/notification_body_model.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:image_picker/image_picker.dart';
 

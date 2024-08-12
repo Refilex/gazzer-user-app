@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/common/models/review_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_details_model.dart';
-import 'package:stackfood_multivendor/features/product/domain/models/review_body_model.dart';
-import 'package:stackfood_multivendor/features/review/domain/services/review_service_interface.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/common/models/review_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_details_model.dart';
+import 'package:gazzer_userapp/features/product/domain/models/review_body_model.dart';
+import 'package:gazzer_userapp/features/review/domain/services/review_service_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

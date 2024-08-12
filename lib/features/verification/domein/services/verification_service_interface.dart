@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
 
 abstract class VerificationServiceInterface {
   Future<ResponseModel> forgetPassword(String? phone);

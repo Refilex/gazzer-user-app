@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/common/widgets/product_shimmer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/web_restaurant_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/restaurant_widget.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/widgets/product_shimmer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/product_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_restaurant_widget.dart';
+import 'package:gazzer_userapp/features/home/widgets/theme1/restaurant_widget.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 
 class ProductViewWidget extends StatelessWidget {
   final List<Product?>? products;

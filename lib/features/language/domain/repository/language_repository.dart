@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/language/domain/repository/language_repository_interface.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/language/domain/repository/language_repository_interface.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/features/onboard/domain/models/onboarding_model.dart';
-import 'package:stackfood_multivendor/util/images.dart';
+import 'package:gazzer_userapp/features/onboard/domain/models/onboarding_model.dart';
+import 'package:gazzer_userapp/util/images.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'onboard_repository_interface.dart';
 

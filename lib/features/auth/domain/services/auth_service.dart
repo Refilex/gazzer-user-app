@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/signup_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/social_log_in_body_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/reposotories/auth_repo_interface.dart';
-import 'package:stackfood_multivendor/features/auth/domain/services/auth_service_interface.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/signup_body_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/social_log_in_body_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/reposotories/auth_repo_interface.dart';
+import 'package:gazzer_userapp/features/auth/domain/services/auth_service_interface.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';

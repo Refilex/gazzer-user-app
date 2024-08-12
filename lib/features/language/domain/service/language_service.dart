@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/language/domain/models/language_model.dart';
-import 'package:stackfood_multivendor/features/language/domain/repository/language_repository_interface.dart';
-import 'package:stackfood_multivendor/features/language/domain/service/language_service_interface.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/language/domain/models/language_model.dart';
+import 'package:gazzer_userapp/features/language/domain/repository/language_repository_interface.dart';
+import 'package:gazzer_userapp/features/language/domain/service/language_service_interface.dart';
 import 'package:flutter/material.dart';
 
 class LanguageService implements LanguageServiceInterface {
