@@ -1808,34 +1808,27 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                 product, context);
                                             Get.back();
                                           }
-                                          if (product!.variations![0].type ==
-                                              "free_input") {
-                                            _onButtonPressed(
-                                                productController,
-                                                cartController,
-                                                priceWithVariation,
-                                                priceWithDiscount,
-                                                price,
-                                                discount,
-                                                discountType,
-                                                addOnIdList,
-                                                addOnsList,
-                                                priceWithAddonsVariation);
-                                          }
-                                          if (product!.variations![0].type !=
-                                              "free_input") {
-                                            _onButtonPressed(
-                                                productController,
-                                                cartController,
-                                                priceWithVariationMulti,
-                                                priceWithDiscount,
-                                                price,
-                                                discount,
-                                                discountType,
-                                                addOnIdList,
-                                                addOnsList,
-                                                priceWithAddonsVariationMulti);
-                                          }
+
+                                          _onButtonPressed(
+                                            productController,
+                                            cartController,
+                                            product!.variations![0].type ==
+                                                "free_input"
+                                                ?
+                                            priceWithVariation
+                                                : priceWithVariationMulti,
+                                            priceWithDiscount,
+                                            price,
+                                            discount,
+                                            discountType,
+                                            addOnIdList,
+                                            addOnsList,
+                                            product!.variations![0].type ==
+                                                "free_input"
+                                                ?
+                                            priceWithAddonsVariation
+                                                : priceWithAddonsVariationMulti,
+                                          );
                                         },
                                       );
                                     }),
