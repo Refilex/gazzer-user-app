@@ -621,22 +621,44 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                     color: Theme.of(context)
                                                         .primaryColor),
                                               ),
-                                              PriceConverter
-                                                  .convertAnimationPrice(
-                                                _cartList!.fold(
-                                                        0.0,
-                                                        (total, item) =>
-                                                            total +
-                                                            (item.price! *
-                                                                item.quantity!)) +
-                                                    groupedDeliveryCharge,
-                                                textStyle:
-                                                    robotoMedium.copyWith(
-                                                        fontSize: Dimensions
-                                                            .fontSizeLarge,
-                                                        color: Theme.of(context)
-                                                            .primaryColor),
-                                              ),
+                                              couponController.discount! > 0
+                                                  ? PriceConverter
+                                                      .convertAnimationPrice(
+                                                      _cartList!.fold(
+                                                              0.0,
+                                                              (total, item) =>
+                                                                  total +
+                                                                  (item.price! *
+                                                                      item
+                                                                          .quantity!)) +
+                                                          groupedDeliveryCharge -
+                                                          couponController
+                                                              .discount!,
+                                                      textStyle:
+                                                          robotoMedium.copyWith(
+                                                              fontSize: Dimensions
+                                                                  .fontSizeLarge,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    )
+                                                  : PriceConverter
+                                                      .convertAnimationPrice(
+                                                      _cartList!.fold(
+                                                              0.0,
+                                                              (total, item) =>
+                                                                  total +
+                                                                  (item.price! *
+                                                                      item.quantity!)) +
+                                                          groupedDeliveryCharge,
+                                                      textStyle:
+                                                          robotoMedium.copyWith(
+                                                              fontSize: Dimensions
+                                                                  .fontSizeLarge,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    ),
                                             ],
                                           ),
                                         ),
