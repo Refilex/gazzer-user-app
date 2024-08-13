@@ -88,7 +88,7 @@ class OrderModel {
   OfflinePayment? offlinePayment;
   double? extraPackagingAmount;
   double? referrerBonusAmount;
-  int? totalDeliveryTime;
+  String? totalDeliveryTime;
 
   OrderModel({
     this.id,

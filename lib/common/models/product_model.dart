@@ -246,7 +246,7 @@ class Variation {
     if (json['max'] != null) {
       variationId = json['variation_id'];
       name = json['name'];
-      type = json['type'];
+      type = json['type'].toString();
       multiSelect = json['type'] == 'multi';
       min = multiSelect! ? int.parse(json['min'].toString()) : 0;
       max = multiSelect! ? int.parse(json['max'].toString()) : 0;
