@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
@@ -8,6 +7,7 @@ import 'package:gazzer_userapp/helper/price_converter.dart';
 import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class BottomCartWidget extends StatelessWidget {
   final int? restaurantId;
@@ -43,7 +43,7 @@ class BottomCartWidget extends StatelessWidget {
                           fontSize: Dimensions.fontSizeDefault)),
                   const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                   Text(
-                    '${'total'.tr}: ${PriceConverter.convertPrice(cartController.cartList.fold(0, (total, item) => total! + item.price!))}',
+                    '${'total'.tr}: ${PriceConverter.convertPrice(cartController.cartList.fold(0, (total, item) => total! + ((item.price!))))}',
                     style: robotoMedium.copyWith(
                         fontSize: Dimensions.fontSizeLarge,
                         color: Theme.of(context).primaryColor),

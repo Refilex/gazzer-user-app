@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
@@ -13,6 +11,8 @@ import 'package:gazzer_userapp/helper/price_converter.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class BottomSectionWidget extends StatelessWidget {
   final CartModel? cart;
@@ -163,19 +163,11 @@ class BottomSectionWidget extends StatelessWidget {
                 ),
                 Text(
                   couponController.discount! > 0
-                      ? PriceConverter.convertPrice((cartList.fold(
-                            0.0,
-                            (total, item) =>
-                                total + (item.price! * item.quantity!),
-                          ) +
+                      ? PriceConverter.convertPrice((orderAmount +
                           deliveryCharge -
                           couponController.discount!))
-                      : PriceConverter.convertPrice((cartList.fold(
-                            0.0,
-                            (total, item) =>
-                                total + (item.price! * item.quantity!),
-                          ) +
-                          deliveryCharge)),
+                      : PriceConverter.convertPrice(
+                          (orderAmount + deliveryCharge)),
                   textDirection: TextDirection.ltr,
                   style: robotoMedium.copyWith(
                       fontSize: Dimensions.fontSizeExtraLarge,
@@ -191,19 +183,10 @@ class BottomSectionWidget extends StatelessWidget {
                 isDigitalPaymentActive: isDigitalPaymentActive,
                 isWalletActive: isWalletActive,
                 total: couponController.discount! > 0
-                    ? (cartList.fold(
-                          0.0,
-                          (total, item) =>
-                              total + (item.price! * item.quantity!),
-                        ) +
+                    ? (orderAmount +
                         deliveryCharge -
                         couponController.discount!)
-                    : (cartList.fold(
-                          0.0,
-                          (total, item) =>
-                              total + (item.price! * item.quantity!),
-                        ) +
-                        deliveryCharge),
+                    : (orderAmount + deliveryCharge),
                 checkoutController: checkoutController,
                 isOfflinePaymentActive: isOfflinePaymentActive,
               )
@@ -259,6 +242,14 @@ class BottomSectionWidget extends StatelessWidget {
                         0,
                         (total, item) =>
                             total! + (item.price! * item.quantity!))),
+                    style: robotoRegular,
+                    textDirection: TextDirection.ltr),
+              ]),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text('variations'.tr, style: robotoRegular),
+                Text(
+                    '(+) ${PriceConverter.convertPrice(orderAmount - (cartList.fold(0, (total, item) => total + (item.price! * item.quantity!))))}',
                     style: robotoRegular,
                     textDirection: TextDirection.ltr),
               ]),

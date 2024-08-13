@@ -2,7 +2,6 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/models/product_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_asset_image_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
@@ -20,6 +19,7 @@ import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class CartProductWidget extends StatelessWidget {
   final CartModel cart;
@@ -252,7 +252,7 @@ class CartProductWidget extends StatelessWidget {
                                         discount > 0
                                             ? Text(
                                                 PriceConverter.convertPrice(
-                                                    cart.product!.price),
+                                                    cart.price),
                                                 textDirection:
                                                     TextDirection.ltr,
                                                 style: robotoMedium.copyWith(

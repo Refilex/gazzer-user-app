@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/common/widgets/rating_bar_widget.dart';
@@ -13,6 +10,8 @@ import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dar
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class TrackDetailsView extends StatelessWidget {
@@ -52,9 +51,7 @@ class TrackDetailsView extends StatelessWidget {
                 Text('estimate_delivery_time'.tr, style: robotoRegular),
                 Center(
                   child: Text(
-                    track.orderStatus == "confirmed"
-                        ? "${track.totalDeliveryTime! - int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(track.confirmed!)))} Mins"
-                        : "${track.totalDeliveryTime!} Mins",
+                    "${track.totalDeliveryTime!} Mins",
                     style: robotoBold.copyWith(
                         fontSize: Dimensions.fontSizeOverLarge),
                   ),
@@ -74,9 +71,7 @@ class TrackDetailsView extends StatelessWidget {
               Text('estimate_delivery_time'.tr, style: robotoRegular),
               Center(
                 child: Text(
-                  track.orderStatus == "confirmed"
-                      ? "${track.totalDeliveryTime! - int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(track.confirmed!)))} Mins"
-                      : "${track.totalDeliveryTime!} Mins",
+                  "${track.totalDeliveryTime!} Mins",
                   style: robotoBold.copyWith(
                       fontSize: Dimensions.fontSizeOverLarge),
                 ),

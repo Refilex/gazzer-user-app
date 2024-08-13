@@ -1,8 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:gazzer_userapp/common/models/review_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
@@ -28,6 +25,8 @@ import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class OrderInfoSection extends StatelessWidget {
@@ -115,12 +114,21 @@ class OrderInfoSection extends StatelessWidget {
             : null,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           DateConverter.isBeforeTime(order.scheduleAt)
-              ? (order.orderStatus == 'confirmed' &&
+              ? (!cancelled &&
+                      ongoing &&
+                      !subscription &&
                       order.totalDeliveryTime != null)
                   ? Column(children: [
                       ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(Images.animateDeliveryMan,
+                          child: Image.asset(
+                              order.orderStatus == 'pending'
+                                  ? Images.pendingOrderDetails
+                                  : (order.orderStatus == 'confirmed' ||
+                                          order.orderStatus == 'processing' ||
+                                          order.orderStatus == 'handover')
+                                      ? Images.preparingFoodOrderDetails
+                                      : Images.animateDeliveryMan,
                               fit: BoxFit.contain,
                               height: 180)),
                       const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -133,8 +141,9 @@ class OrderInfoSection extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            //int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(order.confirmed!)))
                             Text(
-                              "${order.totalDeliveryTime! - int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(order.confirmed!)))}",
+                              "${order.totalDeliveryTime!}",
                               style: robotoBold.copyWith(
                                   fontSize: Dimensions.fontSizeOverLarge),
                               // textDirection: TextDirection.ltr,

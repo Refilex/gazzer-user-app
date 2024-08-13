@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:gazzer_userapp/common/models/product_model.dart';
 import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
@@ -34,6 +32,8 @@ import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<CartModel>? cartList;
@@ -624,13 +624,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                               couponController.discount! > 0
                                                   ? PriceConverter
                                                       .convertAnimationPrice(
-                                                      _cartList!.fold(
-                                                              0.0,
-                                                              (total, item) =>
-                                                                  total +
-                                                                  (item.price! *
-                                                                      item
-                                                                          .quantity!)) +
+                                                      orderAmount +
                                                           groupedDeliveryCharge -
                                                           couponController
                                                               .discount!,
@@ -644,12 +638,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                     )
                                                   : PriceConverter
                                                       .convertAnimationPrice(
-                                                      _cartList!.fold(
-                                                              0.0,
-                                                              (total, item) =>
-                                                                  total +
-                                                                  (item.price! *
-                                                                      item.quantity!)) +
+                                                      orderAmount +
                                                           groupedDeliveryCharge,
                                                       textStyle:
                                                           robotoMedium.copyWith(

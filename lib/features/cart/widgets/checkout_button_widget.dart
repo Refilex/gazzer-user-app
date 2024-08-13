@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
@@ -12,6 +11,7 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class CheckoutButtonWidget extends StatelessWidget {
   final CartController cartController;
@@ -31,9 +31,16 @@ class CheckoutButtonWidget extends StatelessWidget {
     // Calculate the total subtotal for all items
     double totalSubtotal = cartController.cartList.fold(
       0,
-      (sum, item) => sum + (item.price! * item.quantity!),
+      (sum, item) =>
+          sum +
+          (((cartController.itemPrice + cartController.variationPrice) /
+              cartController.cartList.length)),
     );
 
+    //  cartController.cartList.length == 1 ?   : cartController.cartList.fold(
+    // 0,
+    // (sum, item) => sum + (item.price! * item.quantity!),
+    // )
     return Container(
       width: Dimensions.webMaxWidth,
       padding: const EdgeInsets.symmetric(

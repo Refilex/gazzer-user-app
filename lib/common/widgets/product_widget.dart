@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/models/product_model.dart';
 import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_asset_image_widget.dart';
@@ -26,6 +25,7 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class ProductWidget extends StatelessWidget {
   final Product? product;
@@ -58,7 +58,7 @@ class ProductWidget extends StatelessWidget {
     String? image;
     double price = 0;
     double discountPrice = 0;
-
+    ProductController? productController;
     if (isRestaurant) {
       image = restaurant!.logo;
       discount =

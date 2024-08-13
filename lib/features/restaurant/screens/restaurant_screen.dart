@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/models/product_model.dart';
 import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 import 'package:gazzer_userapp/common/widgets/bottom_cart_widget.dart';
@@ -25,6 +24,7 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class RestaurantScreen extends StatefulWidget {
   final Restaurant? restaurant;

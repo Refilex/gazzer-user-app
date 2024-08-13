@@ -1,8 +1,6 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:gazzer_userapp/common/models/product_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_favourite_widget.dart';
@@ -29,6 +27,8 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class ProductBottomSheetWidget extends StatefulWidget {
   final Product? product;
@@ -124,12 +124,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         double addonsCost = _getAddonCost(product!, productController);
         List<AddOn> addOnIdList = _getAddonIdList(product!, productController);
         List<AddOns> addOnsList = _getAddonList(product!, productController);
-        if (product!.variations!.isNotEmpty) {
+        if (product!.variations!.isNotEmpty &&
+            product!.variations![0].type == "free_input") {
           debugPrint(
               '===total : $addonsCost + (($variationPriceWithDiscount * $price) , $discount , $discountType ) * ${productController
                   .quantity}');
-        }
-        if (product!.variations!.isEmpty) {
+        } else {
           debugPrint(
               '===total : $addonsCost + (($variationPriceWithDiscount + $price) , $discount , $discountType ) * ${productController
                   .quantity}');
@@ -1720,15 +1720,17 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                               .of(context)
                                               .primaryColor),
                                     ),
-                                  if (product!.variations!.isEmpty)
-                                    PriceConverter.convertAnimationPrice(
-                                      price + variationPrice,
-                                      textStyle: robotoBold.copyWith(
-                                          color:
-                                          Theme
-                                              .of(context)
-                                              .primaryColor),
-                                    ),
+                                  PriceConverter.convertAnimationPrice(
+                                    product!.variations!.isEmpty ? price *
+                                        productController.quantity! : (price +
+                                        variationPrice) *
+                                        productController.quantity!,
+                                    textStyle: robotoBold.copyWith(
+                                        color:
+                                        Theme
+                                            .of(context)
+                                            .primaryColor),
+                                  ),
                                 ]),
                               ]),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -1803,10 +1805,18 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                             ? null
                                             : () async {
                                           if (product!.variations!.isEmpty) {
-                                            Get.find<ProductController>()
-                                                .productDirectlyAddToCart(
-                                                product, context);
-                                            Get.back();
+                                            _onButtonPressed(
+                                              productController,
+                                              cartController,
+                                              price,
+                                              priceWithDiscount,
+                                              price,
+                                              discount,
+                                              discountType,
+                                              addOnIdList,
+                                              addOnsList,
+                                              price,
+                                            );
                                           }
 
                                           _onButtonPressed(
@@ -1816,7 +1826,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                 "free_input"
                                                 ?
                                             priceWithVariation
-                                                : priceWithVariationMulti,
+                                                : price,
                                             priceWithDiscount,
                                             price,
                                             discount,
@@ -1827,7 +1837,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                 "free_input"
                                                 ?
                                             priceWithAddonsVariation
-                                                : priceWithAddonsVariationMulti,
+                                                : price,
                                           );
                                         },
                                       );
@@ -2002,7 +2012,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     CartHelper.getSelectedAddonIds(addOnIdList: addOnIdList);
     List<int?> listOfAddOnQty =
     CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
-    if (product!.variations![0].type ==
+    if (product!.variations!.isNotEmpty && product!.variations![0].type ==
         "free_input") {
       variations[0].qty = int.parse(customValueController.text);
     }

@@ -1,14 +1,19 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_text_field_widget.dart';
 import 'package:gazzer_userapp/common/widgets/footer_view_widget.dart';
-import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
+import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_page_title_widget.dart';
 import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
-import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
-import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
 import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
 import 'package:gazzer_userapp/features/location/screens/pick_map_screen.dart';
 import 'package:gazzer_userapp/features/location/widgets/location_search_dialog.dart';
 import 'package:gazzer_userapp/features/location/widgets/permission_dialog.dart';
@@ -21,14 +26,9 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
-import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
-import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
-import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
-import 'package:gazzer_userapp/common/widgets/web_page_title_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddAddressScreen extends StatefulWidget {
   final bool fromCheckout;
@@ -608,34 +608,55 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             : const SizedBox(),
         SizedBox(height: widget.forGuest ? Dimensions.paddingSizeOverLarge : 0),
         CustomTextFieldWidget(
-          hintText: '${'street_number'.tr} (${'optional'.tr})',
+          hintText: 'street_number'.tr,
           labelText: 'street_number'.tr,
           inputType: TextInputType.streetAddress,
           focusNode: _streetNode,
+          required: true,
           nextFocus: _houseNode,
           controller: _streetNumberController,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'street_number_is_required'.tr;
+            }
+            return null;
+          },
         ),
         const SizedBox(height: Dimensions.paddingSizeOverLarge),
         Row(children: [
           Expanded(
             child: CustomTextFieldWidget(
-              hintText: '${'house'.tr} (${'optional'.tr})',
+              hintText: 'house'.tr,
               labelText: 'house'.tr,
               inputType: TextInputType.text,
+              required: true,
               focusNode: _houseNode,
               nextFocus: _floorNode,
               controller: _houseController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'house_is_required'.tr;
+                }
+                return null;
+              },
             ),
           ),
           const SizedBox(width: Dimensions.paddingSizeLarge),
           Expanded(
             child: CustomTextFieldWidget(
-              hintText: '${'floor'.tr} (${'optional'.tr})',
+              hintText: 'floor'.tr,
               labelText: 'floor'.tr,
               inputType: TextInputType.text,
+              required: true,
               focusNode: _floorNode,
               inputAction: TextInputAction.done,
               controller: _floorController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'floor_is_required'.tr;
+                }
+                return null;
+              },
             ),
           ),
         ]),
@@ -707,6 +728,14 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       bool isValid, String numberWithCountryCode) {
     if (_contactPersonNameController.text.isEmpty) {
       showCustomSnackBar('please_provide_contact_person_name'.tr);
+    } else if (_streetNumberController.text.isEmpty) {
+      showCustomSnackBar('street_number_is_required'.tr);
+    } else if (_houseController.text.isEmpty) {
+      showCustomSnackBar('house_is_required'.tr);
+    } else if (_floorController.text.isEmpty) {
+      showCustomSnackBar('floor_is_required'.tr);
+    } else if (_streetNumberController.text.isEmpty) {
+      showCustomSnackBar('House is required'.tr);
     } else if (!isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
     } else {
