@@ -40,15 +40,18 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
     final categoryController = Get.find<CategoryController>();
     final cuisineController = Get.find<CuisineController>();
 
-    categoryController.getSubCategoryList(widget.categoryID);
-    cuisineController.getCuisineList();
-    Get.find<CuisineController>().getCuisineRestaurantList(27, 1, false);
-    categoryController.getCategoryRestaurantList(
-      widget.categoryID,
-      1,
-      'all',
-      false,
-    );
+    if (widget.categoryID == "1") {
+      cuisineController.getCuisineList();
+      Get.find<CuisineController>().getCuisineRestaurantList(27, 1, false);
+    } else {
+      categoryController.getCategoryRestaurantList(
+        widget.categoryID,
+        1,
+        'all',
+        false,
+      );
+      categoryController.getSubCategoryList(widget.categoryID);
+    }
 
     _restaurantScrollController.addListener(() {
       if (_restaurantScrollController.position.pixels ==
@@ -112,7 +115,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                     : catController.subCategoryList
                                         ?.elementAt(
                                             catController.subCategoryIndex)
-                                        ?.id
+                                        .id
                                         .toString(),
                                 catController.type,
                               ),
@@ -171,7 +174,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                     : catController.subCategoryList
                                         ?.elementAt(
                                             catController.subCategoryIndex)
-                                        ?.id
+                                        .id
                                         .toString(),
                                 type,
                               );
@@ -181,7 +184,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                 products: null,
                                 restaurants: catController.subCategoryList
                                             ?.elementAt(0)
-                                            ?.id ==
+                                            .id ==
                                         1
                                     ? cuisineController
                                         .cuisineRestaurantsModel?.restaurants
@@ -199,7 +202,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                 children: [
                   (cuisineController.cuisineModel?.cuisines != null &&
                           !catController.isSearching &&
-                          catController.subCategoryList?.elementAt(0)?.id == 1)
+                          widget.categoryID == "1")
                       ? Center(
                           child: Container(
                             height: 40,
@@ -292,7 +295,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                     : catController.subCategoryList
                                         ?.elementAt(
                                             catController.subCategoryIndex)
-                                        ?.id
+                                        .id
                                         .toString(),
                                 catController.type,
                               );
@@ -319,10 +322,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                   ProductViewWidget(
                                     isRestaurant: true,
                                     products: null,
-                                    restaurants: catController.subCategoryList
-                                                ?.elementAt(0)
-                                                ?.id ==
-                                            1
+                                    restaurants: widget.categoryID == "1"
                                         ? cuisineController
                                             .cuisineRestaurantsModel
                                             ?.restaurants
@@ -330,17 +330,17 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                     noDataText:
                                         'no_category_restaurant_found'.tr,
                                   ),
-                                  if (cuisineController.cuisineRestaurantsModel!
-                                      .restaurants!.isEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 200),
-                                      child: Text(
-                                        "Empty section",
-                                        style: robotoMedium.copyWith(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
+                                  // if (cuisineController.cuisineRestaurantsModel!
+                                  //     .restaurants!.isEmpty)
+                                  //   Padding(
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //         vertical: 200),
+                                  //     child: Text(
+                                  //       "Empty section",
+                                  //       style: robotoMedium.copyWith(
+                                  //           fontWeight: FontWeight.bold),
+                                  //     ),
+                                  //   ),
                                   catController.isLoading
                                       ? Center(
                                           child: Padding(
