@@ -62,6 +62,7 @@ dependencies:
   path: ^1.8.2
   http_parser: ^4.0.2
   flutter_svg: ^2.0.10+1
+  dio: ^5.6.0
   #  flutter_polyline_points: ^2.0.0
   custom_info_window: ^1.0.1
 
