@@ -42,7 +42,6 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
 
     if (widget.categoryID == "1") {
       cuisineController.getCuisineList();
-      Get.find<CuisineController>().getCuisineRestaurantList(27, 1, false);
     } else {
       categoryController.getCategoryRestaurantList(
         widget.categoryID,
