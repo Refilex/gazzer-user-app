@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/features/language/domain/models/language_model.dart';
 import 'package:gazzer_userapp/util/images.dart';
+import 'package:get/get.dart';
 
 class AppConstants {
   static const String appName = 'Gazzer';
@@ -9,6 +9,12 @@ class AppConstants {
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
   static const String webHostedUrl = 'https://carrot.refilex.com';
+
+  //paymob gateway
+  static const String paymobApiKey =
+      'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1Rrd016WXpMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuLW5SelVDanB6YnZCNVhtRGg1Zlo3VHZhMXJyQjdPamQwSF91N3I0bmpkNDh3eGJrRi1kV1dLWEx0Q0VhTjRlUmpvSTZ3WHBfUEdROGxTU3NfaG9DcEE=';
+  static const String cartIntegrationId = "4629810";
+  static const String paymobBaseUrl = 'https://accept.paymob.com/api';
 
   // https://carrot.refilex.com
   // https://stackfood-admin.6amtech.com
