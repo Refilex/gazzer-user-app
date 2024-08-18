@@ -5,6 +5,7 @@ import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/business/controllers/business_controller.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/domain/services/payment_manager.dart';
+import 'package:gazzer_userapp/features/checkout/screens/pay.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/payment_button_new.dart';
 import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
@@ -15,7 +16,6 @@ import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PaymentMethodBottomSheet extends StatefulWidget {
   final bool isCashOnDeliveryActive;
@@ -24,6 +24,7 @@ class PaymentMethodBottomSheet extends StatefulWidget {
   final bool isWalletActive;
   final double totalPrice;
   final bool isSubscriptionPackage;
+
   const PaymentMethodBottomSheet(
       {super.key,
       required this.isCashOnDeliveryActive,
@@ -44,6 +45,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
   bool notHideWallet = true;
   bool notHideDigital = true;
   final JustTheController tooltipController = JustTheController();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -206,18 +208,33 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                                       .paymentMethodIndex ==
                                                   2,
                                               onTap: () {
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
                                                 PaymobManager()
                                                     .getPaymentKey(
                                                   amount: widget.totalPrice,
                                                   currency: "EGP",
+                                                  fName:
+                                                      "${Get.find<ProfileController>().userInfoModel?.fName}",
+                                                  lName:
+                                                      "${Get.find<ProfileController>().userInfoModel?.lName}",
+                                                  email:
+                                                      "${Get.find<ProfileController>().userInfoModel?.email}",
+                                                  phone:
+                                                      "${Get.find<ProfileController>().userInfoModel?.phone}",
                                                 )
                                                     .then((String paymentKey) {
-                                                  launchUrl(
-                                                    Uri.parse(
-                                                        "${AppConstants.paymobBaseUrl}/acceptance/iframes/861803?payment_token=$paymentKey"),
-                                                  ).then((value) {
-                                                    checkoutController
-                                                        .setPaymentMethod(2);
+                                                  String paymentUrl =
+                                                      "${AppConstants.paymobBaseUrl}/acceptance/iframes/861803?payment_token=$paymentKey";
+                                                  Get.to(() => PayScreen(
+                                                        url: paymentUrl,
+                                                        checkoutController:
+                                                            checkoutController,
+                                                      ))?.then((value) {
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
                                                   });
                                                 });
                                               },
@@ -258,6 +275,10 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                           }
                                         },
                                       )
+                                    : const SizedBox(),
+                                isLoading
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
                                     : const SizedBox(),
                               ],
                             )

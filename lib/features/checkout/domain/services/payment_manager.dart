@@ -6,6 +6,10 @@ class PaymobManager {
   Future<String> getPaymentKey({
     required double amount,
     required String currency,
+    required String fName,
+    required String lName,
+    required String email,
+    required String phone,
   }) async {
     try {
       String authToken = await _getAuthToken();
@@ -19,6 +23,10 @@ class PaymobManager {
         orderId: orderId.toString(),
         amount: (amount * 100).toString(),
         currency: currency,
+        fName: fName,
+        lName: lName,
+        email: email,
+        phone: phone,
       );
       return paymentKey;
     } catch (e, stackTrace) {
@@ -53,9 +61,7 @@ class PaymobManager {
           "amount_cents": amount,
           "currency": currency,
           "delivery_needed": false,
-          // use boolean instead of string
           "items": [],
-          // ensure items are properly serialized
         },
       );
       return response.data["id"];
@@ -64,12 +70,15 @@ class PaymobManager {
       rethrow; // Propagate the exception further
     }
   }
-
   Future<String> _getPaymentKey({
     required String authToken,
     required String orderId,
     required String amount,
     required String currency,
+    required String fName,
+    required String lName,
+    required String email,
+    required String phone,
   }) async {
     try {
       final Response response = await Dio().post(
@@ -82,10 +91,10 @@ class PaymobManager {
           "order_id": orderId,
           "integration_id": AppConstants.cartIntegrationId,
           "billing_data": {
-            "first_name": "NA",
-            "last_name": "NA",
-            "email": "NA",
-            "phone_number": "NA",
+            "first_name": fName,
+            "last_name": lName,
+            "email": email,
+            "phone_number": phone,
             "apartment": "NA",
             "floor": "NA",
             "street": "NA",
