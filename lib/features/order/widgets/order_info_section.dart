@@ -143,17 +143,9 @@ class OrderInfoSection extends StatelessWidget {
                           children: [
                             //int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(order.confirmed!)))
                             Text(
-                              "${order.totalDeliveryTime!}",
+                              order.totalDeliveryTime!,
                               style: robotoBold.copyWith(
                                   fontSize: Dimensions.fontSizeOverLarge),
-                              // textDirection: TextDirection.ltr,
-                            ),
-                            const SizedBox(
-                                width: Dimensions.paddingSizeExtraSmall),
-                            Text(
-                              "min".tr,
-                              style: robotoBold.copyWith(
-                                  fontSize: Dimensions.fontSizeLarge),
                               // textDirection: TextDirection.ltr,
                             ),
                           ],
@@ -325,11 +317,7 @@ class OrderInfoSection extends StatelessWidget {
                         ? 'cash_on_delivery'.tr
                         : order.paymentMethod == 'wallet'
                             ? 'wallet_payment'.tr
-                            : order.paymentMethod == 'partial_payment'
-                                ? 'partial_payment'.tr
-                                : order.paymentMethod == 'offline_payment'
-                                    ? 'offline_payment'.tr
-                                    : 'digital_payment'.tr,
+                            : 'digital_payment'.tr,
                     style: robotoMedium.copyWith(
                         color: Theme.of(context).primaryColor,
                         fontSize: Dimensions.fontSizeExtraSmall),
@@ -1467,8 +1455,6 @@ class OrderInfoSection extends StatelessWidget {
                           ? Images.cash
                           : order.paymentMethod == 'wallet'
                               ? Images.wallet
-                              : order.paymentMethod == 'partial_payment'
-                                  ? Images.partialWallet
                                   : Images.digitalPayment,
                       width: 24,
                       height: 24,
@@ -1481,9 +1467,7 @@ class OrderInfoSection extends StatelessWidget {
                             ? 'cash'.tr
                             : order.paymentMethod == 'wallet'
                                 ? 'wallet'.tr
-                                : order.paymentMethod == 'partial_payment'
-                                    ? 'partial_payment'.tr
-                                    : 'digital'.tr,
+                                : 'digital_payment'.tr,
                         style: robotoMedium.copyWith(
                             color: Theme.of(context).disabledColor),
                       ),

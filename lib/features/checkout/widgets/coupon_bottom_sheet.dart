@@ -78,7 +78,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
     double totalPrice = widget.total;
     return Container(
       width: Dimensions.webMaxWidth,
-      height: context.height * 0.7,
+      height: context.height * 0.2,
       margin: EdgeInsets.only(top: GetPlatform.isWeb ? 0 : 30),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -151,6 +151,58 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                           ),
                           prefixIcon: Icon(Icons.local_offer_outlined,
                               color: Theme.of(context).primaryColor)),
+                      onSubmitted: (coupon) {
+                        String couponCode = widget
+                            .checkoutController.couponController.text
+                            .trim();
+                        if (couponController.discount! < 1 &&
+                            !couponController.freeDelivery) {
+                          if (couponCode.isNotEmpty &&
+                              !couponController.isLoading) {
+                            couponController
+                                .applyCoupon(
+                                    couponCode,
+                                    (widget.price - widget.discount) +
+                                        widget.addOns,
+                                    widget.deliveryCharge,
+                                    widget.charge,
+                                    totalPrice,
+                                    Get.find<RestaurantController>()
+                                        .restaurant!
+                                        .id)
+                                .then((discount) {
+                              if (discount! > 0) {
+                                showCustomSnackBar(
+                                  '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
+                                  isError: false,
+                                  showToaster: true,
+                                );
+                                if (widget.checkoutController.isPartialPay ||
+                                    widget.checkoutController
+                                            .paymentMethodIndex ==
+                                        1) {
+                                  totalPrice = totalPrice - discount;
+                                  widget.checkoutController
+                                      .checkBalanceStatus(totalPrice);
+                                }
+                              }
+                              Get.back();
+                            });
+                          } else if (couponCode.isEmpty) {
+                            showCustomSnackBar('enter_a_coupon_code'.tr);
+                          }
+                        } else {
+                          totalPrice = totalPrice + couponController.discount!;
+                          couponController.removeCouponData(true);
+                          widget.checkoutController.couponController.text = '';
+                          if (widget.checkoutController.isPartialPay ||
+                              widget.checkoutController.paymentMethodIndex ==
+                                  1) {
+                            widget.checkoutController
+                                .checkBalanceStatus(totalPrice);
+                          }
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -186,6 +238,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                                   .checkBalanceStatus(totalPrice);
                             }
                           }
+                          Get.back();
                         });
                       } else if (couponCode.isEmpty) {
                         showCustomSnackBar('enter_a_coupon_code'.tr);
@@ -239,136 +292,136 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
                 ),
               ]),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.paddingSizeDefault,
-                  vertical: Dimensions.paddingSizeSmall),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('available_promo'.tr,
-                      style: robotoBold.copyWith(
-                          fontSize: Dimensions.fontSizeDefault))),
-            ),
-            Expanded(
-              child: _couponList != null && _couponList!.isNotEmpty
-                  ? GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: ResponsiveHelper.isDesktop(context)
-                            ? 3
-                            : ResponsiveHelper.isTab(context)
-                                ? 2
-                                : 1,
-                        mainAxisSpacing: Dimensions.paddingSizeSmall,
-                        crossAxisSpacing: Dimensions.paddingSizeSmall,
-                        childAspectRatio:
-                            ResponsiveHelper.isMobile(context) ? 3 : 2.5,
-                      ),
-                      itemCount: _couponList!.length,
-                      shrinkWrap: true,
-                      padding:
-                          const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            if (_couponList![index].code != null) {
-                              widget.checkoutController.couponController.text =
-                                  _couponList![index].code.toString();
-                            }
-                            if (widget.checkoutController.couponController.text
-                                .isNotEmpty) {
-                              if (couponController.discount! < 1 &&
-                                  !couponController.freeDelivery) {
-                                if (widget.checkoutController.couponController
-                                        .text.isNotEmpty &&
-                                    !couponController.isLoading) {
-                                  couponController
-                                      .applyCoupon(
-                                          widget.checkoutController
-                                              .couponController.text,
-                                          (widget.price - widget.discount) +
-                                              widget.addOns,
-                                          widget.deliveryCharge,
-                                          widget.charge,
-                                          totalPrice,
-                                          Get.find<RestaurantController>()
-                                              .restaurant!
-                                              .id,
-                                          hideBottomSheet: true)
-                                      .then((discount) {
-                                    widget.checkoutController.couponController
-                                            .text =
-                                        '${widget.checkoutController.couponController.text}(${couponController.freeDelivery ? 'free_delivery'.tr : PriceConverter.convertPrice(couponController.discount)})';
-                                    if (discount! > 0) {
-                                      // orderController.couponController.text = 'coupon_applied'.tr;
-                                      showCustomSnackBar(
-                                        '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
-                                        isError: false,
-                                      );
-                                      if (widget.checkoutController
-                                              .isPartialPay ||
-                                          widget.checkoutController
-                                                  .paymentMethodIndex ==
-                                              1) {
-                                        // totalPrice = totalPrice - discount;
-                                        widget.checkoutController
-                                            .checkBalanceStatus(totalPrice,
-                                                discount: discount);
-                                      }
-                                    } else {
-                                      if (widget.checkoutController
-                                              .isPartialPay ||
-                                          widget.checkoutController
-                                                  .paymentMethodIndex ==
-                                              1) {
-                                        widget.checkoutController
-                                            .checkBalanceStatus(totalPrice);
-                                      }
-                                    }
-                                  });
-                                } else if (widget.checkoutController
-                                    .couponController.text.isEmpty) {
-                                  showCustomSnackBar('enter_a_coupon_code'.tr);
-                                }
-                              } else {
-                                totalPrice =
-                                    totalPrice + couponController.discount!;
-                                couponController.removeCouponData(true);
-                                widget.checkoutController.couponController
-                                    .text = '';
-                                if (widget.checkoutController.isPartialPay ||
-                                    widget.checkoutController
-                                            .paymentMethodIndex ==
-                                        1) {
-                                  widget.checkoutController
-                                      .checkBalanceStatus(totalPrice);
-                                }
-                              }
-                            }
-                          },
-                          child: CouponCardWidget(
-                              toolTipController: _toolTipControllerList,
-                              couponList: _couponList,
-                              index: index),
-                        );
-                      },
-                    )
-                  : Column(
-                      children: [
-                        Image.asset(Images.noCoupon, height: 70),
-                        const SizedBox(height: Dimensions.paddingSizeSmall),
-                        Text('no_promo_available'.tr, style: robotoMedium),
-                        const SizedBox(
-                            height: Dimensions.paddingSizeExtraSmall),
-                        Text(
-                          '${'please_add_manually_or_collect_promo_from'.tr} ${'your_business_name'.tr}',
-                          style: robotoMedium.copyWith(
-                              fontSize: Dimensions.fontSizeSmall,
-                              color: Theme.of(context).disabledColor),
-                        ),
-                        const SizedBox(height: 50),
-                      ],
-                    ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(
+            //       horizontal: Dimensions.paddingSizeDefault,
+            //       vertical: Dimensions.paddingSizeSmall),
+            //   child: Align(
+            //       alignment: Alignment.centerLeft,
+            //       child: Text('available_promo'.tr,
+            //           style: robotoBold.copyWith(
+            //               fontSize: Dimensions.fontSizeDefault))),
+            // ),
+            // Expanded(
+            //   child: _couponList != null && _couponList!.isNotEmpty
+            //       ? GridView.builder(
+            //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //             crossAxisCount: ResponsiveHelper.isDesktop(context)
+            //                 ? 3
+            //                 : ResponsiveHelper.isTab(context)
+            //                     ? 2
+            //                     : 1,
+            //             mainAxisSpacing: Dimensions.paddingSizeSmall,
+            //             crossAxisSpacing: Dimensions.paddingSizeSmall,
+            //             childAspectRatio:
+            //                 ResponsiveHelper.isMobile(context) ? 3 : 2.5,
+            //           ),
+            //           itemCount: _couponList!.length,
+            //           shrinkWrap: true,
+            //           padding:
+            //               const EdgeInsets.all(Dimensions.paddingSizeDefault),
+            //           itemBuilder: (context, index) {
+            //             return InkWell(
+            //               onTap: () {
+            //                 if (_couponList![index].code != null) {
+            //                   widget.checkoutController.couponController.text =
+            //                       _couponList![index].code.toString();
+            //                 }
+            //                 if (widget.checkoutController.couponController.text
+            //                     .isNotEmpty) {
+            //                   if (couponController.discount! < 1 &&
+            //                       !couponController.freeDelivery) {
+            //                     if (widget.checkoutController.couponController
+            //                             .text.isNotEmpty &&
+            //                         !couponController.isLoading) {
+            //                       couponController
+            //                           .applyCoupon(
+            //                               widget.checkoutController
+            //                                   .couponController.text,
+            //                               (widget.price - widget.discount) +
+            //                                   widget.addOns,
+            //                               widget.deliveryCharge,
+            //                               widget.charge,
+            //                               totalPrice,
+            //                               Get.find<RestaurantController>()
+            //                                   .restaurant!
+            //                                   .id,
+            //                               hideBottomSheet: true)
+            //                           .then((discount) {
+            //                         widget.checkoutController.couponController
+            //                                 .text =
+            //                             '${widget.checkoutController.couponController.text}(${couponController.freeDelivery ? 'free_delivery'.tr : PriceConverter.convertPrice(couponController.discount)})';
+            //                         if (discount! > 0) {
+            //                           // orderController.couponController.text = 'coupon_applied'.tr;
+            //                           showCustomSnackBar(
+            //                             '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
+            //                             isError: false,
+            //                           );
+            //                           if (widget.checkoutController
+            //                                   .isPartialPay ||
+            //                               widget.checkoutController
+            //                                       .paymentMethodIndex ==
+            //                                   1) {
+            //                             // totalPrice = totalPrice - discount;
+            //                             widget.checkoutController
+            //                                 .checkBalanceStatus(totalPrice,
+            //                                     discount: discount);
+            //                           }
+            //                         } else {
+            //                           if (widget.checkoutController
+            //                                   .isPartialPay ||
+            //                               widget.checkoutController
+            //                                       .paymentMethodIndex ==
+            //                                   1) {
+            //                             widget.checkoutController
+            //                                 .checkBalanceStatus(totalPrice);
+            //                           }
+            //                         }
+            //                       });
+            //                     } else if (widget.checkoutController
+            //                         .couponController.text.isEmpty) {
+            //                       showCustomSnackBar('enter_a_coupon_code'.tr);
+            //                     }
+            //                   } else {
+            //                     totalPrice =
+            //                         totalPrice + couponController.discount!;
+            //                     couponController.removeCouponData(true);
+            //                     widget.checkoutController.couponController
+            //                         .text = '';
+            //                     if (widget.checkoutController.isPartialPay ||
+            //                         widget.checkoutController
+            //                                 .paymentMethodIndex ==
+            //                             1) {
+            //                       widget.checkoutController
+            //                           .checkBalanceStatus(totalPrice);
+            //                     }
+            //                   }
+            //                 }
+            //               },
+            //               child: CouponCardWidget(
+            //                   toolTipController: _toolTipControllerList,
+            //                   couponList: _couponList,
+            //                   index: index),
+            //             );
+            //           },
+            //         )
+            //       : Column(
+            //           children: [
+            //             Image.asset(Images.noCoupon, height: 70),
+            //             const SizedBox(height: Dimensions.paddingSizeSmall),
+            //             Text('no_promo_available'.tr, style: robotoMedium),
+            //             const SizedBox(
+            //                 height: Dimensions.paddingSizeExtraSmall),
+            //             Text(
+            //               '${'please_add_manually_or_collect_promo_from'.tr} ${'your_business_name'.tr}',
+            //               style: robotoMedium.copyWith(
+            //                   fontSize: Dimensions.fontSizeSmall,
+            //                   color: Theme.of(context).disabledColor),
+            //             ),
+            //             const SizedBox(height: 50),
+            //           ],
+            //         ),
+            // ),
           ],
         );
       }),

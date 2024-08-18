@@ -305,6 +305,20 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                       .deliveryFeeMultiVendor!
                           : deliveryCharge;
 
+                  calcTotal() {
+                    if (couponController.coupon?.couponType ==
+                        "free_delivery") {
+                      deliveryCharge = 0;
+                      return orderAmount + deliveryCharge;
+                    } else if (couponController.discount! > 0) {
+                      return orderAmount +
+                          deliveryCharge -
+                          couponController.discount!;
+                    } else {
+                      return orderAmount + groupedDeliveryCharge;
+                    }
+                  }
+
                   double extraPackagingCharge =
                       _calculateExtraPackagingCharge(checkoutController);
 
@@ -621,33 +635,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                     color: Theme.of(context)
                                                         .primaryColor),
                                               ),
-                                              couponController.discount! > 0
-                                                  ? PriceConverter
-                                                      .convertAnimationPrice(
-                                                      orderAmount +
-                                                          groupedDeliveryCharge -
-                                                          couponController
-                                                              .discount!,
-                                                      textStyle:
-                                                          robotoMedium.copyWith(
-                                                              fontSize: Dimensions
-                                                                  .fontSizeLarge,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor),
-                                                    )
-                                                  : PriceConverter
-                                                      .convertAnimationPrice(
-                                                      orderAmount +
-                                                          groupedDeliveryCharge,
-                                                      textStyle:
-                                                          robotoMedium.copyWith(
-                                                              fontSize: Dimensions
-                                                                  .fontSizeLarge,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor),
-                                                    ),
+                                              PriceConverter
+                                                  .convertAnimationPrice(
+                                                calcTotal(),
+                                                textStyle:
+                                                    robotoMedium.copyWith(
+                                                        fontSize: Dimensions
+                                                            .fontSizeLarge,
+                                                        color: Theme.of(context)
+                                                            .primaryColor),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -659,7 +656,14 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                           todayClosed: todayClosed,
                                           tomorrowClosed: tomorrowClosed,
                                           orderAmount: orderAmount,
-                                          deliveryCharge: deliveryCharge,
+                                          deliveryCharge: (couponController
+                                                      .coupon?.couponType
+                                                      ?.contains(
+                                                          "free_delivery") ??
+                                                  false)
+                                              ? 0
+                                              : deliveryCharge,
+                                          // deliveryCharge: couponController.coupon!.couponType!.contains("free_delivery") ? 0 : deliveryCharge,
                                           tax: tax,
                                           discount: discount,
                                           total: total,

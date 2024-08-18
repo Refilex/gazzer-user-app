@@ -26,7 +26,7 @@ class BottomSectionWidget extends StatelessWidget {
   final CouponController couponController;
   final bool taxIncluded;
   final double tax;
-  final double deliveryCharge;
+  double deliveryCharge;
   final double charge;
   final CheckoutController checkoutController;
   final LocationController locationController;
@@ -112,6 +112,17 @@ class BottomSectionWidget extends StatelessWidget {
                     .deliveryFeeMultiVendor!
         : deliveryCharge;
 
+    calcTotal() {
+      if (couponController.coupon?.couponType == "free_delivery") {
+        deliveryCharge = 0;
+        return orderAmount + deliveryCharge;
+      } else if (couponController.discount! > 0) {
+        return orderAmount + deliveryCharge - couponController.discount!;
+      } else {
+        return orderAmount + deliveryCharge;
+      }
+    }
+
     return Container(
       padding:
           const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
@@ -162,12 +173,7 @@ class BottomSectionWidget extends StatelessWidget {
                       color: Theme.of(context).primaryColor),
                 ),
                 Text(
-                  couponController.discount! > 0
-                      ? PriceConverter.convertPrice((orderAmount +
-                          deliveryCharge -
-                          couponController.discount!))
-                      : PriceConverter.convertPrice(
-                          (orderAmount + deliveryCharge)),
+                  PriceConverter.convertPrice(calcTotal()),
                   textDirection: TextDirection.ltr,
                   style: robotoMedium.copyWith(
                       fontSize: Dimensions.fontSizeExtraLarge,
@@ -182,11 +188,7 @@ class BottomSectionWidget extends StatelessWidget {
                 isCashOnDeliveryActive: isCashOnDeliveryActive,
                 isDigitalPaymentActive: isDigitalPaymentActive,
                 isWalletActive: isWalletActive,
-                total: couponController.discount! > 0
-                    ? (orderAmount +
-                        deliveryCharge -
-                        couponController.discount!)
-                    : (orderAmount + deliveryCharge),
+                total: calcTotal(),
                 checkoutController: checkoutController,
                 isOfflinePaymentActive: isOfflinePaymentActive,
               )
@@ -290,8 +292,13 @@ class BottomSectionWidget extends StatelessWidget {
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('delivery_charge'.tr, style: robotoRegular),
-                Text(PriceConverter.convertPrice(deliveryCharge),
-                    style: robotoRegular, textDirection: TextDirection.ltr),
+                Text(
+                    PriceConverter.convertPrice(
+                        couponController.coupon?.couponType == "free_delivery"
+                            ? 0
+                            : deliveryCharge),
+                    style: robotoRegular,
+                    textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
             ]),

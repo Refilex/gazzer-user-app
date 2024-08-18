@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
 import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_dialog_widget.dart';
@@ -201,7 +202,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
         // Calculate delivery charges based on grouped restaurant orders
         double totalDeliveryCharge = 0;
         bool isFirstRestaurant = true; // To track the first restaurant
-
         restaurantDeliveryCharges.forEach((name, charge) {
           double deliveryCharge;
           if (isFirstRestaurant) {
@@ -352,7 +352,8 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                             couponDiscount: couponDiscount,
                                             tax: tax!,
                                             dmTips: dmTips,
-                                            deliveryCharge: totalDeliveryCharge,
+                                            deliveryCharge:
+                                                order.deliveryCharge!,
                                             total: total,
                                             orderController: orderController,
                                             orderId: widget.orderId,
@@ -381,8 +382,17 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   couponDiscount: couponDiscount,
                                   tax: tax!,
                                   dmTips: dmTips,
-                                  deliveryCharge: totalDeliveryCharge,
-                                  total: total,
+                                  deliveryCharge:
+                                      order.couponCode == "FreeDel20"
+                                          ? 0
+                                          : order.deliveryCharge!,
+                                  total: order.couponCode == "FreeDel20"
+                                      ? order.orderAmount! -
+                                          (5 *
+                                              (restaurantTotalOrders.length
+                                                      .toDouble() -
+                                                  1))
+                                      : total,
                                   orderController: orderController,
                                   orderId: widget.orderId,
                                   contactNumber: widget.contactNumber,
