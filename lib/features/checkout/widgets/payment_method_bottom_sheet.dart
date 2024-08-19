@@ -3,11 +3,13 @@ import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/business/controllers/business_controller.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/domain/services/payment_manager.dart';
 import 'package:gazzer_userapp/features/checkout/screens/pay.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/payment_button_new.dart';
 import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
@@ -208,35 +210,61 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                                       .paymentMethodIndex ==
                                                   2,
                                               onTap: () {
-                                                setState(() {
-                                                  isLoading = true;
-                                                });
-                                                PaymobManager()
-                                                    .getPaymentKey(
-                                                  amount: widget.totalPrice,
-                                                  currency: "EGP",
-                                                  fName:
-                                                      "${Get.find<ProfileController>().userInfoModel?.fName}",
-                                                  lName:
-                                                      "${Get.find<ProfileController>().userInfoModel?.lName}",
-                                                  email:
-                                                      "${Get.find<ProfileController>().userInfoModel?.email}",
-                                                  phone:
-                                                      "${Get.find<ProfileController>().userInfoModel?.phone}",
-                                                )
-                                                    .then((String paymentKey) {
-                                                  String paymentUrl =
-                                                      "${AppConstants.paymobBaseUrl}/acceptance/iframes/861803?payment_token=$paymentKey";
-                                                  Get.to(() => PayScreen(
-                                                        url: paymentUrl,
+                                                if (!Get.find<CartController>()
+                                                        .cartList
+                                                        .first
+                                                        .product!
+                                                        .scheduleOrder! &&
+                                                    Get.find<CartController>()
+                                                        .availableList
+                                                        .contains(false)) {
+                                                  showCustomSnackBar(
+                                                      'one_or_more_product_unavailable'
+                                                          .tr);
+                                                } else if (Get.find<
+                                                                RestaurantController>()
+                                                            .restaurant!
+                                                            .freeDelivery ==
+                                                        null ||
+                                                    Get.find<RestaurantController>()
+                                                            .restaurant!
+                                                            .cutlery ==
+                                                        null) {
+                                                  showCustomSnackBar(
+                                                      'restaurant_is_unavailable'
+                                                          .tr);
+                                                } else {
+                                                  setState(() {
+                                                    isLoading = true;
+                                                  });
+                                                  PaymobManager()
+                                                      .getPaymentKey(
+                                                    amount: widget.totalPrice,
+                                                    currency: "EGP",
+                                                    fName:
+                                                        "${Get.find<ProfileController>().userInfoModel?.fName}",
+                                                    lName:
+                                                        "${Get.find<ProfileController>().userInfoModel?.lName}",
+                                                    email:
+                                                        "${Get.find<ProfileController>().userInfoModel?.email}",
+                                                    phone:
+                                                        "${Get.find<ProfileController>().userInfoModel?.phone}",
+                                                  )
+                                                      .then(
+                                                          (String paymentKey) {
+                                                    String paymentUrl =
+                                                        "${AppConstants.paymobBaseUrl}/acceptance/iframes/861803?payment_token=$paymentKey";
+                                                    Get.to(() => PayScreen(
+                                                          url: paymentUrl,
                                                         checkoutController:
-                                                            checkoutController,
-                                                      ))?.then((value) {
-                                                    setState(() {
-                                                      isLoading = false;
+                                                              checkoutController,
+                                                        ))?.then((value) {
+                                                      setState(() {
+                                                        isLoading = false;
+                                                      });
                                                     });
                                                   });
-                                                });
+                                                }
                                               },
                                             ),
                                           )

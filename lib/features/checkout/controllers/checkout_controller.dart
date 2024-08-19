@@ -1,7 +1,9 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_dropdown_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
-import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
 import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
 import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
 import 'package:gazzer_userapp/features/address/widgets/address_card_widget.dart';
@@ -16,6 +18,7 @@ import 'package:gazzer_userapp/features/checkout/widgets/partial_pay_dialog.dart
 import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
 import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
 import 'package:gazzer_userapp/features/loyalty/controllers/loyalty_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
 import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
 import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
@@ -25,9 +28,6 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
-import 'package:gazzer_userapp/common/widgets/custom_dropdown_widget.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:universal_html/html.dart' as html;
@@ -721,7 +721,9 @@ class CheckoutController extends GetxController implements GetxService {
       }
       _setGuestAddress(null);
       stopLoader();
-      if (paymentMethodIndex == 0 || paymentMethodIndex == 1) {
+      if (paymentMethodIndex == 0 ||
+          paymentMethodIndex == 1 ||
+          paymentMethodIndex == 2) {
         double total = ((amount / 100) *
             Get.find<SplashController>()
                 .configModel!
