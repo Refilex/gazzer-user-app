@@ -1,21 +1,22 @@
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/footer_view_widget.dart';
+import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_menu_bar.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/payment_failed_dialog.dart';
+import 'package:gazzer_userapp/features/location/domain/models/zone_response_model.dart';
 import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/theme_controller.dart';
-import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
-import 'package:gazzer_userapp/features/location/domain/models/zone_response_model.dart';
 import 'package:gazzer_userapp/helper/address_helper.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
-import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
-import 'package:gazzer_userapp/common/widgets/footer_view_widget.dart';
-import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
-import 'package:gazzer_userapp/common/widgets/web_menu_bar.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrderSuccessfulScreen extends StatefulWidget {
@@ -78,7 +79,8 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                   .loyaltyPointItemPurchasePoint!);
           success = orderController.trackModel!.paymentStatus == 'paid' ||
               orderController.trackModel!.paymentMethod == 'cash_on_delivery' ||
-              orderController.trackModel!.paymentMethod == 'partial_payment';
+              orderController.trackModel!.paymentMethod == 'partial_payment' ||
+              orderController.trackModel!.paymentMethod == 'digital_payment';
 
           if (!success &&
               !Get.isDialogOpen! &&
