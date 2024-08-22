@@ -3,15 +3,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/auth/widgets/sign_in_widget.dart';
+import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool exitFromApp;
@@ -119,7 +120,12 @@ class SignInScreenState extends State<SignInScreen> {
                     children: [
                       ResponsiveHelper.isDesktop(context)
                           ? Align(
-                              alignment: Alignment.topRight,
+                              alignment: Get.find<LocalizationController>()
+                                          .locale
+                                          .languageCode ==
+                                      "ar"
+                                  ? Alignment.topRight
+                                  : Alignment.topLeft,
                               child: IconButton(
                                 onPressed: () => Get.back(),
                                 icon: const Icon(Icons.clear),
@@ -137,7 +143,12 @@ class SignInScreenState extends State<SignInScreen> {
                       ),
                       const SizedBox(height: Dimensions.paddingSizeExtraLarge),
                       Align(
-                        alignment: Alignment.topLeft,
+                        alignment: Get.find<LocalizationController>()
+                                    .locale
+                                    .languageCode ==
+                                "ar"
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
                         child: Text('sign_in'.tr,
                             style: robotoBold.copyWith(
                                 fontSize: Dimensions.fontSizeExtraLarge)),

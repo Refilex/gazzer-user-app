@@ -6,10 +6,9 @@ import 'package:get/get.dart';
 
 class PayScreen extends StatefulWidget {
   final String url;
-  final CheckoutController checkoutController; // Add this line
-  const PayScreen(
-      {Key? key, required this.url, required this.checkoutController})
-      : super(key: key);
+  final CheckoutController checkoutController;
+
+  PayScreen({super.key, required this.url, required this.checkoutController});
 
   @override
   State<PayScreen> createState() => _PayScreenState();
@@ -35,7 +34,7 @@ class _PayScreenState extends State<PayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paymob payment'),
+        title: Text("pay_visa".tr),
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(widget.url))),
@@ -57,9 +56,9 @@ class _PayScreenState extends State<PayScreen> {
           } else if (url != null &&
               url.queryParameters.containsKey("success") &&
               url.queryParameters["success"] == "false") {
-            showCustomSnackBar("failed".tr);
             widget.checkoutController.setPaymentMethod(0);
             Get.back();
+            showCustomSnackBar("failed".tr);
           }
         },
       ),
