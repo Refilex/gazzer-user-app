@@ -38,7 +38,7 @@ class BottomCartWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${'item'.tr}: ${cartController.cartList.length}',
+                  Text('${'items'.tr}: ${cartController.cartList.length}',
                       style: robotoMedium.copyWith(
                           fontSize: Dimensions.fontSizeDefault)),
                   const SizedBox(height: Dimensions.paddingSizeExtraSmall),
