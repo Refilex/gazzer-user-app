@@ -1,14 +1,14 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
 import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
 import 'package:gazzer_userapp/features/order/widgets/bottom_view_widget.dart';
 import 'package:gazzer_userapp/features/order/widgets/order_product_widget.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
-import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
 import 'package:gazzer_userapp/helper/price_converter.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrderPricingSection extends StatelessWidget {
@@ -126,25 +126,6 @@ class OrderPricingSection extends StatelessWidget {
                   style: robotoRegular, textDirection: TextDirection.ltr),
             ]),
             const SizedBox(height: Dimensions.paddingSizeSmall),
-
-            (order.additionalCharge != null && order.additionalCharge! > 0)
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                        Text(
-                            Get.find<SplashController>()
-                                .configModel!
-                                .additionalChargeName!,
-                            style: robotoRegular),
-                        Text(
-                            '(+) ${PriceConverter.convertPrice(order.additionalCharge)}',
-                            style: robotoRegular,
-                            textDirection: TextDirection.ltr),
-                      ])
-                : const SizedBox(),
-            (order.additionalCharge != null && order.additionalCharge! > 0)
-                ? const SizedBox(height: 10)
-                : const SizedBox(),
 
             couponDiscount > 0
                 ? Row(

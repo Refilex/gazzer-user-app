@@ -285,7 +285,7 @@ class BottomSectionWidget extends StatelessWidget {
                         ])
                   : const SizedBox(),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('tax'.tr, style: robotoRegular),
+                Text('vat_tax'.tr, style: robotoRegular),
                 Text(PriceConverter.convertPrice(tax),
                     style: robotoRegular, textDirection: TextDirection.ltr),
               ]),

@@ -1,7 +1,6 @@
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_ink_well_widget.dart';
@@ -21,6 +20,7 @@ import 'package:gazzer_userapp/helper/price_converter.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class CartScreen extends StatefulWidget {
   final bool fromNav;
@@ -458,27 +458,6 @@ class _CartScreenState extends State<CartScreen> {
                                                       : Text('calculating'.tr,
                                                           style: robotoRegular),
                                                 ]),
-                                            const SizedBox(
-                                                height: Dimensions
-                                                    .paddingSizeSmall),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('addons'.tr,
-                                                    style: robotoRegular),
-                                                Row(children: [
-                                                  Text('(+)',
-                                                      style: robotoRegular),
-                                                  PriceConverter
-                                                      .convertAnimationPrice(
-                                                          cartController.addOns,
-                                                          textStyle:
-                                                              robotoRegular),
-                                                ]),
-                                              ],
-                                            ),
                                           ]),
                                         ),
                                       ]),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/payment_method_bottom_sheet.dart';
-import 'package:gazzer_userapp/helper/extensions.dart';
 import 'package:gazzer_userapp/helper/price_converter.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class PaymentSection extends StatelessWidget {
   final bool isCashOnDeliveryActive;
@@ -144,7 +143,7 @@ class PaymentSection extends StatelessWidget {
                           : checkoutController.paymentMethodIndex == 1
                               ? 'wallet_payment'.tr
                               : checkoutController.paymentMethodIndex == 2
-                                  ? '${'digital_payment'.tr} (${checkoutController.digitalPaymentName?.replaceAll('_', ' ').toTitleCase() ?? ''})'
+                                  ? 'pay_visa'.tr
                                   : checkoutController.paymentMethodIndex == 3
                                       ? '${'offline_payment'.tr} (${checkoutController.offlineMethodList![checkoutController.selectedOfflineBankIndex].methodName})'
                                       : 'select_payment_method'.tr,

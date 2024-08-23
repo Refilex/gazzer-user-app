@@ -663,7 +663,6 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                   false)
                                               ? 0
                                               : deliveryCharge,
-                                          // deliveryCharge: couponController.coupon!.couponType!.contains("free_delivery") ? 0 : deliveryCharge,
                                           tax: tax,
                                           discount: discount,
                                           total: total,

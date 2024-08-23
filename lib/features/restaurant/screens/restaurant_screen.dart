@@ -685,7 +685,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                           ),
                                                           child: Center(
                                                             child: Text(
-                                                              'All',
+                                                              'all'.tr,
                                                               style: restController.categoryIndex == 0
                                                                   ? robotoMedium.copyWith(
                                                                       fontSize:

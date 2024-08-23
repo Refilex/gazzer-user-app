@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_dialog_widget.dart';
 import 'package:gazzer_userapp/common/widgets/footer_view_widget.dart';
@@ -20,6 +18,7 @@ import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   final OrderModel? orderModel;
@@ -216,14 +215,24 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
           totalDeliveryCharge += deliveryCharge;
         });
         double subTotal = itemsPrice + addOns;
+        // double total = itemsPrice +
+        //     addOns -
+        //     discount! +
+        //     (taxIncluded! ? 0 : tax!) +
+        //     totalDeliveryCharge - // Use the aggregated delivery charge here
+        //     couponDiscount! +
+        //     dmTips +
+        //     additionalCharge +
+        //     extraPackagingCharge -
+        //     referrerBonusAmount;
+
         double total = itemsPrice +
             addOns -
             discount! +
             (taxIncluded! ? 0 : tax!) +
-            totalDeliveryCharge - // Use the aggregated delivery charge here
+            totalDeliveryCharge -
             couponDiscount! +
             dmTips +
-            additionalCharge +
             extraPackagingCharge -
             referrerBonusAmount;
 
