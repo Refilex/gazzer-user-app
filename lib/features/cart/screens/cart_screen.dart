@@ -434,6 +434,26 @@ class _CartScreenState extends State<CartScreen> {
                                             const SizedBox(
                                                 height: Dimensions
                                                     .paddingSizeSmall),
+                                            cartController.addOns > 0
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text('addons'.tr,
+                                                          style: robotoRegular),
+                                                      Text(
+                                                          '(+) ${PriceConverter.convertPrice(cartController.addOns)}',
+                                                          style: robotoRegular,
+                                                          textDirection:
+                                                              TextDirection
+                                                                  .ltr),
+                                                    ],
+                                                  )
+                                                : const SizedBox(),
+                                            const SizedBox(
+                                                height: Dimensions
+                                                    .paddingSizeSmall),
                                             Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment

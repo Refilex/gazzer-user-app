@@ -33,7 +33,9 @@ class CheckoutButtonWidget extends StatelessWidget {
       0,
       (sum, item) =>
           sum +
-          (((cartController.itemPrice + cartController.variationPrice) /
+          (((cartController.itemPrice +
+                  cartController.variationPrice +
+                  cartController.addOns) /
               cartController.cartList.length)),
     );
 
