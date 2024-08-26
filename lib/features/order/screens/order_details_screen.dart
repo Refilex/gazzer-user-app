@@ -362,7 +362,9 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                             tax: tax!,
                                             dmTips: dmTips,
                                             deliveryCharge:
-                                                order.deliveryCharge!,
+                                                order.couponCode == "FreeDel20"
+                                                    ? 0
+                                                    : totalDeliveryCharge,
                                             total: total,
                                             orderController: orderController,
                                             orderId: widget.orderId,
@@ -394,7 +396,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   deliveryCharge:
                                       order.couponCode == "FreeDel20"
                                           ? 0
-                                          : order.deliveryCharge!,
+                                          : totalDeliveryCharge,
                                   total: order.couponCode == "FreeDel20"
                                       ? order.orderAmount! -
                                           (5 *
