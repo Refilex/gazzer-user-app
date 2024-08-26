@@ -414,7 +414,8 @@ class _CartScreenState extends State<CartScreen> {
                                                     ? Dimensions
                                                         .paddingSizeSmall
                                                     : 0),
-                                            cartController.variationPrice > 0
+                                            cartController.variationPrice > 0 ||
+                                                    cartController.addOns > 0
                                                 ? Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -423,27 +424,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       Text('variations'.tr,
                                                           style: robotoRegular),
                                                       Text(
-                                                          '(+) ${PriceConverter.convertPrice(cartController.variationPrice)}',
-                                                          style: robotoRegular,
-                                                          textDirection:
-                                                              TextDirection
-                                                                  .ltr),
-                                                    ],
-                                                  )
-                                                : const SizedBox(),
-                                            const SizedBox(
-                                                height: Dimensions
-                                                    .paddingSizeSmall),
-                                            cartController.addOns > 0
-                                                ? Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text('addons'.tr,
-                                                          style: robotoRegular),
-                                                      Text(
-                                                          '(+) ${PriceConverter.convertPrice(cartController.addOns)}',
+                                                          '(+) ${PriceConverter.convertPrice(cartController.variationPrice + cartController.addOns)}',
                                                           style: robotoRegular,
                                                           textDirection:
                                                               TextDirection

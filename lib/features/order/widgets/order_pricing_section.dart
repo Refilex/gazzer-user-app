@@ -305,7 +305,10 @@ class OrderPricingSection extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                             )),
                         Text(
-                          PriceConverter.convertPrice(total),
+                          PriceConverter.convertPrice(
+                              order.couponCode == "FreeDel20"
+                                  ? subTotal
+                                  : total),
                           textDirection: TextDirection.ltr,
                           style: robotoMedium.copyWith(
                               fontSize: Dimensions.fontSizeLarge,
