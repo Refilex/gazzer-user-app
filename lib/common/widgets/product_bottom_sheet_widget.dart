@@ -1723,7 +1723,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                   PriceConverter.convertAnimationPrice(
                                     product!.variations!.isEmpty ? price *
                                         productController.quantity! : (price +
-                                        variationPrice) *
+                                        variationPrice + addonsCost) *
                                         productController.quantity!,
                                     textStyle: robotoBold.copyWith(
                                         color:
