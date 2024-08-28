@@ -655,17 +655,15 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                               locationController,
                                           todayClosed: todayClosed,
                                           tomorrowClosed: tomorrowClosed,
-                                          orderAmount: orderAmount,
-                                          deliveryCharge: (couponController
-                                                      .coupon?.couponType
-                                                      ?.contains(
-                                                          "free_delivery") ??
-                                                  false)
-                                              ? 0
+                                          orderAmount: calcTotal(),
+                                          deliveryCharge: couponController
+                                                      .coupon?.couponType ==
+                                                  "free_delivery"
+                                              ? deliveryCharge = 0
                                               : deliveryCharge,
                                           tax: tax,
                                           discount: discount,
-                                          total: total,
+                                          total: calcTotal(),
                                           maxCodOrderAmount: maxCodOrderAmount,
                                           subscriptionQty: subscriptionQty,
                                           cartList: _cartList!,
