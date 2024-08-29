@@ -618,7 +618,7 @@ class OrderInfoSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeExtraSmall),
                       child: Row(children: [
-                        Text('${'item'.tr}:', style: robotoRegular),
+                        Text('${'items'.tr}:', style: robotoRegular),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                         Text(
                           orderController.orderDetails!.length.toString(),

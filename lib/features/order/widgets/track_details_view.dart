@@ -51,7 +51,7 @@ class TrackDetailsView extends StatelessWidget {
                 Text('estimate_delivery_time'.tr, style: robotoRegular),
                 Center(
                   child: Text(
-                    "${track.totalDeliveryTime!}",
+                    track.totalDeliveryTime!,
                     style: robotoBold.copyWith(
                         fontSize: Dimensions.fontSizeOverLarge),
                   ),
@@ -71,7 +71,7 @@ class TrackDetailsView extends StatelessWidget {
               Text('estimate_delivery_time'.tr, style: robotoRegular),
               Center(
                 child: Text(
-                  "${track.totalDeliveryTime!}",
+                  track.totalDeliveryTime!,
                   style: robotoBold.copyWith(
                       fontSize: Dimensions.fontSizeOverLarge),
                 ),

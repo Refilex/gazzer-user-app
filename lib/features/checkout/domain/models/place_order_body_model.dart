@@ -10,6 +10,7 @@ class PlaceOrderBodyModel {
   String? _orderType;
   String? _paymentMethod;
   String? _orderNote;
+  double? _deliveryCharge;
   String? _couponCode;
   int? _restaurantId;
   double? _distance;
@@ -55,6 +56,7 @@ class PlaceOrderBodyModel {
     required double? discountAmount,
     required double taxAmount,
     required String orderNote,
+    required double deliveryCharge,
     required String? address,
     required String? latitude,
     required String? longitude,
@@ -87,6 +89,7 @@ class PlaceOrderBodyModel {
     _orderType = orderType;
     _paymentMethod = paymentMethod;
     _orderNote = orderNote;
+    _deliveryCharge = deliveryCharge;
     _couponCode = couponCode;
     _restaurantId = restaurantId;
     _distance = distance;
@@ -132,6 +135,8 @@ class PlaceOrderBodyModel {
   String? get paymentMethod => _paymentMethod;
 
   String? get orderNote => _orderNote;
+
+  double? get deliveryCharge => _deliveryCharge;
 
   String? get couponCode => _couponCode;
 
@@ -204,6 +209,7 @@ class PlaceOrderBodyModel {
     _orderType = json['order_type'];
     _paymentMethod = json['payment_method'];
     _orderNote = json['order_note'];
+    _deliveryCharge = json['delivery_charge'];
     _couponCode = json['coupon_code'];
     _restaurantId = json['restaurant_id'];
     _distance = json['distance'];
@@ -262,6 +268,8 @@ class PlaceOrderBodyModel {
     data['order_type'] = _orderType;
     data['payment_method'] = _paymentMethod;
     data['order_note'] = _orderNote;
+    data['delivery_charge'] = _deliveryCharge;
+
     data['coupon_code'] = _couponCode;
     data['restaurant_id'] = _restaurantId;
     data['distance'] = _distance;

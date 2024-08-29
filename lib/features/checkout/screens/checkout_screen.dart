@@ -660,7 +660,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                       .coupon?.couponType ==
                                                   "free_delivery"
                                               ? deliveryCharge = 0
-                                              : deliveryCharge,
+                                              : deliveryCharge =
+                                                  groupedDeliveryCharge,
                                           tax: tax,
                                           discount: discount,
                                           total: calcTotal(),

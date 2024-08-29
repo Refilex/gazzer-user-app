@@ -397,13 +397,14 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                       order.couponCode == "FreeDel20"
                                           ? 0
                                           : totalDeliveryCharge,
-                                  total: order.couponCode == "FreeDel20"
-                                      ? order.orderAmount! -
-                                          (5 *
-                                              (restaurantTotalOrders.length
-                                                      .toDouble() -
-                                                  1))
-                                      : total,
+                                  total: order.orderAmount!,
+                                  //order.couponCode == "FreeDel20"
+                                  //                                       ? order.orderAmount! -
+                                  //                                           (5 *
+                                  //                                               (restaurantTotalOrders.length
+                                  //                                                       .toDouble() -
+                                  //                                                   1))
+                                  //                                       : total
                                   orderController: orderController,
                                   orderId: widget.orderId,
                                   contactNumber: widget.contactNumber,

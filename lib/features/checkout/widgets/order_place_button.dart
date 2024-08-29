@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
@@ -23,6 +22,7 @@ import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:get/get.dart';
 
 class OrderPlaceButton extends StatelessWidget {
   final CheckoutController checkoutController;
@@ -535,6 +535,7 @@ class OrderPlaceButton extends StatelessWidget {
       isBuyNow: fromCart ? 0 : 1,
       guestEmail: isGuestLogIn ? finalAddress.email : null,
       extraPackagingAmount: extraPackagingAmount,
+      deliveryCharge: deliveryCharge!,
     );
   }
 }
