@@ -11,10 +11,14 @@ class AppConstants {
   static const String webHostedUrl = 'https://carrot.refilex.com';
 
   //paymob gateway
+  static const String paymobBaseUrl = 'https://accept.paymob.com/';
+  static const int cartIntegrationId = 4629810;
   static const String paymobApiKey =
       'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1Rrd016WXpMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuLW5SelVDanB6YnZCNVhtRGg1Zlo3VHZhMXJyQjdPamQwSF91N3I0bmpkNDh3eGJrRi1kV1dLWEx0Q0VhTjRlUmpvSTZ3WHBfUEdROGxTU3NfaG9DcEE=';
-  static const String cartIntegrationId = "4629810";
-  static const String paymobBaseUrl = 'https://accept.paymob.com/api';
+  static const String paymobSecretKey =
+      'egy_sk_test_2fe075da8c34e17f98c6f53e4146fc35d7512f199af1d632ac9f21d4be010607';
+  static const String paymobPublicKey =
+      'egy_pk_test_3ThYccBLEWlmmtel25bUVki3qC8Kw6J8';
 
   // https://carrot.refilex.com
   // https://stackfood-admin.6amtech.com
