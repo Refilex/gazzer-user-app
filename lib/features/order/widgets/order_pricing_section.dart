@@ -306,7 +306,8 @@ class OrderPricingSection extends StatelessWidget {
                             )),
                         Text(
                           PriceConverter.convertPrice(
-                              order.couponCode == "FreeDel20"
+                              order.couponCode != null &&
+                                      order.couponDiscountAmount == 0
                                   ? subTotal
                                   : total),
                           textDirection: TextDirection.ltr,

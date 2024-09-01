@@ -362,7 +362,9 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                             tax: tax!,
                                             dmTips: dmTips,
                                             deliveryCharge:
-                                                order.couponCode == "FreeDel20"
+                                                order.couponDiscountAmount ==
+                                                            0 &&
+                                                        order.couponCode != null
                                                     ? 0
                                                     : totalDeliveryCharge,
                                             total: total,
@@ -394,17 +396,11 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   tax: tax!,
                                   dmTips: dmTips,
                                   deliveryCharge:
-                                      order.couponCode == "FreeDel20"
+                                      order.couponDiscountAmount == 0 &&
+                                              order.couponCode != null
                                           ? 0
                                           : totalDeliveryCharge,
                                   total: order.orderAmount!,
-                                  //order.couponCode == "FreeDel20"
-                                  //                                       ? order.orderAmount! -
-                                  //                                           (5 *
-                                  //                                               (restaurantTotalOrders.length
-                                  //                                                       .toDouble() -
-                                  //                                                   1))
-                                  //                                       : total
                                   orderController: orderController,
                                   orderId: widget.orderId,
                                   contactNumber: widget.contactNumber,
