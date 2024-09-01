@@ -34,7 +34,10 @@ class _PayScreenState extends State<PayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("pay_visa".tr),
+        title: Text("payment".tr),
+        leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(widget.url))),
@@ -44,8 +47,19 @@ class _PayScreenState extends State<PayScreen> {
           startPayment();
         },
         onLoadStart: (controller, url) {
-          print('Loading: $url');
-          const Center(child: CircularProgressIndicator());
+          setState(() {
+            controller.evaluateJavascript(source: """
+             setTimeout(() => {
+          const element = document.querySelector('p.flex.cursor-pointer.justify-center.py-4.text-blue-500.font-semibold.text-sm');
+          if (element && element.innerText.includes('View order details')) {
+            element.style.display = 'none';
+          }
+        }, 1000); 
+            """).then((value) {
+              debugPrint('Loading: $url');
+              const Center(child: CircularProgressIndicator());
+            });
+          });
         },
         onLoadStop: (controller, url) {
           if (url != null &&
