@@ -44,24 +44,22 @@ class _PayScreenState extends State<PayScreen> {
         initialSettings: InAppWebViewSettings(javaScriptEnabled: true),
         onWebViewCreated: (controller) {
           _webViewController = controller;
-          startPayment();
+          setState(() {
+            disableDetailsButton(controller);
+          });
         },
         onLoadStart: (controller, url) {
           setState(() {
-            controller.evaluateJavascript(source: """
-             setTimeout(() => {
-          const element = document.querySelector('p.flex.cursor-pointer.justify-center.py-4.text-blue-500.font-semibold.text-sm');
-          if (element && element.innerText.includes('View order details')) {
-            element.style.display = 'none';
-          }
-        }, 1000); 
-            """).then((value) {
+            disableDetailsButton(controller).then((_) {
               debugPrint('Loading: $url');
               const Center(child: CircularProgressIndicator());
             });
           });
         },
         onLoadStop: (controller, url) {
+          setState(() {
+            disableDetailsButton(controller);
+          });
           if (url != null &&
               url.queryParameters.containsKey("success") &&
               url.queryParameters["success"] == "true") {
@@ -78,4 +76,15 @@ class _PayScreenState extends State<PayScreen> {
       ),
     );
   }
+
+  disableDetailsButton(InAppWebViewController controller) =>
+      controller.evaluateJavascript(source: """
+             setTimeout(() => {
+                     document.body.style.backgroundColor = 'white';
+                    const element = document.querySelector('p.flex.cursor-pointer.justify-center.py-4.text-blue-500.font-semibold.text-sm');
+                    if (element && element.innerText.includes('View order details')) {
+                      element.style.display = 'none';
+                  }
+        }, 800); 
+            """);
 }

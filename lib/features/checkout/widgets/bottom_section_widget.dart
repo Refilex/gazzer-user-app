@@ -116,8 +116,6 @@ class BottomSectionWidget extends StatelessWidget {
       if (couponController.coupon?.couponType == "free_delivery") {
         deliveryCharge = 0;
         return orderAmount + deliveryCharge;
-      } else if (couponController.discount! > 0) {
-        return orderAmount + deliveryCharge - couponController.discount!;
       } else {
         return orderAmount + deliveryCharge;
       }
