@@ -716,6 +716,11 @@ class CheckoutController extends GetxController implements GetxService {
       String? contactNumber) async {
     if (isSuccess) {
       // Get.find<OrderController>().getRunningOrders(1, notify: false);
+      checkoutServiceInterface.sendNotificationRequest(
+          orderID,
+          Get.find<AuthController>().isLoggedIn()
+              ? null
+              : Get.find<AuthController>().getGuestId());
       if (fromCart) {
         Get.find<CartController>().clearCartList();
       }
