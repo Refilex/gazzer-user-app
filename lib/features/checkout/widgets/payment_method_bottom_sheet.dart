@@ -12,7 +12,6 @@ import 'package:gazzer_userapp/features/profile/controllers/profile_controller.d
 import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
-import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
@@ -209,7 +208,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                               isSelected: checkoutController
                                                       .paymentMethodIndex ==
                                                   2,
-                                              onTap: () {
+                                              onTap: () async {
                                                 if (!Get.find<CartController>()
                                                         .cartList
                                                         .first
@@ -237,29 +236,18 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                                   setState(() {
                                                     isLoading = true;
                                                   });
-                                                  Paymob()
-                                                      .getClientSecretKey(
-                                                    amount: widget.totalPrice,
-                                                    fName:
-                                                        "${Get.find<ProfileController>().userInfoModel?.fName}",
-                                                    lName:
-                                                        "${Get.find<ProfileController>().userInfoModel?.lName}",
-                                                    email:
-                                                        "${Get.find<ProfileController>().userInfoModel?.email}",
-                                                    phone:
-                                                        "${Get.find<ProfileController>().userInfoModel?.phone}",
-                                                  )
-                                                      .then((clientSecretKey) {
-                                                    String checkoutUrl =
-                                                        "${AppConstants.paymobBaseUrl}unifiedcheckout/?publicKey=${AppConstants.paymobPublicKey}&clientSecret=$clientSecretKey";
-                                                    Get.to(() => PayScreen(
-                                                          url: checkoutUrl,
-                                                          checkoutController:
-                                                              checkoutController,
-                                                        ))?.then((value) {
-                                                      setState(() {
-                                                        isLoading = false;
-                                                      });
+                                                  String? checkoutUrl =
+                                                      await Paymob()
+                                                          .getPaymobIntention(
+                                                              amount: widget
+                                                                  .totalPrice);
+                                                  Get.to(() => PayScreen(
+                                                        url: checkoutUrl!,
+                                                        checkoutController:
+                                                            checkoutController,
+                                                      ))?.then((value) {
+                                                    setState(() {
+                                                      isLoading = false;
                                                     });
                                                   });
                                                 }
