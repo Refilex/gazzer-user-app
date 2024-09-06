@@ -79,12 +79,11 @@ class _PayScreenState extends State<PayScreen> {
 
   disableDetailsButton(InAppWebViewController controller) =>
       controller.evaluateJavascript(source: """
-             setTimeout(() => {
-                     document.body.style.backgroundColor = 'white';
-                    const element = document.querySelector('p.flex.cursor-pointer.justify-center.py-4.text-blue-500.font-semibold.text-sm');
-                    if (element && element.innerText.includes('View order details')) {
+      (function autoCalledFunction() {
+      const element = document.querySelector('p.flex.cursor-pointer.justify-center.py-4.text-blue-500.font-semibold.text-sm');
+                  if (element && element.innerText.includes('View order details')) {
                       element.style.display = 'none';
                   }
-        }, 800); 
+          })(); 
             """);
 }

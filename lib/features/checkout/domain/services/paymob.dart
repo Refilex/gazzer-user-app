@@ -1,55 +1,39 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class Paymob {
-  Future<String> getClientSecretKey({
+  Future<String?> getPaymobIntention({
     required double amount,
-    required String fName,
-    required String lName,
-    required String email,
-    required String phone,
   }) async {
     try {
-      Response response = await Dio().post(
-        "${AppConstants.paymobBaseUrl}v1/intention/",
-        options: Options(
-          headers: {
-            "Authorization": "Token ${AppConstants.paymobSecretKey}",
-            "Content-Type": "application/json",
-          },
-        ),
-        data: {
-          "amount": (amount * 100).toString(),
-          "currency": "EGP",
-          "expiration": 5800,
-          "payment_methods": [AppConstants.cartIntegrationId, "card"],
-          "billing_data": {
-            "apartment": "NA",
-            "first_name": fName,
-            "last_name": lName,
-            "street": "NA",
-            "building": "NA",
-            "phone_number": phone,
-            "country": "NA",
-            "email": email,
-            "floor": "NA",
-            "state": "NA"
-          },
-          "customer": {"first_name": fName, "last_name": lName, "email": email}
+      final response = await http.get(
+        Uri.parse(
+            "${AppConstants.baseUrl}/api/v1/customer/paymob/intention?amount=$amount"),
+        headers: {
+          "Authorization":
+              "Bearer ${Get.find<AuthController>().getUserToken()}",
+          "Content-Type": "application/json",
         },
       );
 
-      if (response.statusCode == 201) {
-        debugPrint("client_secret_key= ${response.data['client_secret']}");
-        return response.data['client_secret'];
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        if (data.isNotEmpty && data[0]['checkout_url'] != null) {
+          debugPrint("checkout_url: ${data[0]['checkout_url']}");
+          return data[0]['checkout_url'];
+        }
       } else {
-        throw Exception(
-            'Failed to get client secret. Status: ${response.statusCode}');
+        debugPrint('Error: ${response.statusCode}');
       }
     } catch (e) {
-      debugPrint('Error in getClientSecretKey: $e');
-      rethrow; // Rethrow the caught exception for higher-level handling
+      debugPrint('Exception: $e');
     }
+
+    return null; // Return null if no URL is found
   }
 }
