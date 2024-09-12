@@ -30,7 +30,7 @@ class OrderPlaceButton extends StatelessWidget {
   final bool todayClosed;
   final bool tomorrowClosed;
   final double orderAmount;
-  final double? deliveryCharge;
+  final double deliveryCharge;
   final double tax;
   final double? discount;
   final double total;
@@ -60,7 +60,7 @@ class OrderPlaceButton extends StatelessWidget {
       required this.todayClosed,
       required this.tomorrowClosed,
       required this.orderAmount,
-      this.deliveryCharge,
+      required this.deliveryCharge,
       required this.tax,
       this.discount,
       required this.total,
@@ -140,7 +140,7 @@ class OrderPlaceButton extends StatelessWidget {
                       discount: discount!,
                       taxIncluded: taxIncluded,
                       tax: tax,
-                      deliveryCharge: deliveryCharge!,
+                      deliveryCharge: deliveryCharge,
                       total: total,
                       taxPercent: taxPercent,
                     ),
@@ -274,6 +274,13 @@ class OrderPlaceButton extends StatelessWidget {
               isWalletActive: isWalletActive,
               totalPrice: total,
               isOfflinePaymentActive: isOfflinePaymentActive,
+              deliveryCharge: deliveryCharge,
+              fromCart: fromCart,
+              discount: discount!,
+              tax: tax,
+              cartList: cartList,
+              checkoutController: checkoutController,
+              extraPackagingAmount: extraPackagingAmount,
             )));
       } else {
         showModalBottomSheet(
@@ -286,6 +293,13 @@ class OrderPlaceButton extends StatelessWidget {
             isWalletActive: isWalletActive,
             totalPrice: total,
             isOfflinePaymentActive: isOfflinePaymentActive,
+            deliveryCharge: deliveryCharge,
+            fromCart: fromCart,
+            discount: discount!,
+            tax: tax,
+            cartList: cartList,
+            checkoutController: checkoutController,
+            extraPackagingAmount: extraPackagingAmount,
           ),
         );
       }
@@ -535,7 +549,7 @@ class OrderPlaceButton extends StatelessWidget {
       isBuyNow: fromCart ? 0 : 1,
       guestEmail: isGuestLogIn ? finalAddress.email : null,
       extraPackagingAmount: extraPackagingAmount,
-      deliveryCharge: deliveryCharge!,
+      deliveryCharge: deliveryCharge,
     );
   }
 }

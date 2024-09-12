@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:gazzer_userapp/common/widgets/custom_text_field_widget.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/auth/widgets/auth_dialog_widget.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/coupon_section.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/guest_login_widget.dart';
@@ -19,6 +18,8 @@ import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
+import 'package:get/get.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class TopSectionWidget extends StatelessWidget {
   final double charge;
@@ -46,6 +47,7 @@ class TopSectionWidget extends StatelessWidget {
   final FocusNode guestEmailNode;
   final JustTheController loginTooltipController;
   final Function() callBack;
+  final List<CartModel> cartList;
 
   const TopSectionWidget(
       {super.key,
@@ -73,7 +75,9 @@ class TopSectionWidget extends StatelessWidget {
       required this.guestEmailController,
       required this.guestEmailNode,
       required this.loginTooltipController,
-      required this.callBack});
+    required this.callBack,
+    required this.cartList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -298,6 +302,9 @@ class TopSectionWidget extends StatelessWidget {
                   total: total,
                   checkoutController: checkoutController,
                   isOfflinePaymentActive: isOfflinePaymentActive,
+                  deliveryCharge: deliveryCharge,
+                  fromCart: fromCart,
+                  cartList: cartList,
                 )
               : const SizedBox(),
           // SizedBox(height: isGuestLoggedIn && !isDesktop ? 0 : Dimensions.paddingSizeDefault),
@@ -306,9 +313,7 @@ class TopSectionWidget extends StatelessWidget {
               ? PartialPayView(totalPrice: total)
               : const SizedBox(),
         ]),
-
       ]);
     });
   }
-
 }
