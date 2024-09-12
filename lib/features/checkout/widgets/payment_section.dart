@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/payment_method_bottom_sheet.dart';
 import 'package:gazzer_userapp/helper/price_converter.dart';
@@ -7,23 +8,37 @@ import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/images.dart';
 import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
-
 class PaymentSection extends StatelessWidget {
   final bool isCashOnDeliveryActive;
   final bool isDigitalPaymentActive;
   final bool isWalletActive;
   final bool isOfflinePaymentActive;
   final double total;
+  final double deliveryCharge;
   final CheckoutController checkoutController;
-
+  final bool fromCart;
+  final bool? isGuestLogIn;
+  final double? discount;
+  final double? tax;
+  final double? extraPackagingAmount;
+  final int? subscriptionQty;
+  final List<CartModel> cartList;
   const PaymentSection({
     super.key,
     required this.isCashOnDeliveryActive,
     required this.isDigitalPaymentActive,
     required this.isWalletActive,
     required this.total,
+    required this.deliveryCharge,
     required this.checkoutController,
+    required this.fromCart,
     required this.isOfflinePaymentActive,
+    required this.cartList,
+    this.tax,
+    this.subscriptionQty,
+    this.isGuestLogIn,
+    this.extraPackagingAmount,
+    this.discount,
   });
 
   @override
@@ -61,6 +76,13 @@ class PaymentSection extends StatelessWidget {
                       isWalletActive: isWalletActive,
                       totalPrice: total,
                       isOfflinePaymentActive: isOfflinePaymentActive,
+                      deliveryCharge: deliveryCharge,
+                      fromCart: fromCart,
+                      tax: tax!,
+                      discount: discount!,
+                      cartList: cartList,
+                      checkoutController: checkoutController,
+                      extraPackagingAmount: extraPackagingAmount!,
                     )));
               } else {
                 showModalBottomSheet(
@@ -73,6 +95,13 @@ class PaymentSection extends StatelessWidget {
                     isWalletActive: isWalletActive,
                     totalPrice: total,
                     isOfflinePaymentActive: isOfflinePaymentActive,
+                    deliveryCharge: deliveryCharge,
+                    fromCart: fromCart,
+                    tax: tax!,
+                    discount: discount!,
+                    cartList: cartList,
+                    checkoutController: checkoutController,
+                    extraPackagingAmount: extraPackagingAmount!,
                   ),
                 );
               }

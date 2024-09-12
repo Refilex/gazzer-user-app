@@ -382,6 +382,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                   Expanded(
                                                       flex: 6,
                                                       child: TopSectionWidget(
+                                                        cartList: _cartList!,
                                                         charge: charge,
                                                         deliveryCharge:
                                                             groupedDeliveryCharge,
@@ -495,6 +496,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                                 TopSectionWidget(
+                                                  cartList: _cartList!,
                                                   charge: charge,
                                                   deliveryCharge:
                                                       groupedDeliveryCharge,
