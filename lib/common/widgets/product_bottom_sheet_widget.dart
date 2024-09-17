@@ -1822,7 +1822,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                           _onButtonPressed(
                                             productController,
                                             cartController,
-                                            product!.variations![0].type ==
+                                            product!.variations!.isNotEmpty &&
+                                                product!.variations![0].type ==
                                                 "free_input"
                                                 ?
                                             priceWithVariation
@@ -1833,7 +1834,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                             discountType,
                                             addOnIdList,
                                             addOnsList,
-                                            product!.variations![0].type ==
+                                            product!.variations!.isNotEmpty &&
+                                                product!.variations![0].type ==
                                                 "free_input"
                                                 ?
                                             priceWithAddonsVariation
