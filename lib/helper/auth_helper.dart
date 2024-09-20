@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 
 class AuthHelper {

@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:flutter/material.dart';
 
 ThemeData dark = ThemeData(

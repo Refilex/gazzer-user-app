@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
 
 class PlaceOrderBodyModel {
   List<OnlineCart>? _cart;
@@ -10,6 +10,7 @@ class PlaceOrderBodyModel {
   String? _orderType;
   String? _paymentMethod;
   String? _orderNote;
+  double? _deliveryCharge;
   String? _couponCode;
   int? _restaurantId;
   double? _distance;
@@ -55,6 +56,7 @@ class PlaceOrderBodyModel {
     required double? discountAmount,
     required double taxAmount,
     required String orderNote,
+    required double deliveryCharge,
     required String? address,
     required String? latitude,
     required String? longitude,
@@ -87,6 +89,7 @@ class PlaceOrderBodyModel {
     _orderType = orderType;
     _paymentMethod = paymentMethod;
     _orderNote = orderNote;
+    _deliveryCharge = deliveryCharge;
     _couponCode = couponCode;
     _restaurantId = restaurantId;
     _distance = distance;
@@ -132,6 +135,8 @@ class PlaceOrderBodyModel {
   String? get paymentMethod => _paymentMethod;
 
   String? get orderNote => _orderNote;
+
+  double? get deliveryCharge => _deliveryCharge;
 
   String? get couponCode => _couponCode;
 
@@ -204,6 +209,7 @@ class PlaceOrderBodyModel {
     _orderType = json['order_type'];
     _paymentMethod = json['payment_method'];
     _orderNote = json['order_note'];
+    _deliveryCharge = json['delivery_charge'];
     _couponCode = json['coupon_code'];
     _restaurantId = json['restaurant_id'];
     _distance = json['distance'];
@@ -262,6 +268,8 @@ class PlaceOrderBodyModel {
     data['order_type'] = _orderType;
     data['payment_method'] = _paymentMethod;
     data['order_note'] = _orderNote;
+    data['delivery_charge'] = _deliveryCharge;
+
     data['coupon_code'] = _couponCode;
     data['restaurant_id'] = _restaurantId;
     data['distance'] = _distance;
@@ -399,11 +407,13 @@ class Cart {
 class OrderVariation {
   String? name;
   OrderVariationValue? values;
+  int? qty;
 
-  OrderVariation({this.name, this.values});
+  OrderVariation({this.name, this.values, this.qty});
 
   OrderVariation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    qty = json['qty'];
     values = json['values'] != null
         ? OrderVariationValue.fromJson(json['values'])
         : null;
@@ -412,6 +422,7 @@ class OrderVariation {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
+    data['qty'] = qty;
     if (values != null) {
       data['values'] = values!.toJson();
     }
@@ -422,15 +433,19 @@ class OrderVariation {
 class OrderVariationValue {
   List<String?>? label;
 
+  // int? qty;
+  // ,this.qty
   OrderVariationValue({this.label});
 
   OrderVariationValue.fromJson(Map<String, dynamic> json) {
     label = json['label'].cast<String>();
+    // qty = json['qty'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['label'] = label;
+    // data['qty'] = qty;
     return data;
   }
 }

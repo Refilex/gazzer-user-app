@@ -1,22 +1,22 @@
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/order/widgets/cancellation_dialogue.dart';
-import 'package:stackfood_multivendor/features/order/widgets/subscription_pause_dialog.dart';
-import 'package:stackfood_multivendor/features/review/domain/models/rate_review_model.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_details_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/confirmation_dialog_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/confirmation_dialog_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_details_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/widgets/cancellation_dialogue.dart';
+import 'package:gazzer_userapp/features/order/widgets/subscription_pause_dialog.dart';
+import 'package:gazzer_userapp/features/review/domain/models/rate_review_model.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 
 class BottomViewWidget extends StatelessWidget {
@@ -58,7 +58,7 @@ class BottomViewWidget extends StatelessWidget {
                   ((!subscription ||
                               (order.subscription!.status != 'canceled' &&
                                   order.subscription!.status != 'completed')) &&
-                          ((pending && !digitalPay) ||
+                          ((pending && digitalPay) ||
                               accepted ||
                               confirmed ||
                               processing ||
@@ -84,54 +84,54 @@ class BottomViewWidget extends StatelessWidget {
                           ),
                         )
                       : const SizedBox(),
-                  (!offlinePay &&
-                          pending &&
-                          order.paymentStatus == 'unpaid' &&
-                          digitalPay &&
-                          Get.find<SplashController>()
-                              .configModel!
-                              .cashOnDelivery!)
-                      ? Expanded(
-                          child: CustomButtonWidget(
-                            buttonText: 'switch_to_cash_on_delivery'.tr,
-                            margin: const EdgeInsets.all(
-                                Dimensions.paddingSizeSmall),
-                            onPressed: () {
-                              Get.dialog(ConfirmationDialogWidget(
-                                  icon: Images.warning,
-                                  description: 'are_you_sure_to_switch'.tr,
-                                  onYesPressed: () {
-                                    double maxCodOrderAmount = AddressHelper
-                                                .getAddressFromSharedPref()!
-                                            .zoneData!
-                                            .firstWhere((data) =>
-                                                data.id ==
-                                                order.restaurant!.zoneId)
-                                            .maxCodOrderAmount ??
-                                        0;
-
-                                    if (maxCodOrderAmount > total) {
-                                      orderController
-                                          .switchToCOD(
-                                              order.id.toString(), null)
-                                          .then((isSuccess) {
-                                        Get.back();
-                                        if (isSuccess) {
-                                          Get.back();
-                                        }
-                                      });
-                                    } else {
-                                      if (Get.isDialogOpen!) {
-                                        Get.back();
-                                      }
-                                      showCustomSnackBar(
-                                          '${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
-                                    }
-                                  }));
-                            },
-                          ),
-                        )
-                      : const SizedBox(),
+                  // (!offlinePay &&
+                  //         pending &&
+                  //         order.paymentStatus == 'unpaid' &&
+                  //         digitalPay &&
+                  //         Get.find<SplashController>()
+                  //             .configModel!
+                  //             .cashOnDelivery!)
+                  //     ? Expanded(
+                  //         child: CustomButtonWidget(
+                  //           buttonText: 'switch_to_cash_on_delivery'.tr,
+                  //           margin: const EdgeInsets.all(
+                  //               Dimensions.paddingSizeSmall),
+                  //           onPressed: () {
+                  //             Get.dialog(ConfirmationDialogWidget(
+                  //                 icon: Images.warning,
+                  //                 description: 'are_you_sure_to_switch'.tr,
+                  //                 onYesPressed: () {
+                  //                   double maxCodOrderAmount = AddressHelper
+                  //                               .getAddressFromSharedPref()!
+                  //                           .zoneData!
+                  //                           .firstWhere((data) =>
+                  //                               data.id ==
+                  //                               order.restaurant!.zoneId)
+                  //                           .maxCodOrderAmount ??
+                  //                       0;
+                  //
+                  //                   if (maxCodOrderAmount > total) {
+                  //                     orderController
+                  //                         .switchToCOD(
+                  //                             order.id.toString(), null)
+                  //                         .then((isSuccess) {
+                  //                       Get.back();
+                  //                       if (isSuccess) {
+                  //                         Get.back();
+                  //                       }
+                  //                     });
+                  //                   } else {
+                  //                     if (Get.isDialogOpen!) {
+                  //                       Get.back();
+                  //                     }
+                  //                     showCustomSnackBar(
+                  //                         '${'you_cant_order_more_then'.tr} ${PriceConverter.convertPrice(maxCodOrderAmount)} ${'in_cash_on_delivery'.tr}');
+                  //                   }
+                  //                 }));
+                  //           },
+                  //         ),
+                  //       )
+                  //     : const SizedBox(),
                   (subscription
                           ? (order.subscription!.status == 'active' ||
                               order.subscription!.status == 'paused')

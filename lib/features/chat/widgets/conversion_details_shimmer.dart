@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 
 class ConversationDetailsShimmer extends StatelessWidget {
   const ConversationDetailsShimmer({super.key});

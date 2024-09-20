@@ -1,6 +1,6 @@
+import 'package:gazzer_userapp/features/language/domain/models/language_model.dart';
+import 'package:gazzer_userapp/util/images.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/language/domain/models/language_model.dart';
-import 'package:stackfood_multivendor/util/images.dart';
 
 class AppConstants {
   static const String appName = 'Gazzer';
@@ -9,7 +9,6 @@ class AppConstants {
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
   static const String webHostedUrl = 'https://carrot.refilex.com';
-
   // https://carrot.refilex.com
   // https://stackfood-admin.6amtech.com
   static const String baseUrl = 'https://carrot.refilex.com';
@@ -242,16 +241,16 @@ class AppConstants {
         languageName: 'عربى',
         countryCode: 'SA',
         languageCode: 'ar'),
-    LanguageModel(
-        imageUrl: Images.spanish,
-        languageName: 'Spanish',
-        countryCode: 'ES',
-        languageCode: 'es'),
-    LanguageModel(
-        imageUrl: Images.bengali,
-        languageName: 'Bengali',
-        countryCode: 'BN',
-        languageCode: 'bn'),
+    // LanguageModel(
+    //     imageUrl: Images.spanish,
+    //     languageName: 'Spanish',
+    //     countryCode: 'ES',
+    //     languageCode: 'es'),
+    // LanguageModel(
+    //     imageUrl: Images.bengali,
+    //     languageName: 'Bengali',
+    //     countryCode: 'BN',
+    //     languageCode: 'bn'),
   ];
 
   static List<String> joinDropdown = [

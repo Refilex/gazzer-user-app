@@ -1,30 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/payment_method_bottom_sheet.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/payment_method_bottom_sheet.dart';
-import 'package:stackfood_multivendor/helper/extensions.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-
 class PaymentSection extends StatelessWidget {
   final bool isCashOnDeliveryActive;
   final bool isDigitalPaymentActive;
   final bool isWalletActive;
   final bool isOfflinePaymentActive;
   final double total;
+  final double deliveryCharge;
   final CheckoutController checkoutController;
-
+  final bool fromCart;
+  final bool? isGuestLogIn;
+  final double? discount;
+  final double? tax;
+  final double? extraPackagingAmount;
+  final int? subscriptionQty;
+  final List<CartModel> cartList;
   const PaymentSection({
     super.key,
     required this.isCashOnDeliveryActive,
     required this.isDigitalPaymentActive,
     required this.isWalletActive,
     required this.total,
+    required this.deliveryCharge,
     required this.checkoutController,
+    required this.fromCart,
     required this.isOfflinePaymentActive,
+    required this.cartList,
+    this.tax,
+    this.subscriptionQty,
+    this.isGuestLogIn,
+    this.extraPackagingAmount,
+    this.discount,
   });
 
   @override
@@ -62,6 +76,13 @@ class PaymentSection extends StatelessWidget {
                       isWalletActive: isWalletActive,
                       totalPrice: total,
                       isOfflinePaymentActive: isOfflinePaymentActive,
+                      deliveryCharge: deliveryCharge,
+                      fromCart: fromCart,
+                      tax: tax!,
+                      discount: discount!,
+                      cartList: cartList,
+                      checkoutController: checkoutController,
+                      extraPackagingAmount: extraPackagingAmount!,
                     )));
               } else {
                 showModalBottomSheet(
@@ -74,6 +95,13 @@ class PaymentSection extends StatelessWidget {
                     isWalletActive: isWalletActive,
                     totalPrice: total,
                     isOfflinePaymentActive: isOfflinePaymentActive,
+                    deliveryCharge: deliveryCharge,
+                    fromCart: fromCart,
+                    tax: tax!,
+                    discount: discount!,
+                    cartList: cartList,
+                    checkoutController: checkoutController,
+                    extraPackagingAmount: extraPackagingAmount!,
                   ),
                 );
               }
@@ -144,7 +172,7 @@ class PaymentSection extends StatelessWidget {
                           : checkoutController.paymentMethodIndex == 1
                               ? 'wallet_payment'.tr
                               : checkoutController.paymentMethodIndex == 2
-                                  ? '${'digital_payment'.tr} (${checkoutController.digitalPaymentName?.replaceAll('_', ' ').toTitleCase() ?? ''})'
+                                  ? 'pay_visa'.tr
                                   : checkoutController.paymentMethodIndex == 3
                                       ? '${'offline_payment'.tr} (${checkoutController.offlineMethodList![checkoutController.selectedOfflineBankIndex].methodName})'
                                       : 'select_payment_method'.tr,

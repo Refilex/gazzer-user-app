@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/features/product/domain/models/basic_campaign_model.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/features/product/domain/services/campaign_service_interface.dart';
+import 'package:gazzer_userapp/features/product/domain/models/basic_campaign_model.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/features/product/domain/services/campaign_service_interface.dart';
 import 'package:get/get.dart';
 
 class CampaignController extends GetxController implements GetxService {

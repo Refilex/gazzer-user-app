@@ -1,6 +1,6 @@
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/favourite/domain/repositories/favourite_repository_interface.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/favourite/domain/repositories/favourite_repository_interface.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:get/get_connect/connect.dart';
 
 class FavouriteRepository implements FavouriteRepositoryInterface<Response> {

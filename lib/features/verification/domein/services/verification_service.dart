@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/auth/domain/reposotories/auth_repo_interface.dart';
-import 'package:stackfood_multivendor/features/verification/domein/reposotories/verification_repo_interface.dart';
-import 'package:stackfood_multivendor/features/verification/domein/services/verification_service_interface.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/reposotories/auth_repo_interface.dart';
+import 'package:gazzer_userapp/features/verification/domein/reposotories/verification_repo_interface.dart';
+import 'package:gazzer_userapp/features/verification/domein/services/verification_service_interface.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
 class VerificationService implements VerificationServiceInterface {

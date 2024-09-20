@@ -1,10 +1,10 @@
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/delivery_log_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_cancellation_body.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/pause_log_model.dart';
-import 'package:stackfood_multivendor/interface/repository_interface.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/delivery_log_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_cancellation_body.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/pause_log_model.dart';
+import 'package:gazzer_userapp/interface/repository_interface.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:image_picker/image_picker.dart';
 

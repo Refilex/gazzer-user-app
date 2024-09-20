@@ -1,8 +1,8 @@
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/vehicle_model.dart';
-import 'package:stackfood_multivendor/interface/repository_interface.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/vehicle_model.dart';
+import 'package:gazzer_userapp/interface/repository_interface.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
-import 'package:stackfood_multivendor/features/auth/domain/models/zone_model.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/zone_model.dart';
 
 abstract class DeliverymanRegistrationRepoInterface
     extends RepositoryInterface {

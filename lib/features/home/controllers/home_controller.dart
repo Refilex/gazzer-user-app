@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/features/home/domain/models/banner_model.dart';
-import 'package:stackfood_multivendor/features/home/domain/models/cashback_model.dart';
-import 'package:stackfood_multivendor/features/home/domain/services/home_service_interface.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/features/home/domain/models/banner_model.dart';
+import 'package:gazzer_userapp/features/home/domain/models/cashback_model.dart';
+import 'package:gazzer_userapp/features/home/domain/services/home_service_interface.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController implements GetxService {

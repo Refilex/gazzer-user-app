@@ -1,13 +1,13 @@
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/common/widgets/no_data_screen_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_shimmer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/theme1/restaurant_widget.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/common/widgets/web_restaurant_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/widgets/no_data_screen_widget.dart';
+import 'package:gazzer_userapp/common/widgets/product_shimmer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/product_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_restaurant_widget.dart';
+import 'package:gazzer_userapp/features/home/widgets/theme1/restaurant_widget.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:get/get.dart';
 
 class ProductViewWidget extends StatelessWidget {
@@ -55,6 +55,17 @@ class ProductViewWidget extends StatelessWidget {
       if (!isNull) {
         length = products!.length;
       }
+    }
+    if (restaurants != null && restaurants!.isEmpty) {
+      return NoDataScreen(
+        isEmptyRestaurant: isRestaurant ? true : false,
+        isEmptyWishlist: fromFavorite! ? true : false,
+        isEmptySearchFood: fromSearch! ? true : false,
+        title: noDataText ??
+            (isRestaurant
+                ? 'there_is_no_restaurant'.tr
+                : 'there_is_no_food'.tr),
+      );
     }
 
     return Column(children: [
@@ -113,14 +124,15 @@ class ProductViewWidget extends StatelessWidget {
                               );
                   },
                 )
-              : NoDataScreen(
-                  isEmptyRestaurant: isRestaurant ? true : false,
-                  isEmptyWishlist: fromFavorite! ? true : false,
-                  isEmptySearchFood: fromSearch! ? true : false,
-                  title: noDataText ??
-                      (isRestaurant
-                          ? 'there_is_no_restaurant'.tr
-                          : 'there_is_no_food'.tr),
+              : const Center(
+                  child: SizedBox(
+                    width: 30.0, // Adjust the width as needed
+                    height: 30.0, // Adjust the height as needed
+                    child: CircularProgressIndicator(
+                      strokeWidth:
+                          2.0, // Optional: Adjust the stroke width if needed
+                    ),
+                  ),
                 )
           : GridView.builder(
               key: UniqueKey(),

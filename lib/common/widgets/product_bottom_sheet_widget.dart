@@ -1,33 +1,34 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_favourite_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/discount_tag_widget.dart';
+import 'package:gazzer_userapp/common/widgets/discount_tag_without_image_widget.dart';
+import 'package:gazzer_userapp/common/widgets/product_bottom_sheet_shimmer.dart';
+import 'package:gazzer_userapp/common/widgets/quantity_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/rating_bar_widget.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/checkout/screens/checkout_screen.dart';
+import 'package:gazzer_userapp/features/favourite/controllers/favourite_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_details_model.dart' as orderModel;
+import 'package:gazzer_userapp/features/product/controllers/product_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/cart_helper.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_favourite_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/discount_tag_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/discount_tag_without_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_shimmer.dart';
-import 'package:stackfood_multivendor/common/widgets/quantity_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/checkout/screens/checkout_screen.dart';
-import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
-import 'package:stackfood_multivendor/features/product/controllers/product_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/helper/cart_helper.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 
 class ProductBottomSheetWidget extends StatefulWidget {
   final Product? product;
@@ -35,14 +36,15 @@ class ProductBottomSheetWidget extends StatefulWidget {
   final CartModel? cart;
   final int? cartIndex;
   final bool inRestaurantPage;
+  final orderModel.OrderDetailsModel? orderDetails;
 
-  const ProductBottomSheetWidget(
-      {super.key,
-      required this.product,
-      this.isCampaign = false,
-      this.cart,
-      this.cartIndex,
-      this.inRestaurantPage = false});
+  const ProductBottomSheetWidget({super.key,
+    required this.product,
+    this.isCampaign = false,
+    this.cart,
+    this.cartIndex,
+    this.orderDetails,
+    this.inRestaurantPage = false});
 
   @override
   State<ProductBottomSheetWidget> createState() =>
@@ -55,6 +57,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
   final ScrollController scrollController = ScrollController();
 
   Product? product;
+  orderModel.OrderDetailsModel? orderDetails;
   TextEditingController customValueController = TextEditingController();
 
   @override
@@ -121,14 +124,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         double addonsCost = _getAddonCost(product!, productController);
         List<AddOn> addOnIdList = _getAddonIdList(product!, productController);
         List<AddOns> addOnsList = _getAddonList(product!, productController);
-        if (product!.variations![0].type ==
-            "free_input") {
+        if (product!.variations!.isNotEmpty &&
+            product!.variations![0].type == "free_input") {
           debugPrint(
               '===total : $addonsCost + (($variationPriceWithDiscount * $price) , $discount , $discountType ) * ${productController
                   .quantity}');
-        }
-        if (product!.variations![0].type !=
-            "free_input") {
+        } else {
           debugPrint(
               '===total : $addonsCost + (($variationPriceWithDiscount + $price) , $discount , $discountType ) * ${productController
                   .quantity}');
@@ -188,62 +189,72 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+
                                     ///Product
                                     Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         children: [
                                           (product!.image != null &&
-                                                  product!.image!.isNotEmpty)
+                                              product!.image!.isNotEmpty)
                                               ? InkWell(
-                                                  onTap: widget.isCampaign
-                                                      ? null
-                                                      : () {
-                                                          if (!widget
-                                                              .isCampaign) {
-                                                            Get.toNamed(RouteHelper
-                                                                .getItemImagesRoute(
-                                                                    product!));
-                                                          }
-                                                        },
-                                                  child: Stack(children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              Dimensions
-                                                                  .radiusSmall),
-                                                      child: CustomImageWidget(
-                                                        image:
-                                                            '${widget.isCampaign ? Get.find<SplashController>().configModel!.baseUrls!.campaignImageUrl : Get.find<SplashController>().configModel!.baseUrls!.productImageUrl}/${product!.image}',
-                                                        width: ResponsiveHelper
-                                                                .isMobile(
-                                                                    context)
-                                                            ? 100
-                                                            : 140,
-                                                        height: ResponsiveHelper
-                                                                .isMobile(
-                                                                    context)
-                                                            ? 100
-                                                            : 140,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                    DiscountTagWidget(
-                                                        discount: discount,
-                                                        discountType:
-                                                            discountType,
-                                                        isProductBottomSheet:
-                                                            true),
-                                                  ]),
-                                                )
+                                            onTap: widget.isCampaign
+                                                ? null
+                                                : () {
+                                              if (!widget
+                                                  .isCampaign) {
+                                                Get.toNamed(RouteHelper
+                                                    .getItemImagesRoute(
+                                                    product!));
+                                              }
+                                            },
+                                            child: Stack(children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    Dimensions
+                                                        .radiusSmall),
+                                                child: CustomImageWidget(
+                                                  image:
+                                                  '${widget.isCampaign ? Get
+                                                      .find<SplashController>()
+                                                      .configModel!
+                                                      .baseUrls!
+                                                      .campaignImageUrl : Get
+                                                      .find<SplashController>()
+                                                      .configModel!
+                                                      .baseUrls!
+                                                      .productImageUrl}/${product!
+                                                      .image}',
+                                                  width: ResponsiveHelper
+                                                      .isMobile(
+                                                      context)
+                                                      ? 100
+                                                      : 140,
+                                                  height: ResponsiveHelper
+                                                      .isMobile(
+                                                      context)
+                                                      ? 100
+                                                      : 140,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              DiscountTagWidget(
+                                                  discount: discount,
+                                                  discountType:
+                                                  discountType,
+                                                  isProductBottomSheet:
+                                                  true),
+                                            ]),
+                                          )
                                               : const SizedBox.shrink(),
                                           const SizedBox(
                                               width:
-                                                  Dimensions.paddingSizeSmall),
+                                              Dimensions.paddingSizeSmall),
                                           Expanded(
                                             child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     product!.name ?? '',
@@ -252,7 +263,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                             .fontSizeLarge),
                                                     maxLines: 2,
                                                     overflow:
-                                                        TextOverflow.ellipsis,
+                                                    TextOverflow.ellipsis,
                                                   ),
                                                   InkWell(
                                                     onTap: () {
@@ -262,8 +273,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                       } else {
                                                         Get.offNamed(RouteHelper
                                                             .getRestaurantRoute(
-                                                                product!
-                                                                    .restaurantId));
+                                                            product!
+                                                                .restaurantId));
                                                       }
                                                     },
                                                     child: Padding(
@@ -326,9 +337,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                         discount: discount,
                                                         discountType:
                                                         discountType),
-                                                    if (product!.variations![0]
-                                                        .type ==
-                                                        "free_input")
+                                                    if (product!.variations!
+                                                        .isNotEmpty &&
+                                                        product!.variations![0]
+                                                            .type ==
+                                                            "free_input")
                                                       Text(
                                                         "${priceWithAddonsVariationWithDiscount
                                                             .toDouble()}E€",
@@ -339,9 +352,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                             fontSize: Dimensions
                                                                 .fontSizeLarge),
                                                       ),
-                                                    if (product!.variations![0]
-                                                        .type !=
-                                                        "free_input")
+                                                    if (product!.variations!
+                                                        .isNotEmpty &&
+                                                        product!.variations![0]
+                                                            .type !=
+                                                            "free_input")
                                                       Text(
                                                         PriceConverter
                                                             .convertPrice(
@@ -370,24 +385,27 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                 .error))
                                                         : const SizedBox(),
                                                     (!widget.isCampaign &&
-                                                            product!.stockType !=
-                                                                'unlimited' &&
-                                                            productController
-                                                                    .quantity !=
-                                                                1 &&
-                                                            productController
-                                                                    .quantity! >=
-                                                                product!
-                                                                    .itemStock!)
+                                                        product!.stockType !=
+                                                            'unlimited' &&
+                                                        productController
+                                                            .quantity !=
+                                                            1 &&
+                                                        productController
+                                                            .quantity! >=
+                                                            product!
+                                                                .itemStock!)
                                                         ? Text(
-                                                            ' (${'only'.tr} ${product!.itemStock!} ${'item_available'.tr})',
-                                                            style: robotoRegular
-                                                                .copyWith(
-                                                                    color: Colors
-                                                                        .blue,
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeSmall))
+                                                        ' (${'only'
+                                                            .tr} ${product!
+                                                            .itemStock!} ${'item_available'
+                                                            .tr})',
+                                                        style: robotoRegular
+                                                            .copyWith(
+                                                            color: Colors
+                                                                .blue,
+                                                            fontSize:
+                                                            Dimensions
+                                                                .fontSizeSmall))
                                                         : const SizedBox(),
                                                   ]),
                                                 ]),
@@ -395,52 +413,53 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                           Column(
                                               mainAxisSize: MainAxisSize.min,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                              CrossAxisAlignment.end,
                                               children: [
                                                 widget.isCampaign
                                                     ? const SizedBox(height: 25)
                                                     : GetBuilder<
-                                                            FavouriteController>(
-                                                        builder:
-                                                            (favouriteController) {
-                                                        return Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    Dimensions
-                                                                        .radiusDefault),
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor
-                                                                .withOpacity(
-                                                                    0.05),
-                                                          ),
-                                                          padding: const EdgeInsets
-                                                              .all(Dimensions
-                                                                  .paddingSizeSmall),
-                                                          margin: EdgeInsets.only(
-                                                              top: GetPlatform
-                                                                      .isAndroid
-                                                                  ? 0
-                                                                  : Dimensions
-                                                                      .paddingSizeLarge),
-                                                          child:
-                                                              CustomFavouriteWidget(
-                                                            isWished:
-                                                                favouriteController
-                                                                    .wishProductIdList
-                                                                    .contains(
-                                                                        product!
-                                                                            .id),
-                                                            product: product,
-                                                            isRestaurant: false,
-                                                          ),
-                                                        );
-                                                      }),
+                                                    FavouriteController>(
+                                                    builder:
+                                                        (favouriteController) {
+                                                      return Container(
+                                                        decoration:
+                                                        BoxDecoration(
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              Dimensions
+                                                                  .radiusDefault),
+                                                          color: Theme
+                                                              .of(
+                                                              context)
+                                                              .primaryColor
+                                                              .withOpacity(
+                                                              0.05),
+                                                        ),
+                                                        padding: const EdgeInsets
+                                                            .all(Dimensions
+                                                            .paddingSizeSmall),
+                                                        margin: EdgeInsets.only(
+                                                            top: GetPlatform
+                                                                .isAndroid
+                                                                ? 0
+                                                                : Dimensions
+                                                                .paddingSizeLarge),
+                                                        child:
+                                                        CustomFavouriteWidget(
+                                                          isWished:
+                                                          favouriteController
+                                                              .wishProductIdList
+                                                              .contains(
+                                                              product!
+                                                                  .id),
+                                                          product: product,
+                                                          isRestaurant: false,
+                                                        ),
+                                                      );
+                                                    }),
                                               ]),
                                         ]),
 
@@ -448,564 +467,809 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                         height: Dimensions.paddingSizeDefault),
 
                                     (product!.description != null &&
-                                            product!.description!.isNotEmpty)
+                                        product!.description!.isNotEmpty)
                                         ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
                                             children: [
-                                              Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text('description'.tr,
-                                                        style: robotoBold.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeLarge)),
-                                                    (Get.find<SplashController>()
-                                                            .configModel!
-                                                            .toggleVegNonVeg!)
-                                                        ? Container(
-                                                            padding: const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: Dimensions
-                                                                    .paddingSizeExtraSmall,
-                                                                horizontal:
-                                                                    Dimensions
-                                                                        .paddingSizeSmall),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      Dimensions
-                                                                          .radiusExtraLarge),
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .cardColor,
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .withOpacity(
-                                                                            0.3),
-                                                                    blurRadius:
-                                                                        10,
-                                                                    spreadRadius:
-                                                                        1)
-                                                              ],
-                                                            ),
-                                                            child:
-                                                                Row(children: [
-                                                              Image.asset(
-                                                                  product!.veg ==
-                                                                          1
-                                                                      ? Images
-                                                                          .vegLogo
-                                                                      : Images
-                                                                          .nonVegLogo,
-                                                                  height: 20,
-                                                                  width: 20),
-                                                              const SizedBox(
-                                                                  width: Dimensions
-                                                                      .paddingSizeSmall),
-                                                              Text(
-                                                                  product!.veg ==
-                                                                          1
-                                                                      ? 'veg'.tr
-                                                                      : 'non_veg'
-                                                                          .tr,
-                                                                  style: robotoMedium
-                                                                      .copyWith(
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeDefault)),
-                                                            ]),
-                                                          )
-                                                        : const SizedBox(),
-                                                  ]),
-                                              const SizedBox(
-                                                  height: Dimensions
-                                                      .paddingSizeExtraSmall),
-                                              Text(product!.description ?? '',
-                                                  style: robotoRegular,
-                                                  textAlign: TextAlign.justify),
-                                              const SizedBox(
-                                                  height: Dimensions
-                                                      .paddingSizeLarge),
-                                            ],
-                                          )
+                                              Text('description'.tr,
+                                                  style: robotoBold.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeLarge)),
+                                              (Get
+                                                  .find<SplashController>()
+                                                  .configModel!
+                                                  .toggleVegNonVeg!)
+                                                  ? Container(
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                    vertical: Dimensions
+                                                        .paddingSizeExtraSmall,
+                                                    horizontal:
+                                                    Dimensions
+                                                        .paddingSizeSmall),
+                                                decoration:
+                                                BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions
+                                                          .radiusExtraLarge),
+                                                  color: Theme
+                                                      .of(
+                                                      context)
+                                                      .cardColor,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors
+                                                            .grey
+                                                            .withOpacity(
+                                                            0.3),
+                                                        blurRadius:
+                                                        10,
+                                                        spreadRadius:
+                                                        1)
+                                                  ],
+                                                ),
+                                                child:
+                                                Row(children: [
+                                                  Image.asset(
+                                                      product!.veg ==
+                                                          1
+                                                          ? Images
+                                                          .vegLogo
+                                                          : Images
+                                                          .nonVegLogo,
+                                                      height: 20,
+                                                      width: 20),
+                                                  const SizedBox(
+                                                      width: Dimensions
+                                                          .paddingSizeSmall),
+                                                  Text(
+                                                      product!.veg ==
+                                                          1
+                                                          ? 'veg'.tr
+                                                          : 'non_veg'
+                                                          .tr,
+                                                      style: robotoMedium
+                                                          .copyWith(
+                                                          fontSize:
+                                                          Dimensions
+                                                              .fontSizeDefault)),
+                                                ]),
+                                              )
+                                                  : const SizedBox(),
+                                            ]),
+                                        const SizedBox(
+                                            height: Dimensions
+                                                .paddingSizeExtraSmall),
+                                        Text(product!.description ?? '',
+                                            style: robotoRegular,
+                                            textAlign: TextAlign.justify),
+                                        const SizedBox(
+                                            height: Dimensions
+                                                .paddingSizeLarge),
+                                      ],
+                                    )
                                         : const SizedBox(),
 
                                     /// Variation
-                                    product!.variations != null
+                                    product!.variations != null &&
+                                        product!.variations!.isNotEmpty
                                         ? ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount:
-                                                product!.variations!.length,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            padding: EdgeInsets.only(
-                                                bottom: (product!.variations !=
-                                                            null &&
-                                                        product!.variations!
-                                                            .isNotEmpty)
-                                                    ? Dimensions
-                                                        .paddingSizeLarge
-                                                    : 0),
-                                            itemBuilder: (context, index) {
-                                              int selectedCount = 0;
-                                              if (product!.variations![index]
-                                                  .required!) {
-                                                for (var value
-                                                    in productController
-                                                            .selectedVariations[
-                                                        index]) {
-                                                  if (value == true) {
-                                                    selectedCount++;
-                                                  }
-                                                }
-                                              }
-                                              return Container(
-                                                padding: EdgeInsets.all(product!
-                                                        .variations![index]
-                                                        .required!
-                                                    ? (product!
-                                                                    .variations![
-                                                                        index]
-                                                                    .multiSelect!
-                                                                ? product!
-                                                                    .variations![
-                                                                        index]
-                                                                    .min!
-                                                                : 1) <=
-                                                            selectedCount
-                                                        ? Dimensions
-                                                            .paddingSizeSmall
-                                                        : Dimensions
-                                                            .paddingSizeSmall
-                                                    : 0),
-                                                margin: EdgeInsets.only(
-                                                    bottom: index !=
-                                                            product!.variations!
-                                                                    .length -
-                                                                1
-                                                        ? Dimensions
-                                                            .paddingSizeDefault
-                                                        : 0),
-                                                decoration: BoxDecoration(
-                                                    color: product!
-                                                            .variations![index]
-                                                            .required!
-                                                        ? (product!.variations![index].multiSelect!
-                                                                    ? product!
-                                                                        .variations![
-                                                                            index]
-                                                                        .min!
-                                                                    : 1) <=
-                                                                selectedCount
-                                                            ? Theme.of(context)
-                                                                .primaryColor
-                                                                .withOpacity(
-                                                                    0.05)
-                                                            : Theme.of(context)
-                                                                .disabledColor
-                                                                .withOpacity(
-                                                                    0.05)
-                                                        : Colors.transparent,
-                                                    border: Border.all(
-                                                        color: product!
-                                                                .variations![
-                                                                    index]
-                                                                .required!
-                                                            ? (product!.variations![index].multiSelect! ? product!.variations![index].min! : 1) <=
-                                                                    selectedCount
-                                                                ? Theme.of(context)
-                                                                    .primaryColor
-                                                                    .withOpacity(
-                                                                        0.3)
-                                                                : Theme.of(context)
-                                                                    .disabledColor
-                                                                    .withOpacity(
-                                                                        0.3)
-                                                            : Colors
-                                                                .transparent,
-                                                        width: 1),
-                                                    borderRadius: BorderRadius.circular(
-                                                        Dimensions.radiusDefault)),
-                                                child: Column(
+                                      shrinkWrap: true,
+                                      itemCount:
+                                      product!.variations!.length,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
+                                      padding: EdgeInsets.only(
+                                          bottom: (product!.variations !=
+                                              null &&
+                                              product!.variations!
+                                                  .isNotEmpty)
+                                              ? Dimensions
+                                              .paddingSizeLarge
+                                              : 0),
+                                      itemBuilder: (context, index) {
+                                        int selectedCount = 0;
+                                        if (product!.variations![index]
+                                            .required!) {
+                                          for (var value
+                                          in productController
+                                              .selectedVariations[
+                                          index]) {
+                                            if (value == true) {
+                                              selectedCount++;
+                                            }
+                                          }
+                                        }
+                                        return Container(
+                                          padding: EdgeInsets.all(product!
+                                              .variations![index]
+                                              .required!
+                                              ? (product!
+                                              .variations![
+                                          index]
+                                              .multiSelect!
+                                              ? product!
+                                              .variations![
+                                          index]
+                                              .min!
+                                              : 1) <=
+                                              selectedCount
+                                              ? Dimensions
+                                              .paddingSizeSmall
+                                              : Dimensions
+                                              .paddingSizeSmall
+                                              : 0),
+                                          margin: EdgeInsets.only(
+                                              bottom: index !=
+                                                  product!.variations!
+                                                      .length -
+                                                      1
+                                                  ? Dimensions
+                                                  .paddingSizeDefault
+                                                  : 0),
+                                          decoration: BoxDecoration(
+                                              color: product!
+                                                  .variations![index]
+                                                  .required!
+                                                  ? (product!.variations![index]
+                                                  .multiSelect!
+                                                  ? product!
+                                                  .variations![
+                                              index]
+                                                  .min!
+                                                  : 1) <=
+                                                  selectedCount
+                                                  ? Theme
+                                                  .of(context)
+                                                  .primaryColor
+                                                  .withOpacity(
+                                                  0.05)
+                                                  : Theme
+                                                  .of(context)
+                                                  .disabledColor
+                                                  .withOpacity(
+                                                  0.05)
+                                                  : Colors.transparent,
+                                              border: Border.all(
+                                                  color: product!
+                                                      .variations![
+                                                  index]
+                                                      .required!
+                                                      ? (product!
+                                                      .variations![index]
+                                                      .multiSelect!
+                                                      ? product!
+                                                      .variations![index].min!
+                                                      : 1) <=
+                                                      selectedCount
+                                                      ? Theme
+                                                      .of(context)
+                                                      .primaryColor
+                                                      .withOpacity(
+                                                      0.3)
+                                                      : Theme
+                                                      .of(context)
+                                                      .disabledColor
+                                                      .withOpacity(
+                                                      0.3)
+                                                      : Colors
+                                                      .transparent,
+                                                  width: 1),
+                                              borderRadius: BorderRadius
+                                                  .circular(
+                                                  Dimensions.radiusDefault)),
+                                          child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .start,
+                                              children: [
+                                                Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    CrossAxisAlignment
+                                                        .center,
                                                     children: [
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                                product!
-                                                                    .variations![
-                                                                        index]
-                                                                    .name!,
-                                                                style: robotoBold
-                                                                    .copyWith(
-                                                                        fontSize:
-                                                                            Dimensions.fontSizeLarge)),
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: product!
-                                                                        .variations![
-                                                                            index]
-                                                                        .required!
-                                                                    ? (product!.variations![index].multiSelect! ? product!.variations![index].min! : 1) >
-                                                                            selectedCount
-                                                                        ? Theme.of(context)
-                                                                            .colorScheme
-                                                                            .error
-                                                                            .withOpacity(
-                                                                                0.1)
-                                                                        : Theme.of(context)
-                                                                            .primaryColor
-                                                                            .withOpacity(
-                                                                                0.1)
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .disabledColor
-                                                                        .withOpacity(
-                                                                            0.2),
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        Dimensions
-                                                                            .radiusSmall),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      Dimensions
-                                                                          .paddingSizeExtraSmall),
-                                                              child: Text(
-                                                                product!
-                                                                        .variations![
-                                                                            index]
-                                                                        .required!
-                                                                    ? (product!.variations![index].multiSelect! ? product!.variations![index].min! : 1) <=
-                                                                            selectedCount
-                                                                        ? 'completed'
-                                                                            .tr
-                                                                        : 'required'
-                                                                            .tr
-                                                                    : 'optional'
-                                                                        .tr,
-                                                                style:
-                                                                    robotoRegular
-                                                                        .copyWith(
-                                                                  color: product!
-                                                                          .variations![
-                                                                              index]
-                                                                          .required!
-                                                                      ? (product!.variations![index].multiSelect! ? product!.variations![index].min! : 1) <=
-                                                                              selectedCount
-                                                                          ? Theme.of(context)
-                                                                              .primaryColor
-                                                                          : Theme.of(context)
-                                                                              .colorScheme
-                                                                              .error
-                                                                      : Theme.of(
-                                                                              context)
-                                                                          .hintColor,
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeSmall,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ]),
-                                                      const SizedBox(
-                                                          height: Dimensions
-                                                              .paddingSizeExtraSmall),
-                                                      Row(children: [
-                                                        product!
-                                                                .variations![
-                                                                    index]
-                                                                .multiSelect!
-                                                            ? Text(
-                                                                '${'select_minimum'.tr} ${'${product!.variations![index].min}'
-                                                                    ' ${'and_up_to'.tr} ${product!.variations![index].max} ${'options'.tr}'}',
-                                                                style: robotoMedium.copyWith(
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeExtraSmall,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .disabledColor),
-                                                              )
-                                                            : Text(
-                                                                'select_one'.tr,
-                                                                style: robotoMedium.copyWith(
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeExtraSmall,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .primaryColor),
-                                                              ),
-                                                      ]),
-                                                      SizedBox(
-                                                          height: product!
-                                                                  .variations![
-                                                                      index]
-                                                                  .multiSelect!
-                                                              ? Dimensions
-                                                                  .paddingSizeExtraSmall
-                                                              : 0),
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
+                                                      Text(
+                                                          product!
+                                                              .variations![
+                                                          index]
+                                                              .name!,
+                                                          style: robotoBold
+                                                              .copyWith(
+                                                              fontSize:
+                                                              Dimensions
+                                                                  .fontSizeLarge)),
+                                                      Container(
+                                                        decoration:
+                                                        BoxDecoration(
+                                                          color: product!
+                                                              .variations![
+                                                          index]
+                                                              .required!
+                                                              ? (product!
+                                                              .variations![index]
+                                                              .multiSelect!
+                                                              ? product!
+                                                              .variations![index]
+                                                              .min!
+                                                              : 1) >
+                                                              selectedCount
+                                                              ? Theme
+                                                              .of(context)
+                                                              .colorScheme
+                                                              .error
+                                                              .withOpacity(
+                                                              0.1)
+                                                              : Theme
+                                                              .of(context)
+                                                              .primaryColor
+                                                              .withOpacity(
+                                                              0.1)
+                                                              : Theme
+                                                              .of(
+                                                              context)
+                                                              .disabledColor
+                                                              .withOpacity(
+                                                              0.2),
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              Dimensions
+                                                                  .radiusSmall),
+                                                        ),
                                                         padding:
-                                                            EdgeInsets.zero,
-                                                        itemCount: productController
-                                                                    .collapseVariation[
-                                                                index]
-                                                            ? product!
-                                                                        .variations![
-                                                                            index]
-                                                                        .variationValues!
-                                                                        .length >
-                                                                    4
-                                                                ? 5
-                                                                : product!
-                                                                    .variations![
-                                                                        index]
-                                                                    .variationValues!
-                                                                    .length
-                                                            : product!
+                                                        const EdgeInsets
+                                                            .all(
+                                                            Dimensions
+                                                                .paddingSizeExtraSmall),
+                                                        child: Text(
+                                                          product!
+                                                              .variations![
+                                                          index]
+                                                              .required!
+                                                              ? (product!
+                                                              .variations![index]
+                                                              .multiSelect!
+                                                              ? product!
+                                                              .variations![index]
+                                                              .min!
+                                                              : 1) <=
+                                                              selectedCount
+                                                              ? 'completed'
+                                                              .tr
+                                                              : 'required'
+                                                              .tr
+                                                              : 'optional'
+                                                              .tr,
+                                                          style:
+                                                          robotoRegular
+                                                              .copyWith(
+                                                            color: product!
                                                                 .variations![
-                                                                    index]
-                                                                .variationValues!
-                                                                .length,
-                                                        itemBuilder:
-                                                            (context, i) {
-                                                          if (i == 4 &&
-                                                              productController
-                                                                      .collapseVariation[
-                                                                  index]) {
-                                                            return Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      Dimensions
-                                                                          .paddingSizeExtraSmall),
-                                                              child: InkWell(
-                                                                onTap: () =>
-                                                                    productController
-                                                                        .showMoreSpecificSection(
-                                                                            index),
-                                                                child: Row(
-                                                                    children: [
-                                                                      Icon(
-                                                                          Icons
-                                                                              .expand_more,
-                                                                          size:
-                                                                              18,
-                                                                          color:
-                                                                              Theme.of(context).primaryColor),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              Dimensions.paddingSizeExtraSmall),
-                                                                      Text(
-                                                                        '${'view'.tr} ${product!.variations![index].variationValues!.length - 4} ${'more_option'.tr}',
-                                                                        style: robotoMedium.copyWith(
-                                                                            color:
-                                                                                Theme.of(context).primaryColor),
-                                                                      ),
-                                                                    ]),
-                                                              ),
-                                                            );
-                                                          } else {
-                                                            return Padding(
-                                                              padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveHelper
-                                                                          .isDesktop(
-                                                                              context)
-                                                                      ? Dimensions
-                                                                          .paddingSizeExtraSmall
-                                                                      : 0),
-                                                              child: InkWell(
-                                                                onTap: () {
-                                                                  productController.setCartVariationIndex(
-                                                                      index,
-                                                                      i,
-                                                                      product,
-                                                                      product!
-                                                                          .variations![
-                                                                              index]
-                                                                          .multiSelect!);
-                                                                  productController.setExistInCartForBottomSheet(
-                                                                      product!,
-                                                                      productController
-                                                                          .selectedVariations);
-                                                                },
-                                                                child: Row(
-                                                                    children: [
-                                                                      Flexible(
-                                                                        child: Row(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: [
-                                                                              product!.variations![index].multiSelect!
-                                                                                  ? Checkbox(
-                                                                                      value: productController.selectedVariations[index][i],
-                                                                                      activeColor: Theme.of(context).primaryColor,
-                                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
-                                                                                      onChanged: (bool? newValue) {
-                                                                                        productController.setCartVariationIndex(index, i, product, product!.variations![index].multiSelect!);
-                                                                                        productController.setExistInCartForBottomSheet(product!, productController.selectedVariations);
-                                                                                      },
-                                                                                      visualDensity: const VisualDensity(horizontal: -3, vertical: -3),
-                                                                                      side: BorderSide(width: 2, color: Theme.of(context).hintColor),
-                                                                                    )
-                                                                                  : Radio(
-                                                                                      value: i,
-                                                                                      groupValue: productController.selectedVariations[index].indexOf(true),
-                                                                                      onChanged: (dynamic value) {
-                                                                                        productController.setCartVariationIndex(index, i, product, product!.variations![index].multiSelect!);
-                                                                                        productController.setExistInCartForBottomSheet(product!, productController.selectedVariations);
-                                                                                      },
-                                                                                      activeColor: Theme.of(context).primaryColor,
-                                                                                      toggleable: false,
-                                                                                      visualDensity: const VisualDensity(horizontal: -3, vertical: -3),
-                                                                                      fillColor: MaterialStateColor.resolveWith((states) => productController.selectedVariations[index][i]! ? Theme.of(context).primaryColor : Theme.of(context).disabledColor),
-                                                                                    ),
-                                                                              Text(
-                                                                                product!.variations![index].variationValues![i].level!.trim(),
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: productController.selectedVariations[index][i]! ? robotoMedium : robotoRegular.copyWith(color: Theme.of(context).hintColor),
-                                                                              ),
-                                                                              Flexible(
-                                                                                child: (productController.selectedVariations[index][i]! && (productController.quantity == product!.variations![index].variationValues![i].currentStock))
-                                                                                    ? Text(
-                                                                                        ' (${'only'.tr} ${product!.variations![index].variationValues![i].currentStock} ${'item_available'.tr})',
-                                                                                        style: robotoRegular.copyWith(color: Colors.blue, fontSize: Dimensions.fontSizeExtraSmall),
-                                                                                      )
-                                                                                    : Text(
-                                                                                        ' (${'out_of_stock'.tr})',
-                                                                                        maxLines: 1,
-                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                        style: (product!.variations![index].variationValues![i].stockType != 'unlimited' && product!.variations![index].variationValues![i].currentStock != null && product!.variations![index].variationValues![i].currentStock! <= 0) ? robotoMedium.copyWith(color: Theme.of(context).colorScheme.error, fontSize: Dimensions.fontSizeExtraSmall) : robotoRegular.copyWith(color: Colors.transparent),
-                                                                                      ),
-                                                                              ),
-                                                                            ]),
-                                                                      ),
-                                                                      (price > priceWithDiscount) &&
-                                                                              (discountType == 'percent')
-                                                                          ? Text(
-                                                                              PriceConverter.convertPrice(product!.variations![index].variationValues![i].optionPrice),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              textDirection: TextDirection.ltr,
-                                                                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor, decoration: TextDecoration.lineThrough),
-                                                                            )
-                                                                          : const SizedBox(),
-                                                                      SizedBox(
-                                                                          width: price > priceWithDiscount
-                                                                              ? Dimensions.paddingSizeExtraSmall
-                                                                              : 0),
-                                                                      Text(
-                                                                        '+${PriceConverter.convertPrice(product!.variations![index].variationValues![i].optionPrice, discount: discount, discountType: discountType, isVariation: true)}',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        textDirection:
-                                                                            TextDirection.ltr,
-                                                                        style: productController.selectedVariations[index][i]!
-                                                                            ? robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall)
-                                                                            : robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
-                                                                      )
-                                                                    ]),
-                                                              ),
-                                                            );
-                                                          }
-                                                        },
-                                                      ),
-                                                      if (product!
-                                                                  .variations![
-                                                                      index]
-                                                                  .type ==
-                                                              "free_input" &&
-                                                          productController
-                                                              .selectedVariations[
-                                                                  index]
-                                                              .contains(true))
-                                                        Padding(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                              vertical: Dimensions
-                                                                  .paddingSizeSmall),
-                                                          child: TextFormField(
-                                                            controller:
-                                                                customValueController,
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              labelText:
-                                                                  'enter_custom_value'
-                                                                      .tr,
-                                                              labelStyle: TextStyle(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor),
-                                                              border:
-                                                                  const OutlineInputBorder(),
-                                                              contentPadding: const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      Dimensions
-                                                                          .paddingSizeSmall,
-                                                                  vertical:
-                                                                  Dimensions
-                                                                      .paddingSizeSmall),
-                                                                ),
-                                                            onFieldSubmitted:
-                                                                (value) {
-                                                              if (product!.price !=
-                                                                      null &&
-                                                                  customValueController
-                                                                      .text
-                                                                      .isNotEmpty) {
-                                                                product!.price =
-                                                                    double.tryParse(
-                                                                        customValueController
-                                                                            .text);
-                                                              }
-                                                            },
-                                                            onChanged: (value) {
-                                                              if (product!.price !=
-                                                                      null &&
-                                                                  customValueController
-                                                                      .text
-                                                                      .isNotEmpty) {
-                                                                setState(() {
-                                                                  product!.price =
-                                                                      double.tryParse(
-                                                                          customValueController
-                                                                              .text);
-                                                                });
-                                                              }
-                                                            },
+                                                            index]
+                                                                .required!
+                                                                ? (product!
+                                                                .variations![index]
+                                                                .multiSelect!
+                                                                ? product!
+                                                                .variations![index]
+                                                                .min!
+                                                                : 1) <=
+                                                                selectedCount
+                                                                ? Theme
+                                                                .of(context)
+                                                                .primaryColor
+                                                                : Theme
+                                                                .of(context)
+                                                                .colorScheme
+                                                                .error
+                                                                : Theme
+                                                                .of(
+                                                                context)
+                                                                .hintColor,
+                                                            fontSize:
+                                                            Dimensions
+                                                                .fontSizeSmall,
                                                           ),
                                                         ),
+                                                      ),
                                                     ]),
-                                              );
-                                            },
-                                          )
+                                                const SizedBox(
+                                                    height: Dimensions
+                                                        .paddingSizeExtraSmall),
+                                                Row(children: [
+                                                  product!
+                                                      .variations![
+                                                  index]
+                                                      .multiSelect!
+                                                      ? Text(
+                                                    '${'select_minimum'
+                                                        .tr} ${'${product!
+                                                        .variations![index]
+                                                        .min}'
+                                                        ' ${'and_up_to'
+                                                        .tr} ${product!
+                                                        .variations![index]
+                                                        .max} ${'options'
+                                                        .tr}'}',
+                                                    style: robotoMedium
+                                                        .copyWith(
+                                                        fontSize:
+                                                        Dimensions
+                                                            .fontSizeExtraSmall,
+                                                        color: Theme
+                                                            .of(
+                                                            context)
+                                                            .disabledColor),
+                                                  )
+                                                      : Text(
+                                                    'select_one'.tr,
+                                                    style: robotoMedium
+                                                        .copyWith(
+                                                        fontSize:
+                                                        Dimensions
+                                                            .fontSizeExtraSmall,
+                                                        color: Theme
+                                                            .of(
+                                                            context)
+                                                            .primaryColor),
+                                                  ),
+                                                ]),
+                                                SizedBox(
+                                                    height: product!
+                                                        .variations![
+                                                    index]
+                                                        .multiSelect!
+                                                        ? Dimensions
+                                                        .paddingSizeExtraSmall
+                                                        : 0),
+                                                ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                                  padding:
+                                                  EdgeInsets.zero,
+                                                  itemCount: productController
+                                                      .collapseVariation[
+                                                  index]
+                                                      ? product!
+                                                      .variations![
+                                                  index]
+                                                      .variationValues!
+                                                      .length >
+                                                      4
+                                                      ? 5
+                                                      : product!
+                                                      .variations![
+                                                  index]
+                                                      .variationValues!
+                                                      .length
+                                                      : product!
+                                                      .variations![
+                                                  index]
+                                                      .variationValues!
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, i) {
+                                                    if (i == 4 &&
+                                                        productController
+                                                            .collapseVariation[
+                                                        index]) {
+                                                      return Padding(
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .all(
+                                                            Dimensions
+                                                                .paddingSizeExtraSmall),
+                                                        child: InkWell(
+                                                          onTap: () =>
+                                                              productController
+                                                                  .showMoreSpecificSection(
+                                                                  index),
+                                                          child: Row(
+                                                              children: [
+                                                                Icon(
+                                                                    Icons
+                                                                        .expand_more,
+                                                                    size:
+                                                                    18,
+                                                                    color:
+                                                                    Theme
+                                                                        .of(
+                                                                        context)
+                                                                        .primaryColor),
+                                                                const SizedBox(
+                                                                    width:
+                                                                    Dimensions
+                                                                        .paddingSizeExtraSmall),
+                                                                Text(
+                                                                  '${'view'
+                                                                      .tr} ${product!
+                                                                      .variations![index]
+                                                                      .variationValues!
+                                                                      .length -
+                                                                      4} ${'more_option'
+                                                                      .tr}',
+                                                                  style: robotoMedium
+                                                                      .copyWith(
+                                                                      color:
+                                                                      Theme
+                                                                          .of(
+                                                                          context)
+                                                                          .primaryColor),
+                                                                ),
+                                                              ]),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                            vertical: ResponsiveHelper
+                                                                .isDesktop(
+                                                                context)
+                                                                ? Dimensions
+                                                                .paddingSizeExtraSmall
+                                                                : 0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            productController
+                                                                .setCartVariationIndex(
+                                                                index,
+                                                                i,
+                                                                product,
+                                                                product!
+                                                                    .variations![
+                                                                index]
+                                                                    .multiSelect!);
+                                                            productController
+                                                                .setExistInCartForBottomSheet(
+                                                                product!,
+                                                                productController
+                                                                    .selectedVariations);
+                                                          },
+                                                          child: Row(
+                                                              children: [
+                                                                Flexible(
+                                                                  child: Row(
+                                                                      crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                      children: [
+                                                                        product!
+                                                                            .variations![index]
+                                                                            .multiSelect!
+                                                                            ? Checkbox(
+                                                                          value: productController
+                                                                              .selectedVariations[index][i],
+                                                                          activeColor: Theme
+                                                                              .of(
+                                                                              context)
+                                                                              .primaryColor,
+                                                                          shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius
+                                                                                  .circular(
+                                                                                  Dimensions
+                                                                                      .radiusSmall)),
+                                                                          onChanged: (
+                                                                              bool? newValue) {
+                                                                            productController
+                                                                                .setCartVariationIndex(
+                                                                                index,
+                                                                                i,
+                                                                                product,
+                                                                                product!
+                                                                                    .variations![index]
+                                                                                    .multiSelect!);
+                                                                            productController
+                                                                                .setExistInCartForBottomSheet(
+                                                                                product!,
+                                                                                productController
+                                                                                    .selectedVariations);
+                                                                          },
+                                                                          visualDensity: const VisualDensity(
+                                                                              horizontal: -3,
+                                                                              vertical: -3),
+                                                                          side: BorderSide(
+                                                                              width: 2,
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
+                                                                                  .hintColor),
+                                                                        )
+                                                                            : Radio(
+                                                                          value: i,
+                                                                          groupValue: productController
+                                                                              .selectedVariations[index]
+                                                                              .indexOf(
+                                                                              true),
+                                                                          onChanged: (
+                                                                              dynamic value) {
+                                                                            productController
+                                                                                .setCartVariationIndex(
+                                                                                index,
+                                                                                i,
+                                                                                product,
+                                                                                product!
+                                                                                    .variations![index]
+                                                                                    .multiSelect!);
+                                                                            productController
+                                                                                .setExistInCartForBottomSheet(
+                                                                                product!,
+                                                                                productController
+                                                                                    .selectedVariations);
+                                                                          },
+                                                                          activeColor: Theme
+                                                                              .of(
+                                                                              context)
+                                                                              .primaryColor,
+                                                                          toggleable: false,
+                                                                          visualDensity: const VisualDensity(
+                                                                              horizontal: -3,
+                                                                              vertical: -3),
+                                                                          fillColor: MaterialStateColor
+                                                                              .resolveWith((
+                                                                              states) =>
+                                                                          productController
+                                                                              .selectedVariations[index][i]!
+                                                                              ? Theme
+                                                                              .of(
+                                                                              context)
+                                                                              .primaryColor
+                                                                              : Theme
+                                                                              .of(
+                                                                              context)
+                                                                              .disabledColor),
+                                                                        ),
+                                                                        Text(
+                                                                          product!
+                                                                              .variations![index]
+                                                                              .variationValues![i]
+                                                                              .level!
+                                                                              .trim(),
+                                                                          maxLines: 1,
+                                                                          overflow: TextOverflow
+                                                                              .ellipsis,
+                                                                          style: productController
+                                                                              .selectedVariations[index][i]!
+                                                                              ? robotoMedium
+                                                                              : robotoRegular
+                                                                              .copyWith(
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
+                                                                                  .hintColor),
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: (productController
+                                                                              .selectedVariations[index][i]! &&
+                                                                              (productController
+                                                                                  .quantity ==
+                                                                                  product!
+                                                                                      .variations![index]
+                                                                                      .variationValues![i]
+                                                                                      .currentStock))
+                                                                              ? Text(
+                                                                            ' (${'only'
+                                                                                .tr} ${product!
+                                                                                .variations![index]
+                                                                                .variationValues![i]
+                                                                                .currentStock} ${'item_available'
+                                                                                .tr})',
+                                                                            style: robotoRegular
+                                                                                .copyWith(
+                                                                                color: Colors
+                                                                                    .blue,
+                                                                                fontSize: Dimensions
+                                                                                    .fontSizeExtraSmall),
+                                                                          )
+                                                                              : Text(
+                                                                            ' (${'out_of_stock'
+                                                                                .tr})',
+                                                                            maxLines: 1,
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis,
+                                                                            style: (product!
+                                                                                .variations![index]
+                                                                                .variationValues![i]
+                                                                                .stockType !=
+                                                                                'unlimited' &&
+                                                                                product!
+                                                                                    .variations![index]
+                                                                                    .variationValues![i]
+                                                                                    .currentStock !=
+                                                                                    null &&
+                                                                                product!
+                                                                                    .variations![index]
+                                                                                    .variationValues![i]
+                                                                                    .currentStock! <=
+                                                                                    0)
+                                                                                ? robotoMedium
+                                                                                .copyWith(
+                                                                                color: Theme
+                                                                                    .of(
+                                                                                    context)
+                                                                                    .colorScheme
+                                                                                    .error,
+                                                                                fontSize: Dimensions
+                                                                                    .fontSizeExtraSmall)
+                                                                                : robotoRegular
+                                                                                .copyWith(
+                                                                                color: Colors
+                                                                                    .transparent),
+                                                                          ),
+                                                                        ),
+                                                                      ]),
+                                                                ),
+                                                                (price >
+                                                                    priceWithDiscount) &&
+                                                                    (discountType ==
+                                                                        'percent')
+                                                                    ? Text(
+                                                                  PriceConverter
+                                                                      .convertPrice(
+                                                                      product!
+                                                                          .variations![index]
+                                                                          .variationValues![i]
+                                                                          .optionPrice),
+                                                                  maxLines: 1,
+                                                                  overflow: TextOverflow
+                                                                      .ellipsis,
+                                                                  textDirection: TextDirection
+                                                                      .ltr,
+                                                                  style: robotoRegular
+                                                                      .copyWith(
+                                                                      fontSize: Dimensions
+                                                                          .fontSizeExtraSmall,
+                                                                      color: Theme
+                                                                          .of(
+                                                                          context)
+                                                                          .disabledColor,
+                                                                      decoration: TextDecoration
+                                                                          .lineThrough),
+                                                                )
+                                                                    : const SizedBox(),
+                                                                SizedBox(
+                                                                    width: price >
+                                                                        priceWithDiscount
+                                                                        ? Dimensions
+                                                                        .paddingSizeExtraSmall
+                                                                        : 0),
+                                                                Text(
+                                                                  '+${PriceConverter
+                                                                      .convertPrice(
+                                                                      product!
+                                                                          .variations![index]
+                                                                          .variationValues![i]
+                                                                          .optionPrice,
+                                                                      discount: discount,
+                                                                      discountType: discountType,
+                                                                      isVariation: true)}',
+                                                                  maxLines:
+                                                                  1,
+                                                                  overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                                  textDirection:
+                                                                  TextDirection
+                                                                      .ltr,
+                                                                  style: productController
+                                                                      .selectedVariations[index][i]!
+                                                                      ? robotoMedium
+                                                                      .copyWith(
+                                                                      fontSize: Dimensions
+                                                                          .fontSizeExtraSmall)
+                                                                      : robotoRegular
+                                                                      .copyWith(
+                                                                      fontSize: Dimensions
+                                                                          .fontSizeExtraSmall,
+                                                                      color: Theme
+                                                                          .of(
+                                                                          context)
+                                                                          .disabledColor),
+                                                                )
+                                                              ]),
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                                if (product!
+                                                    .variations![
+                                                index]
+                                                    .type ==
+                                                    "free_input" &&
+                                                    productController
+                                                        .selectedVariations[
+                                                    index]
+                                                        .contains(true))
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: Dimensions
+                                                            .paddingSizeSmall),
+                                                    child: TextFormField(
+                                                      controller:
+                                                      customValueController,
+                                                      keyboardType:
+                                                      TextInputType
+                                                          .number,
+                                                      decoration:
+                                                      InputDecoration(
+                                                        labelText:
+                                                        'enter_custom_value'
+                                                            .tr,
+                                                        labelStyle: TextStyle(
+                                                            color: Theme
+                                                                .of(
+                                                                context)
+                                                                .primaryColor),
+                                                        border:
+                                                        const OutlineInputBorder(),
+                                                        contentPadding: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal:
+                                                            Dimensions
+                                                                .paddingSizeSmall,
+                                                            vertical:
+                                                            Dimensions
+                                                                .paddingSizeSmall),
+                                                      ),
+                                                      onFieldSubmitted:
+                                                          (value) {
+                                                        if (product!.price !=
+                                                            null &&
+                                                            customValueController
+                                                                .text
+                                                                .isNotEmpty) {
+                                                          setState(() {
+                                                            product!.price =
+                                                                double.tryParse(
+                                                                    customValueController
+                                                                        .text);
+                                                            product!
+                                                                .variations![0]
+                                                                .qty =
+                                                                int.tryParse(
+                                                                    customValueController
+                                                                        .text);
+                                                            orderDetails!
+                                                                .variation![0]
+                                                                .qty =
+                                                                int.tryParse(
+                                                                    customValueController
+                                                                        .text);
+                                                          });
+                                                        }
+                                                      },
+                                                      onChanged: (value) {
+                                                        if (product!.price !=
+                                                            null &&
+                                                            customValueController
+                                                                .text
+                                                                .isNotEmpty) {
+                                                          setState(() {
+                                                            product!.price =
+                                                                double.tryParse(
+                                                                    customValueController
+                                                                        .text);
+                                                          });
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                              ]),
+                                        );
+                                      },
+                                    )
                                         : const SizedBox(),
 
                                     SizedBox(
@@ -1444,22 +1708,29 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                       : const SizedBox(),
                                   const SizedBox(
                                       width: Dimensions.paddingSizeExtraSmall),
-                                  if (product!.variations![0].type ==
-                                      "free_input")
+                                  if (product!.variations!.isNotEmpty &&
+                                      product!.variations![0].type ==
+                                          "free_input")
                                     Text(
-                                      "${priceWithAddonsVariationWithDiscount.toDouble()}E€",
+                                      "${priceWithAddonsVariationWithDiscount
+                                          .toDouble()}E€",
                                       style: robotoBold.copyWith(
                                           color:
-                                              Theme.of(context).primaryColor),
+                                          Theme
+                                              .of(context)
+                                              .primaryColor),
                                     ),
-                                  if (product!.variations![0].type !=
-                                      "free_input")
-                                    PriceConverter.convertAnimationPrice(
-                                      price + variationPrice,
-                                      textStyle: robotoBold.copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
+                                  PriceConverter.convertAnimationPrice(
+                                    product!.variations!.isEmpty ? price *
+                                        productController.quantity! : (price +
+                                        variationPrice + addonsCost) *
+                                        productController.quantity!,
+                                    textStyle: robotoBold.copyWith(
+                                        color:
+                                        Theme
+                                            .of(context)
+                                            .primaryColor),
+                                  ),
                                 ]),
                               ]),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -1486,12 +1757,13 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                       fontSize: Dimensions.fontSizeLarge),
                                 ),
                                 QuantityButton(
-                                  onTap: () => productController.setQuantity(
-                                      true,
-                                      product!.cartQuantityLimit,
-                                      product!.stockType,
-                                      product!.itemStock,
-                                      widget.isCampaign),
+                                  onTap: () =>
+                                      productController.setQuantity(
+                                          true,
+                                          product!.cartQuantityLimit,
+                                          product!.stockType,
+                                          product!.itemStock,
+                                          widget.isCampaign),
                                   isIncrement: true,
                                 ),
                               ]),
@@ -1500,65 +1772,78 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                               Expanded(
                                 child: GetBuilder<CartController>(
                                     builder: (cartController) {
-                                  return CustomButtonWidget(
-                                    radius: Dimensions.paddingSizeDefault,
-                                    width: ResponsiveHelper.isDesktop(context)
-                                        ? MediaQuery.of(context).size.width /
+                                      return CustomButtonWidget(
+                                        radius: Dimensions.paddingSizeDefault,
+                                        width: ResponsiveHelper.isDesktop(
+                                            context)
+                                            ? MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width /
                                             2.0
-                                        : null,
-                                    isLoading: cartController.isLoading,
-                                    buttonText: (!product!.scheduleOrder! &&
+                                            : null,
+                                        isLoading: cartController.isLoading,
+                                        buttonText: (!product!.scheduleOrder! &&
                                             !isAvailable)
-                                        ? 'not_available_now'.tr
-                                        : widget.isCampaign
+                                            ? 'not_available_now'.tr
+                                            : widget.isCampaign
                                             ? 'order_now'.tr
                                             : (widget.cart != null ||
-                                                    productController
-                                                            .cartIndex !=
-                                                        -1)
-                                                ? 'update_in_cart'.tr
-                                                : 'add_to_cart'.tr,
-                                    onPressed: (!product!.scheduleOrder! &&
-                                                !isAvailable) ||
+                                            productController
+                                                .cartIndex !=
+                                                -1)
+                                            ? 'update_in_cart'.tr
+                                            : 'add_to_cart'.tr,
+                                        onPressed: (!product!.scheduleOrder! &&
+                                            !isAvailable) ||
                                             (widget.cart != null &&
                                                 productController
-                                                        .checkOutOfStockVariationSelected(
-                                                            product
-                                                                ?.variations) !=
+                                                    .checkOutOfStockVariationSelected(
+                                                    product
+                                                        ?.variations) !=
                                                     null)
-                                        ? null
-                                        : () async {
-                                            if (product!.variations![0].type ==
-                                                "free_input") {
-                                              _onButtonPressed(
-                                                  productController,
-                                                  cartController,
-                                                  priceWithVariation,
-                                                  priceWithDiscount,
-                                                  price,
-                                                  discount,
-                                                  discountType,
-                                                  addOnIdList,
-                                                  addOnsList,
-                                                  priceWithAddonsVariation);
-                                            }
-                                            if (product!.variations![0].type !=
-                                                "free_input") {
-                                              _onButtonPressed(
-                                                  productController,
-                                                  cartController,
-                                                  priceWithVariationMulti,
-                                                  priceWithDiscount,
-                                                  price,
-                                                  discount,
-                                                  discountType,
-                                                  addOnIdList,
-                                                  addOnsList,
-                                                  priceWithAddonsVariationMulti);
-                                            }
-                                          },
-                                  );
-                                }),
+                                            ? null
+                                            : () async {
+                                          if (product!.variations!.isEmpty) {
+                                            _onButtonPressed(
+                                              productController,
+                                              cartController,
+                                              price,
+                                              priceWithDiscount,
+                                              price,
+                                              discount,
+                                              discountType,
+                                              addOnIdList,
+                                              addOnsList,
+                                              price,
+                                            );
+                                          }
+
+                                          _onButtonPressed(
+                                            productController,
+                                            cartController,
+                                            product!.variations!.isNotEmpty &&
+                                                product!.variations![0].type ==
+                                                "free_input"
+                                                ?
+                                            priceWithVariation
+                                                : price,
+                                            priceWithDiscount,
+                                            price,
+                                            discount,
+                                            discountType,
+                                            addOnIdList,
+                                            addOnsList,
+                                            product!.variations!.isNotEmpty &&
+                                                product!.variations![0].type ==
+                                                "free_input"
+                                                ?
+                                            priceWithAddonsVariation
+                                                : price,
+                                          );
+                                        },
+                                      );
+                                    }),
                               ),
                             ],
                           ),
@@ -1571,28 +1856,31 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
               GetPlatform.isAndroid
                   ? const SizedBox()
                   : Positioned(
-                      top: 5,
-                      right: 10,
-                      child: InkWell(
-                        onTap: () => Get.back(),
-                        child: Container(
-                          padding: const EdgeInsets.all(
-                              Dimensions.paddingSizeExtraSmall),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.3),
-                                  blurRadius: 5)
-                            ],
-                          ),
-                          child: const Icon(Icons.close, size: 14),
-                        ),
-                      ),
+                top: 5,
+                right: 10,
+                child: InkWell(
+                  onTap: () => Get.back(),
+                  child: Container(
+                    padding: const EdgeInsets.all(
+                        Dimensions.paddingSizeExtraSmall),
+                    decoration: BoxDecoration(
+                      color: Theme
+                          .of(context)
+                          .cardColor,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Theme
+                                .of(context)
+                                .primaryColor
+                                .withOpacity(0.3),
+                            blurRadius: 5)
+                      ],
                     ),
+                    child: const Icon(Icons.close, size: 14),
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -1600,24 +1888,25 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     );
   }
 
-  void _onButtonPressed(
-    ProductController productController,
-    CartController cartController,
-    double priceWithVariation,
-    double priceWithDiscount,
-    double price,
-    double? discount,
-    String? discountType,
-    List<AddOn> addOnIdList,
-    List<AddOns> addOnsList,
-    double priceWithAddonsVariation,
-  ) async {
+  void _onButtonPressed(ProductController productController,
+      CartController cartController,
+      double priceWithVariation,
+      double priceWithDiscount,
+      double price,
+      double? discount,
+      String? discountType,
+      List<AddOn> addOnIdList,
+      List<AddOns> addOnsList,
+      double priceWithAddonsVariation,) async {
     _processVariationWarning(productController);
 
     if (productController.canAddToCartProduct) {
+      double finalPrice = priceWithVariation;
+
+      // Create CartModel with the final price
       CartModel cartModel = CartModel(
         null,
-        priceWithVariation,
+        finalPrice,
         priceWithDiscount,
         (price -
             PriceConverter.convertWithDiscount(price, discount, discountType)!),
@@ -1631,12 +1920,19 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         productController.variationsStock,
       );
 
-      OnlineCart onlineCart = await _processOnlineCart(productController,
-          cartController, addOnIdList, addOnsList, priceWithAddonsVariation);
+      // Process online cart
+      OnlineCart onlineCart = await _processOnlineCart(
+          productController,
+          cartController,
+          addOnIdList,
+          addOnsList,
+          priceWithAddonsVariation
+      );
 
       debugPrint('-------checkout online cart body : ${onlineCart.toJson()}');
       debugPrint('-------checkout cart : ${cartModel.toJson()}');
 
+      // Navigate to appropriate screen based on campaign status
       if (widget.isCampaign) {
         Get.back();
         Get.toNamed(RouteHelper.getCheckoutRoute('campaign'),
@@ -1646,10 +1942,15 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
             ));
       } else {
         await _executeActions(
-            cartController, productController, cartModel, onlineCart);
+            cartController,
+            productController,
+            cartModel,
+            onlineCart
+        );
       }
     }
   }
+
 
   void _processVariationWarning(ProductController productController) {
     if (product!.variations != null && product!.variations!.isNotEmpty) {
@@ -1658,7 +1959,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
             product!.variations![index].required! &&
             !productController.selectedVariations[index].contains(true)) {
           showCustomSnackBar(
-              '${'choose_a_variation_from'.tr} ${product!.variations![index].name}',
+              '${'choose_a_variation_from'.tr} ${product!.variations![index]
+                  .name}',
               showToaster: true);
           productController.changeCanAddToCartProduct(false);
           return;
@@ -1691,30 +1993,35 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     }
   }
 
-  Future<OnlineCart> _processOnlineCart(
-    ProductController productController,
-    CartController cartController,
-    List<AddOn> addOnIdList,
-    List<AddOns> addOnsList,
-    double priceWithAddonsVariation,
-  ) async {
-    List<OrderVariation> variations = CartHelper.getSelectedVariations(
+  Future<OnlineCart> _processOnlineCart(ProductController productController,
+      CartController cartController,
+      List<AddOn> addOnIdList,
+      List<AddOns> addOnsList,
+      double priceWithAddonsVariation,) async {
+    List<OrderVariation> variations = CartHelper
+        .getSelectedVariations(
       productVariations: product!.variations,
       selectedVariations: productController.selectedVariations,
-    ).$1;
-    List<int?> optionsIdList = CartHelper.getSelectedVariations(
+    )
+        .$1;
+    List<int?> optionsIdList = CartHelper
+        .getSelectedVariations(
       productVariations: product!.variations,
       selectedVariations: productController.selectedVariations,
-    ).$2;
+    )
+        .$2;
     List<int?> listOfAddOnId =
-        CartHelper.getSelectedAddonIds(addOnIdList: addOnIdList);
+    CartHelper.getSelectedAddonIds(addOnIdList: addOnIdList);
     List<int?> listOfAddOnQty =
-        CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
-
+    CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
+    if (product!.variations!.isNotEmpty && product!.variations![0].type ==
+        "free_input") {
+      variations[0].qty = int.parse(customValueController.text);
+    }
     OnlineCart onlineCart = OnlineCart(
         (widget.cart != null || productController.cartIndex != -1)
             ? widget.cart?.id ??
-                cartController.cartList[productController.cartIndex].id
+            cartController.cartList[productController.cartIndex].id
             : null,
         widget.isCampaign ? null : product!.id,
         widget.isCampaign ? product!.id : null,
@@ -1726,11 +2033,12 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         listOfAddOnQty,
         'Food',
         variationOptionIds: optionsIdList);
+
+
     return onlineCart;
   }
 
-  Future<void> _executeActions(
-      CartController cartController,
+  Future<void> _executeActions(CartController cartController,
       ProductController productController,
       CartModel cartModel,
       OnlineCart onlineCart) async {
@@ -1770,8 +2078,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     // }
   }
 
-  double _getVariationPriceWithDiscount(
-      Product product,
+  double _getVariationPriceWithDiscount(Product product,
       ProductController productController,
       double? discount,
       String? discountType) {
@@ -1779,8 +2086,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     if (product.variations != null) {
       for (int index = 0; index < product.variations!.length; index++) {
         for (int i = 0;
-            i < product.variations![index].variationValues!.length;
-            i++) {
+        i < product.variations![index].variationValues!.length;
+        i++) {
           if (productController.selectedVariations[index].isNotEmpty &&
               productController.selectedVariations[index][i]!) {
             variationPrice += PriceConverter.convertWithDiscount(
@@ -1794,14 +2101,14 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     return variationPrice;
   }
 
-  double _getVariationPrice(
-      Product product, ProductController productController) {
+  double _getVariationPrice(Product product,
+      ProductController productController) {
     double variationPrice = 0;
     if (product.variations != null) {
       for (int index = 0; index < product.variations!.length; index++) {
         for (int i = 0;
-            i < product.variations![index].variationValues!.length;
-            i++) {
+        i < product.variations![index].variationValues!.length;
+        i++) {
           if (productController.selectedVariations[index].isNotEmpty &&
               productController.selectedVariations[index][i]!) {
             variationPrice += PriceConverter.convertWithDiscount(
@@ -1829,8 +2136,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     return addonsCost;
   }
 
-  List<AddOn> _getAddonIdList(
-      Product product, ProductController productController) {
+  List<AddOn> _getAddonIdList(Product product,
+      ProductController productController) {
     List<AddOn> addOnIdList = [];
     for (int index = 0; index < product.addOns!.length; index++) {
       if (productController.addOnActiveList[index]) {
@@ -1843,8 +2150,8 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
     return addOnIdList;
   }
 
-  List<AddOns> _getAddonList(
-      Product product, ProductController productController) {
+  List<AddOns> _getAddonList(Product product,
+      ProductController productController) {
     List<AddOns> addOnsList = [];
     for (int index = 0; index < product.addOns!.length; index++) {
       if (productController.addOnActiveList[index]) {

@@ -1,24 +1,24 @@
-import 'package:stackfood_multivendor/features/checkout/widgets/offline_success_dialog.dart';
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/subscription_schedule_model.dart';
-import 'package:stackfood_multivendor/features/order/widgets/bottom_view_widget.dart';
-import 'package:stackfood_multivendor/features/order/widgets/order_info_section.dart';
-import 'package:stackfood_multivendor/features/order/widgets/order_pricing_section.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_details_model.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_dialog_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/web_page_title_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_dialog_widget.dart';
+import 'package:gazzer_userapp/common/widgets/footer_view_widget.dart';
+import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_page_title_widget.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/offline_success_dialog.dart';
+import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_details_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/subscription_schedule_model.dart';
+import 'package:gazzer_userapp/features/order/widgets/bottom_view_widget.dart';
+import 'package:gazzer_userapp/features/order/widgets/order_info_section.dart';
+import 'package:gazzer_userapp/features/order/widgets/order_pricing_section.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   final OrderModel? orderModel;
@@ -27,13 +27,14 @@ class OrderDetailsScreen extends StatefulWidget {
   final String? contactNumber;
   final bool fromGuestTrack;
 
-  const OrderDetailsScreen(
-      {super.key,
-      required this.orderModel,
-      required this.orderId,
-      this.contactNumber,
-      this.fromOfflinePayment = false,
-      this.fromGuestTrack = false});
+  const OrderDetailsScreen({
+    super.key,
+    required this.orderModel,
+    required this.orderId,
+    this.contactNumber,
+    this.fromOfflinePayment = false,
+    this.fromGuestTrack = false,
+  });
 
   @override
   OrderDetailsScreenState createState() => OrderDetailsScreenState();
@@ -72,7 +73,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
     _loadData(context);
   }
 
@@ -92,7 +92,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-
     Get.find<OrderController>().cancelTimer();
   }
 
@@ -111,7 +110,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
         }
       },
       child: GetBuilder<OrderController>(builder: (orderController) {
-        double? deliveryCharge = 0;
         double itemsPrice = 0;
         double? discount = 0;
         double? couponDiscount = 0;
@@ -126,6 +124,11 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
         OrderModel? order = orderController.trackModel;
         bool subscription = false;
         List<String> schedules = [];
+
+        // Define maps for delivery charges and total orders per restaurant
+        Map<String, double> restaurantDeliveryCharges = {};
+        Map<String, double> restaurantTotalOrders = {};
+
         if (orderController.orderDetails != null && order != null) {
           subscription = order.subscription != null;
 
@@ -156,10 +159,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                   orderController.schedules![0].time!));
             }
           }
-          if (order.orderType == 'delivery') {
-            deliveryCharge = order.deliveryCharge;
-            dmTips = order.dmTips;
-          }
+
           couponDiscount = order.couponDiscountAmount;
           discount = order.restaurantDiscountAmount;
           tax = order.totalTaxAmount;
@@ -167,6 +167,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
           additionalCharge = order.additionalCharge!;
           extraPackagingCharge = order.extraPackagingAmount!;
           referrerBonusAmount = order.referrerBonusAmount!;
+
           for (OrderDetailsModel orderDetails
               in orderController.orderDetails!) {
             for (AddOn addOn in orderDetails.addOns!) {
@@ -174,7 +175,18 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
             }
             itemsPrice =
                 itemsPrice + (orderDetails.price! * orderDetails.quantity!);
+
+            // Accumulate delivery charges for each restaurant
+            String restaurantName =
+                orderDetails.foodDetails!.restaurantName ?? '';
+            if (!restaurantDeliveryCharges.containsKey(restaurantName)) {
+              restaurantDeliveryCharges[restaurantName] = 0;
+              restaurantTotalOrders[restaurantName] = 0;
+            }
+            restaurantTotalOrders[restaurantName] =
+                (restaurantTotalOrders[restaurantName] ?? 0) + 1;
           }
+
           if (order.restaurant != null) {
             if (order.restaurant!.restaurantModel == 'commission') {
               showChatPermission = true;
@@ -186,15 +198,41 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
             }
           }
         }
+        // Calculate delivery charges based on grouped restaurant orders
+        double totalDeliveryCharge = 0;
+        bool isFirstRestaurant = true; // To track the first restaurant
+        restaurantDeliveryCharges.forEach((name, charge) {
+          double deliveryCharge;
+          if (isFirstRestaurant) {
+            deliveryCharge = 15; // Charge for the first restaurant
+            isFirstRestaurant = false; // Set to false after the first order
+          } else {
+            deliveryCharge = Get.find<SplashController>()
+                .configModel!
+                .deliveryFeeMultiVendor!
+                .toDouble(); // Charge for subsequent restaurants
+          }
+          totalDeliveryCharge += deliveryCharge;
+        });
         double subTotal = itemsPrice + addOns;
+        // double total = itemsPrice +
+        //     addOns -
+        //     discount! +
+        //     (taxIncluded! ? 0 : tax!) +
+        //     totalDeliveryCharge - // Use the aggregated delivery charge here
+        //     couponDiscount! +
+        //     dmTips +
+        //     additionalCharge +
+        //     extraPackagingCharge -
+        //     referrerBonusAmount;
+
         double total = itemsPrice +
             addOns -
             discount! +
             (taxIncluded! ? 0 : tax!) +
-            deliveryCharge! -
+            totalDeliveryCharge -
             couponDiscount! +
-            dmTips! +
-            additionalCharge +
+            dmTips +
             extraPackagingCharge -
             referrerBonusAmount;
 
@@ -256,7 +294,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                             : 'order_details'.tr),
                     Expanded(
                         child: SingleChildScrollView(
-                      // physics: const BouncingScrollPhysics(),
                       controller: scrollController,
                       child: FooterViewWidget(
                           child: SizedBox(
@@ -324,7 +361,12 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                             couponDiscount: couponDiscount,
                                             tax: tax!,
                                             dmTips: dmTips,
-                                            deliveryCharge: deliveryCharge,
+                                            deliveryCharge:
+                                                order.couponDiscountAmount ==
+                                                            0 &&
+                                                        order.couponCode != null
+                                                    ? 0
+                                                    : totalDeliveryCharge,
                                             total: total,
                                             orderController: orderController,
                                             orderId: widget.orderId,
@@ -353,8 +395,12 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   couponDiscount: couponDiscount,
                                   tax: tax!,
                                   dmTips: dmTips,
-                                  deliveryCharge: deliveryCharge,
-                                  total: total,
+                                  deliveryCharge:
+                                      order.couponDiscountAmount == 0 &&
+                                              order.couponCode != null
+                                          ? 0
+                                          : totalDeliveryCharge,
+                                  total: order.orderAmount!,
                                   orderController: orderController,
                                   orderId: widget.orderId,
                                   contactNumber: widget.contactNumber,

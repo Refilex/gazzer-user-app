@@ -2,19 +2,18 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/no_internet_screen_widget.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/favourite/controllers/favourite_controller.dart';
+import 'package:gazzer_userapp/features/notification/domain/models/notification_body_model.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/features/splash/domain/models/deep_link_body.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/images.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/common/widgets/no_internet_screen_widget.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/favourite/controllers/favourite_controller.dart';
-import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/splash/domain/models/deep_link_body.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
 
 class SplashScreen extends StatefulWidget {
   final NotificationBodyModel? notificationBody;
@@ -169,27 +168,19 @@ class SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       key: _globalKey,
       body: GetBuilder<SplashController>(builder: (splashController) {
-        return Center(
-          child: splashController.hasConnection
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(Images.gazzerLogo, width: 100),
-                    const SizedBox(height: Dimensions.paddingSizeLarge),
-                    const Text(
-                      AppConstants.appName,
-                      style: TextStyle(
-                        color: Colors.deepOrange,
-                        fontSize: 25.0,
-                      ),
-                    ),
-                  ],
-                )
-              : NoInternetScreen(
-                  child: SplashScreen(
-                      notificationBody: widget.notificationBody,
-                      linkBody: widget.linkBody)),
-        );
+        return splashController.hasConnection
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Image.asset(
+                  Images.gazzerSplash,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : NoInternetScreen(
+                child: SplashScreen(
+                    notificationBody: widget.notificationBody,
+                    linkBody: widget.linkBody));
       }),
     );
   }

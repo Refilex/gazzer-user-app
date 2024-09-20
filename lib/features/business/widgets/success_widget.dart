@@ -1,8 +1,8 @@
-import 'package:stackfood_multivendor/features/auth/widgets/registration_stepper_widget.dart';
-import 'package:stackfood_multivendor/features/business/controllers/business_controller.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/features/auth/widgets/registration_stepper_widget.dart';
+import 'package:gazzer_userapp/features/business/controllers/business_controller.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

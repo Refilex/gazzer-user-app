@@ -1,8 +1,8 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/profile/domain/models/userinfo_model.dart';
-import 'package:stackfood_multivendor/features/profile/domain/repositories/profile_repository_interface.dart';
-import 'package:stackfood_multivendor/features/profile/domain/services/profile_service_interface.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/profile/domain/models/userinfo_model.dart';
+import 'package:gazzer_userapp/features/profile/domain/repositories/profile_repository_interface.dart';
+import 'package:gazzer_userapp/features/profile/domain/services/profile_service_interface.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

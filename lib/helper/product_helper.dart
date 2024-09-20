@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
 
 class ProductHelper {
   static bool isAvailable(Product product) {

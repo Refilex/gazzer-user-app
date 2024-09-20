@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/features/splash/domain/models/deep_link_body.dart';
+import 'package:gazzer_userapp/features/splash/domain/models/deep_link_body.dart';
 
 class LinkConverter {
   static DeepLinkBody convertDeepLink(String link) {

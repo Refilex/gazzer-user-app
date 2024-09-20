@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class OnHoverWidget extends StatefulWidget {

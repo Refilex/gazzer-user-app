@@ -1,8 +1,8 @@
-import 'package:stackfood_multivendor/api/api_client.dart';
-import 'package:stackfood_multivendor/features/home/domain/models/banner_model.dart';
-import 'package:stackfood_multivendor/features/home/domain/models/cashback_model.dart';
-import 'package:stackfood_multivendor/features/home/domain/repositories/home_repository_interface.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
+import 'package:gazzer_userapp/api/api_client.dart';
+import 'package:gazzer_userapp/features/home/domain/models/banner_model.dart';
+import 'package:gazzer_userapp/features/home/domain/models/cashback_model.dart';
+import 'package:gazzer_userapp/features/home/domain/repositories/home_repository_interface.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:get/get_connect.dart';
 
 class HomeRepository implements HomeRepositoryInterface {

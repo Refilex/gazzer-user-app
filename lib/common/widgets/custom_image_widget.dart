@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_asset_image_widget.dart';
-import 'package:stackfood_multivendor/util/images.dart';
+import 'package:gazzer_userapp/common/widgets/custom_asset_image_widget.dart';
+import 'package:gazzer_userapp/util/images.dart';
 import 'package:flutter/material.dart';
 
 class CustomImageWidget extends StatelessWidget {

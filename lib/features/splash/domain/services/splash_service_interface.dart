@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/features/splash/domain/models/config_model.dart';
+import 'package:gazzer_userapp/features/splash/domain/models/config_model.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
 abstract class SplashServiceInterface {

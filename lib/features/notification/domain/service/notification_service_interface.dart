@@ -1,4 +1,4 @@
-import 'package:stackfood_multivendor/features/notification/domain/models/notification_model.dart';
+import 'package:gazzer_userapp/features/notification/domain/models/notification_model.dart';
 
 abstract class NotificationServiceInterface {
   Future<List<NotificationModel>?> getList();

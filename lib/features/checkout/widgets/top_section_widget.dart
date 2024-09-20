@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_text_field_widget.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/auth/widgets/auth_dialog_widget.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/coupon_section.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/guest_login_widget.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/order_type_widget.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/partial_pay_view.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/payment_section.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/subscription_view.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/time_slot_section.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
+import 'package:gazzer_userapp/helper/auth_helper.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/auth/widgets/auth_dialog_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/guest_login_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/order_type_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/partial_pay_view.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/payment_section.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/subscription_view.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/time_slot_section.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/helper/auth_helper.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 
 class TopSectionWidget extends StatelessWidget {
   final double charge;
@@ -44,6 +47,7 @@ class TopSectionWidget extends StatelessWidget {
   final FocusNode guestEmailNode;
   final JustTheController loginTooltipController;
   final Function() callBack;
+  final List<CartModel> cartList;
 
   const TopSectionWidget(
       {super.key,
@@ -71,7 +75,9 @@ class TopSectionWidget extends StatelessWidget {
       required this.guestEmailController,
       required this.guestEmailNode,
       required this.loginTooltipController,
-      required this.callBack});
+    required this.callBack,
+    required this.cartList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -214,96 +220,6 @@ class TopSectionWidget extends StatelessWidget {
                     ? Dimensions.paddingSizeSmall
                     : 0),
 
-        // checkoutController.restaurant != null
-        //     ? Container(
-        //         width: context.width,
-        //         decoration: BoxDecoration(
-        //           color: Theme.of(context).cardColor,
-        //           borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-        //           boxShadow: [
-        //             BoxShadow(
-        //                 color: Colors.grey.withOpacity(0.1),
-        //                 spreadRadius: 1,
-        //                 blurRadius: 10,
-        //                 offset: const Offset(0, 1))
-        //           ],
-        //         ),
-        //         margin: EdgeInsets.symmetric(
-        //             horizontal: isDesktop ? 0 : Dimensions.fontSizeDefault),
-        //         padding: EdgeInsets.symmetric(
-        //             horizontal: isDesktop
-        //                 ? Dimensions.paddingSizeLarge
-        //                 : Dimensions.paddingSizeSmall,
-        //             vertical: Dimensions.paddingSizeSmall),
-        //         child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text('delivery_option'.tr, style: robotoMedium),
-        //               const SizedBox(height: Dimensions.paddingSizeDefault),
-        //               SingleChildScrollView(
-        //                   scrollDirection: Axis.horizontal,
-        //                   child: Row(children: [
-        //                     (Get.find<SplashController>()
-        //                                 .configModel!
-        //                                 .homeDelivery! &&
-        //                             checkoutController.restaurant!.delivery!)
-        //                         ? DeliveryOptionButton(
-        //                             value: 'delivery',
-        //                             title: 'home_delivery'.tr,
-        //                             charge: charge,
-        //                             isFree: checkoutController
-        //                                 .restaurant!.freeDelivery,
-        //                             total: total,
-        //                           )
-        //                         : const SizedBox(),
-        //                     const SizedBox(
-        //                         width: Dimensions.paddingSizeDefault),
-        //                     (Get.find<SplashController>()
-        //                                 .configModel!
-        //                                 .takeAway! &&
-        //                             checkoutController.restaurant!.takeAway!)
-        //                         ? DeliveryOptionButton(
-        //                             value: 'take_away',
-        //                             title: 'take_away'.tr,
-        //                             charge: deliveryCharge,
-        //                             isFree: true,
-        //                             total: total,
-        //                           )
-        //                         : const SizedBox(),
-        //                   ])),
-        //               SizedBox(
-        //                   height:
-        //                       isDesktop ? Dimensions.paddingSizeDefault : 0),
-        //             ]),
-        //       )
-        //     : const SizedBox(),
-        //
-        // SizedBox(
-        //     height: checkoutController.orderType != 'take_away'
-        //         ? ResponsiveHelper.isDesktop(context)
-        //             ? Dimensions.paddingSizeSmall
-        //             : Dimensions.paddingSizeLarge
-        //         : Dimensions.paddingSizeSmall),
-
-        // (checkoutController.orderType != 'take_away' &&
-        //         !ResponsiveHelper.isDesktop(context))
-        //     ? Center(
-        //         child: Text(
-        //             '${'delivery_charge'.tr}: ${(checkoutController.orderType == 'take_away' || (checkoutController.orderType == 'delivery' ? checkoutController.restaurant!.freeDelivery! : true)) ? 'free'.tr : charge != -1 ? PriceConverter.convertPrice(checkoutController.orderType == 'delivery' ? charge : deliveryCharge) : 'calculating'.tr}',
-        //             textDirection: TextDirection.ltr))
-        //     : const SizedBox(),
-
-        // Padding(
-        //   padding: const EdgeInsets.only(
-        //     left: Dimensions.paddingSizeDefault,
-        //     right: Dimensions.paddingSizeDefault,
-        //     top: Dimensions.paddingSizeSmall,
-        //   ),
-        //   child: Text(
-        //     "order_details".tr,
-        //     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-        //   ),
-        // ),
         /// Time Slot
         TimeSlotSection(
             fromCart: fromCart,
@@ -311,6 +227,47 @@ class TopSectionWidget extends StatelessWidget {
             tomorrowClosed: tomorrowClosed,
             todayClosed: todayClosed,
             tooltipController2: tooltipController2),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('additional_note'.tr, style: robotoMedium),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
+              CustomTextFieldWidget(
+                controller: checkoutController.noteController,
+                hintText: 'share_any_specific_delivery_details_here'.tr,
+                showLabelText: false,
+                maxLines: 1,
+                inputType: TextInputType.multiline,
+                inputAction: TextInputAction.done,
+                capitalization: TextCapitalization.sentences,
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: Dimensions.paddingSizeExtraLarge,
+        ),
+
+        /// Coupon
+        !ResponsiveHelper.isDesktop(context) && !isGuestLoggedIn
+            ? CouponSection(
+                charge: charge,
+                checkoutController: checkoutController,
+                price: price,
+                discount: discount,
+                addOns: addOns,
+                deliveryCharge: deliveryCharge,
+                total: total,
+              )
+            : const SizedBox(),
+        SizedBox(
+            height: !ResponsiveHelper.isDesktop(context)
+                ? Dimensions.paddingSizeSmall
+                : 0),
 
         ///Delivery Address
         // DeliverySection(
@@ -323,23 +280,6 @@ class TopSectionWidget extends StatelessWidget {
         //   guestEmailNode: guestEmailNode,
         // ),
         // const SizedBox(height: Dimensions.paddingSizeSmall),
-
-        /// Coupon
-        // !ResponsiveHelper.isDesktop(context) && !isGuestLoggedIn
-        //     ? CouponSection(
-        //         charge: charge,
-        //         checkoutController: checkoutController,
-        //         price: price,
-        //         discount: discount,
-        //         addOns: addOns,
-        //         deliveryCharge: deliveryCharge,
-        //         total: total,
-        //       )
-        //     : const SizedBox(),
-        // SizedBox(
-        //     height: !ResponsiveHelper.isDesktop(context)
-        //         ? Dimensions.paddingSizeSmall
-        //         : 0),
 
         ///DmTips
         // DeliveryManTipsSection(
@@ -362,6 +302,9 @@ class TopSectionWidget extends StatelessWidget {
                   total: total,
                   checkoutController: checkoutController,
                   isOfflinePaymentActive: isOfflinePaymentActive,
+                  deliveryCharge: deliveryCharge,
+                  fromCart: fromCart,
+                  cartList: cartList,
                 )
               : const SizedBox(),
           // SizedBox(height: isGuestLoggedIn && !isDesktop ? 0 : Dimensions.paddingSizeDefault),
@@ -370,46 +313,7 @@ class TopSectionWidget extends StatelessWidget {
               ? PartialPayView(totalPrice: total)
               : const SizedBox(),
         ]),
-
-        /*ResponsiveHelper.isDesktop(context) ? PaymentSection(
-                isCashOnDeliveryActive: isCashOnDeliveryActive, isDigitalPaymentActive: isDigitalPaymentActive,
-                isWalletActive: isWalletActive, total: total, checkoutController: checkoutController, isOfflinePaymentActive: isOfflinePaymentActive,
-              ) : const SizedBox(),*/
-
-        //SizedBox(height: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : 0),
-
-        // isDesktop
-        //     ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        //         const SizedBox(height: Dimensions.paddingSizeLarge),
-        //         Text('additional_note'.tr, style: robotoMedium),
-        //         const SizedBox(height: Dimensions.paddingSizeSmall),
-        //         CustomTextFieldWidget(
-        //           controller: checkoutController.noteController,
-        //           hintText: 'share_any_specific_delivery_details_here'.tr,
-        //           showLabelText: false,
-        //           maxLines: 3,
-        //           inputType: TextInputType.multiline,
-        //           inputAction: TextInputAction.done,
-        //           capitalization: TextCapitalization.sentences,
-        //         ),
-        //         const SizedBox(height: Dimensions.paddingSizeLarge),
-        //       ])
-        //     : const SizedBox(),
       ]);
     });
   }
-
-// void _checkPermission(Function onTap) async {
-//   LocationPermission permission = await Geolocator.checkPermission();
-//   if(permission == LocationPermission.denied) {
-//     permission = await Geolocator.requestPermission();
-//   }
-//   if(permission == LocationPermission.denied) {
-//     showCustomSnackBar('you_have_to_allow'.tr);
-//   }else if(permission == LocationPermission.deniedForever) {
-//     Get.dialog(const PermissionDialog());
-//   }else {
-//     onTap();
-//   }
-// }
 }

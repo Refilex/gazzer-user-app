@@ -1,7 +1,7 @@
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/business/domain/models/business_plan_body.dart';
-import 'package:stackfood_multivendor/features/business/domain/models/package_model.dart';
-import 'package:stackfood_multivendor/features/business/domain/services/business_service_interface.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/features/business/domain/models/business_plan_body.dart';
+import 'package:gazzer_userapp/features/business/domain/models/package_model.dart';
+import 'package:gazzer_userapp/features/business/domain/services/business_service_interface.dart';
 import 'package:get/get.dart';
 
 class BusinessController extends GetxController implements GetxService {

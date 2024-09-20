@@ -1,29 +1,30 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:stackfood_multivendor/common/models/review_model.dart';
-import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/order/widgets/log_bottom_sheet_widget.dart';
-import 'package:stackfood_multivendor/features/order/widgets/offline_info_edit_dialog.dart';
-import 'package:stackfood_multivendor/features/notification/domain/models/notification_body_model.dart';
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/order/widgets/delivery_details.dart';
-import 'package:stackfood_multivendor/features/order/widgets/order_product_widget.dart';
-import 'package:stackfood_multivendor/features/review/widgets/review_dialog_widget.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/features/chat/domain/models/conversation_model.dart';
-import 'package:stackfood_multivendor/features/chat/widgets/image_dialog_widget.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/review_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/rating_bar_widget.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/chat/domain/models/conversation_model.dart';
+import 'package:gazzer_userapp/features/chat/widgets/image_dialog_widget.dart';
+import 'package:gazzer_userapp/features/notification/domain/models/notification_body_model.dart';
+import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_details_model.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/widgets/delivery_details.dart';
+import 'package:gazzer_userapp/features/order/widgets/log_bottom_sheet_widget.dart';
+import 'package:gazzer_userapp/features/order/widgets/offline_info_edit_dialog.dart';
+import 'package:gazzer_userapp/features/order/widgets/order_product_widget.dart';
+import 'package:gazzer_userapp/features/review/widgets/review_dialog_widget.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -75,7 +76,16 @@ class OrderInfoSection extends StatelessWidget {
         order.orderStatus == 'refunded' ||
         order.orderStatus == 'refund_request_canceled' ||
         order.orderStatus == 'canceled');
-
+    // Group products by restaurant
+    Map<String, List<OrderDetailsModel>> groupedProducts = {};
+    for (var details in orderController.orderDetails!) {
+      final restaurantId = details.foodDetails!.restaurantId;
+      if (groupedProducts.containsKey(restaurantId.toString())) {
+        groupedProducts[restaurantId.toString()]!.add(details);
+      } else {
+        groupedProducts[restaurantId.toString()] = [details];
+      }
+    }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       isDesktop
           ? Padding(
@@ -104,7 +114,10 @@ class OrderInfoSection extends StatelessWidget {
             : null,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           DateConverter.isBeforeTime(order.scheduleAt)
-              ? (!cancelled && ongoing && !subscription)
+              ? (!cancelled &&
+                      ongoing &&
+                      !subscription &&
+                      order.totalDeliveryTime != null)
                   ? Column(children: [
                       ClipRRect(
                           borderRadius: BorderRadius.circular(10),
@@ -125,28 +138,18 @@ class OrderInfoSection extends StatelessWidget {
                               color: Theme.of(context).disabledColor)),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                       Center(
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text(
-                            DateConverter.differenceInMinute(
-                                        order.restaurant!.deliveryTime,
-                                        order.createdAt,
-                                        order.processingTime,
-                                        order.scheduleAt) <
-                                    5
-                                ? '1 - 5'
-                                : '${DateConverter.differenceInMinute(order.restaurant!.deliveryTime, order.createdAt, order.processingTime, order.scheduleAt) - 5} '
-                                    '- ${DateConverter.differenceInMinute(order.restaurant!.deliveryTime, order.createdAt, order.processingTime, order.scheduleAt)}',
-                            style: robotoBold.copyWith(
-                                fontSize: Dimensions.fontSizeExtraLarge),
-                            textDirection: TextDirection.ltr,
-                          ),
-                          const SizedBox(
-                              width: Dimensions.paddingSizeExtraSmall),
-                          Text('min'.tr,
-                              style: robotoMedium.copyWith(
-                                  fontSize: Dimensions.fontSizeLarge,
-                                  color: Theme.of(context).primaryColor)),
-                        ]),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            //int.parse(DateFormat('HH').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(order.confirmed!)))
+                            Text(
+                              order.totalDeliveryTime!,
+                              style: robotoBold.copyWith(
+                                  fontSize: Dimensions.fontSizeOverLarge),
+                              // textDirection: TextDirection.ltr,
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: Dimensions.paddingSizeExtraLarge),
                     ])
@@ -198,19 +201,25 @@ class OrderInfoSection extends StatelessWidget {
                               order.createdAt!),
                           style: robotoRegular),
                     ])
-                  : Row(children: [
-                      Text('${'order_id'.tr}:', style: robotoRegular),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                      Text(order.id.toString(), style: robotoMedium),
-                      const Expanded(child: SizedBox()),
-                      const Icon(Icons.watch_later, size: 17),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                      Text(
-                        DateConverter.dateTimeStringToDateTime(
-                            order.createdAt!),
-                        style: robotoRegular,
-                      ),
-                    ]),
+                  : Row(
+                      children: [
+                        Text('${'order_id'.tr}:', style: robotoRegular),
+                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        Text(order.id.toString(), style: robotoMedium),
+                        const SizedBox(width: 5),
+                        // Ensures remaining space is filled
+                        const Icon(Icons.watch_later, size: 17),
+                        // Adjust size if needed
+                        const SizedBox(width: 5),
+                        Text(
+                          DateConverter.dateTimeStringToDateTime(
+                              order.createdAt!),
+                          style: robotoRegular.copyWith(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
               const Divider(height: Dimensions.paddingSizeLarge),
               subscription
                   ? Row(children: [
@@ -308,11 +317,7 @@ class OrderInfoSection extends StatelessWidget {
                         ? 'cash_on_delivery'.tr
                         : order.paymentMethod == 'wallet'
                             ? 'wallet_payment'.tr
-                            : order.paymentMethod == 'partial_payment'
-                                ? 'partial_payment'.tr
-                                : order.paymentMethod == 'offline_payment'
-                                    ? 'offline_payment'.tr
-                                    : 'digital_payment'.tr,
+                            : 'digital_payment'.tr,
                     style: robotoMedium.copyWith(
                         color: Theme.of(context).primaryColor,
                         fontSize: Dimensions.fontSizeExtraSmall),
@@ -613,7 +618,7 @@ class OrderInfoSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeExtraSmall),
                       child: Row(children: [
-                        Text('${'item'.tr}:', style: robotoRegular),
+                        Text('${'items'.tr}:', style: robotoRegular),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                         Text(
                           orderController.orderDetails!.length.toString(),
@@ -1046,209 +1051,209 @@ class OrderInfoSection extends StatelessWidget {
           ]),
         ),
       ]),
-      const SizedBox(height: Dimensions.paddingSizeSmall),
-      isDesktop
-          ? Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: Dimensions.paddingSizeSmall),
-              child: Text('restaurant_details'.tr, style: robotoMedium),
-            )
-          : const SizedBox(),
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        !isDesktop
-            ? Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.paddingSizeLarge,
-                    vertical: Dimensions.paddingSizeSmall),
-                child: Text('restaurant_details'.tr, style: robotoMedium),
-              )
-            : const SizedBox(),
-        InkWell(
-          onTap: () =>
-              Get.toNamed(RouteHelper.getRestaurantRoute(order.restaurant?.id)),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(
-                  isDesktop ? Dimensions.radiusDefault : 0),
-              boxShadow: [
-                BoxShadow(
-                    color: isDesktop
-                        ? Colors.black.withOpacity(0.05)
-                        : Theme.of(context).primaryColor.withOpacity(0.05),
-                    blurRadius: 10)
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.paddingSizeLarge,
-                vertical: Dimensions.paddingSizeSmall),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              order.restaurant != null
-                  ? Row(children: [
-                      ClipOval(
-                          child: CustomImageWidget(
-                        image:
-                            '${Get.find<SplashController>().configModel!.baseUrls!.restaurantImageUrl}/${order.restaurant!.logo}',
-                        height: 50,
-                        width: 50,
-                        fit: BoxFit.cover,
-                        isRestaurant: true,
-                      )),
-                      const SizedBox(width: Dimensions.paddingSizeSmall),
-                      Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                            Text(
-                              order.restaurant!.name!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: robotoMedium,
-                            ),
-                            const SizedBox(
-                                height: Dimensions.paddingSizeExtraSmall),
-                            Text(
-                              order.restaurant!.address!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: robotoRegular.copyWith(
-                                  fontSize: Dimensions.fontSizeSmall,
-                                  color: Theme.of(context).disabledColor),
-                            ),
-                          ])),
-                      (takeAway &&
-                              (pending ||
-                                  accepted ||
-                                  confirmed ||
-                                  processing ||
-                                  order.orderStatus == 'handover' ||
-                                  pickedUp))
-                          ? TextButton.icon(
-                              onPressed: () async {
-                                String url =
-                                    'https://www.google.com/maps/dir/?api=1&destination=${order.restaurant!.latitude}'
-                                    ',${order.restaurant!.longitude}&mode=d';
-                                if (await canLaunchUrlString(url)) {
-                                  await launchUrlString(url,
-                                      mode: LaunchMode.externalApplication);
-                                } else {
-                                  showCustomSnackBar(
-                                      'unable_to_launch_google_map'.tr);
-                                }
-                              },
-                              icon: const Icon(Icons.directions),
-                              label: Text('direction'.tr),
-                            )
-                          : const SizedBox(),
-                      (showChatPermission &&
-                              !delivered &&
-                              order.orderStatus != 'failed' &&
-                              !cancelled &&
-                              order.orderStatus != 'refunded' &&
-                              !isGuestLoggedIn)
-                          ? InkWell(
-                              onTap: () async {
-                                orderController.cancelTimer();
-                                await Get.toNamed(RouteHelper.getChatRoute(
-                                  notificationBody: NotificationBodyModel(
-                                      orderId: order.id,
-                                      restaurantId: order.restaurant!.vendorId),
-                                  user: User(
-                                      id: order.restaurant!.vendorId,
-                                      fName: order.restaurant!.name,
-                                      lName: '',
-                                      image: order.restaurant!.logo),
-                                ));
-                                orderController.callTrackOrderApi(
-                                    orderModel: order,
-                                    orderId: order.id.toString());
-                              },
-                              child: Image.asset(Images.chatImageOrderDetails,
-                                  height: 25, width: 25, fit: BoxFit.cover),
-                            )
-                          : const SizedBox(),
-                      SizedBox(
-                          width: order.restaurant!.phone != null
-                              ? Dimensions.paddingSizeDefault
-                              : 0),
-                      order.restaurant!.phone != null
-                          ? InkWell(
-                              onTap: () async {
-                                if (await canLaunchUrlString(
-                                    'tel:${order.restaurant!.phone}')) {
-                                  launchUrlString(
-                                      'tel:${order.restaurant!.phone}',
-                                      mode: LaunchMode.externalApplication);
-                                } else {
-                                  showCustomSnackBar(
-                                      '${'can_not_launch'.tr} ${order.restaurant!.phone}');
-                                }
-                              },
-                              child: Image.asset(Images.callImageOrderDetails,
-                                  height: 25, width: 25, fit: BoxFit.cover),
-                            )
-                          : const SizedBox(),
-                      SizedBox(
-                          width: (!subscription &&
-                                  Get.find<SplashController>()
-                                      .configModel!
-                                      .refundStatus! &&
-                                  delivered &&
-                                  orderController
-                                          .orderDetails![0].itemCampaignId ==
-                                      null &&
-                                  !isGuestLoggedIn)
-                              ? Dimensions.paddingSizeDefault
-                              : 0),
-                      (!subscription &&
-                              Get.find<SplashController>()
-                                  .configModel!
-                                  .refundStatus! &&
-                              delivered &&
-                              orderController.orderDetails![0].itemCampaignId ==
-                                  null &&
-                              !isGuestLoggedIn)
-                          ? InkWell(
-                              onTap: () => Get.toNamed(
-                                  RouteHelper.getRefundRequestRoute(
-                                      order.id.toString())),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 1),
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radiusSmall),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal:
-                                        Dimensions.paddingSizeExtraSmall,
-                                    vertical: Dimensions.paddingSizeSmall),
-                                child: Text('request_for_refund'.tr,
-                                    style: robotoMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeSmall,
-                                        color: Theme.of(context).primaryColor)),
-                              ),
-                            )
-                          : const SizedBox(),
-                    ])
-                  : Center(
-                      child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.paddingSizeSmall),
-                      child: Text(
-                        'no_restaurant_data_found'.tr,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: robotoRegular.copyWith(
-                            fontSize: Dimensions.fontSizeSmall),
-                      ),
-                    )),
-            ]),
-          ),
-        ),
-      ]),
+      // const SizedBox(height: Dimensions.paddingSizeSmall),
+      // isDesktop
+      //     ? Padding(
+      //         padding: const EdgeInsets.symmetric(
+      //             vertical: Dimensions.paddingSizeSmall),
+      //         child: Text('restaurant_details'.tr, style: robotoMedium),
+      //       )
+      //     : const SizedBox(),
+      // Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      //   !isDesktop
+      //       ? Padding(
+      //           padding: const EdgeInsets.symmetric(
+      //               horizontal: Dimensions.paddingSizeLarge,
+      //               vertical: Dimensions.paddingSizeSmall),
+      //           child: Text('restaurant_details'.tr, style: robotoMedium),
+      //         )
+      //       : const SizedBox(),
+      //   InkWell(
+      //     onTap: () =>
+      //         Get.toNamed(RouteHelper.getRestaurantRoute(order.restaurant?.id)),
+      //     child: Container(
+      //       decoration: BoxDecoration(
+      //         color: Theme.of(context).cardColor,
+      //         borderRadius: BorderRadius.circular(
+      //             isDesktop ? Dimensions.radiusDefault : 0),
+      //         boxShadow: [
+      //           BoxShadow(
+      //               color: isDesktop
+      //                   ? Colors.black.withOpacity(0.05)
+      //                   : Theme.of(context).primaryColor.withOpacity(0.05),
+      //               blurRadius: 10)
+      //         ],
+      //       ),
+      //       padding: const EdgeInsets.symmetric(
+      //           horizontal: Dimensions.paddingSizeLarge,
+      //           vertical: Dimensions.paddingSizeSmall),
+      //       child:
+      //           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      //         order.restaurant != null
+      //             ? Row(children: [
+      //                 ClipOval(
+      //                     child: CustomImageWidget(
+      //                   image:
+      //                       '${Get.find<SplashController>().configModel!.baseUrls!.restaurantImageUrl}/${order.restaurant!.logo}',
+      //                   height: 50,
+      //                   width: 50,
+      //                   fit: BoxFit.cover,
+      //                   isRestaurant: true,
+      //                 )),
+      //                 const SizedBox(width: Dimensions.paddingSizeSmall),
+      //                 Expanded(
+      //                     child: Column(
+      //                         crossAxisAlignment: CrossAxisAlignment.start,
+      //                         children: [
+      //                       Text(
+      //                         order.restaurant!.name!,
+      //                         maxLines: 1,
+      //                         overflow: TextOverflow.ellipsis,
+      //                         style: robotoMedium,
+      //                       ),
+      //                       const SizedBox(
+      //                           height: Dimensions.paddingSizeExtraSmall),
+      //                       Text(
+      //                         order.restaurant!.address!,
+      //                         maxLines: 1,
+      //                         overflow: TextOverflow.ellipsis,
+      //                         style: robotoRegular.copyWith(
+      //                             fontSize: Dimensions.fontSizeSmall,
+      //                             color: Theme.of(context).disabledColor),
+      //                       ),
+      //                     ])),
+      //                 (takeAway &&
+      //                         (pending ||
+      //                             accepted ||
+      //                             confirmed ||
+      //                             processing ||
+      //                             order.orderStatus == 'handover' ||
+      //                             pickedUp))
+      //                     ? TextButton.icon(
+      //                         onPressed: () async {
+      //                           String url =
+      //                               'https://www.google.com/maps/dir/?api=1&destination=${order.restaurant!.latitude}'
+      //                               ',${order.restaurant!.longitude}&mode=d';
+      //                           if (await canLaunchUrlString(url)) {
+      //                             await launchUrlString(url,
+      //                                 mode: LaunchMode.externalApplication);
+      //                           } else {
+      //                             showCustomSnackBar(
+      //                                 'unable_to_launch_google_map'.tr);
+      //                           }
+      //                         },
+      //                         icon: const Icon(Icons.directions),
+      //                         label: Text('direction'.tr),
+      //                       )
+      //                     : const SizedBox(),
+      //                 (showChatPermission &&
+      //                         !delivered &&
+      //                         order.orderStatus != 'failed' &&
+      //                         !cancelled &&
+      //                         order.orderStatus != 'refunded' &&
+      //                         !isGuestLoggedIn)
+      //                     ? InkWell(
+      //                         onTap: () async {
+      //                           orderController.cancelTimer();
+      //                           await Get.toNamed(RouteHelper.getChatRoute(
+      //                             notificationBody: NotificationBodyModel(
+      //                                 orderId: order.id,
+      //                                 restaurantId: order.restaurant!.vendorId),
+      //                             user: User(
+      //                                 id: order.restaurant!.vendorId,
+      //                                 fName: order.restaurant!.name,
+      //                                 lName: '',
+      //                                 image: order.restaurant!.logo),
+      //                           ));
+      //                           orderController.callTrackOrderApi(
+      //                               orderModel: order,
+      //                               orderId: order.id.toString());
+      //                         },
+      //                         child: Image.asset(Images.chatImageOrderDetails,
+      //                             height: 25, width: 25, fit: BoxFit.cover),
+      //                       )
+      //                     : const SizedBox(),
+      //                 SizedBox(
+      //                     width: order.restaurant!.phone != null
+      //                         ? Dimensions.paddingSizeDefault
+      //                         : 0),
+      //                 order.restaurant!.phone != null
+      //                     ? InkWell(
+      //                         onTap: () async {
+      //                           if (await canLaunchUrlString(
+      //                               'tel:${order.restaurant!.phone}')) {
+      //                             launchUrlString(
+      //                                 'tel:${order.restaurant!.phone}',
+      //                                 mode: LaunchMode.externalApplication);
+      //                           } else {
+      //                             showCustomSnackBar(
+      //                                 '${'can_not_launch'.tr} ${order.restaurant!.phone}');
+      //                           }
+      //                         },
+      //                         child: Image.asset(Images.callImageOrderDetails,
+      //                             height: 25, width: 25, fit: BoxFit.cover),
+      //                       )
+      //                     : const SizedBox(),
+      //                 SizedBox(
+      //                     width: (!subscription &&
+      //                             Get.find<SplashController>()
+      //                                 .configModel!
+      //                                 .refundStatus! &&
+      //                             delivered &&
+      //                             orderController
+      //                                     .orderDetails![0].itemCampaignId ==
+      //                                 null &&
+      //                             !isGuestLoggedIn)
+      //                         ? Dimensions.paddingSizeDefault
+      //                         : 0),
+      //                 (!subscription &&
+      //                         Get.find<SplashController>()
+      //                             .configModel!
+      //                             .refundStatus! &&
+      //                         delivered &&
+      //                         orderController.orderDetails![0].itemCampaignId ==
+      //                             null &&
+      //                         !isGuestLoggedIn)
+      //                     ? InkWell(
+      //                         onTap: () => Get.toNamed(
+      //                             RouteHelper.getRefundRequestRoute(
+      //                                 order.id.toString())),
+      //                         child: Container(
+      //                           decoration: BoxDecoration(
+      //                             border: Border.all(
+      //                                 color: Theme.of(context).primaryColor,
+      //                                 width: 1),
+      //                             borderRadius: BorderRadius.circular(
+      //                                 Dimensions.radiusSmall),
+      //                           ),
+      //                           padding: const EdgeInsets.symmetric(
+      //                               horizontal:
+      //                                   Dimensions.paddingSizeExtraSmall,
+      //                               vertical: Dimensions.paddingSizeSmall),
+      //                           child: Text('request_for_refund'.tr,
+      //                               style: robotoMedium.copyWith(
+      //                                   fontSize: Dimensions.fontSizeSmall,
+      //                                   color: Theme.of(context).primaryColor)),
+      //                         ),
+      //                       )
+      //                     : const SizedBox(),
+      //               ])
+      //             : Center(
+      //                 child: Padding(
+      //                 padding: const EdgeInsets.symmetric(
+      //                     vertical: Dimensions.paddingSizeSmall),
+      //                 child: Text(
+      //                   'no_restaurant_data_found'.tr,
+      //                   maxLines: 1,
+      //                   overflow: TextOverflow.ellipsis,
+      //                   style: robotoRegular.copyWith(
+      //                       fontSize: Dimensions.fontSizeSmall),
+      //                 ),
+      //               )),
+      //       ]),
+      //     ),
+      //   ),
+      // ]),
       const SizedBox(height: Dimensions.paddingSizeSmall),
       order.deliveryMan != null
           ? Column(children: [
@@ -1450,8 +1455,6 @@ class OrderInfoSection extends StatelessWidget {
                           ? Images.cash
                           : order.paymentMethod == 'wallet'
                               ? Images.wallet
-                              : order.paymentMethod == 'partial_payment'
-                                  ? Images.partialWallet
                                   : Images.digitalPayment,
                       width: 24,
                       height: 24,
@@ -1464,9 +1467,7 @@ class OrderInfoSection extends StatelessWidget {
                             ? 'cash'.tr
                             : order.paymentMethod == 'wallet'
                                 ? 'wallet'.tr
-                                : order.paymentMethod == 'partial_payment'
-                                    ? 'partial_payment'.tr
-                                    : 'digital'.tr,
+                                : 'digital_payment'.tr,
                         style: robotoMedium.copyWith(
                             color: Theme.of(context).disabledColor),
                       ),

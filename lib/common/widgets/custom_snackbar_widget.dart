@@ -1,5 +1,5 @@
-import 'package:stackfood_multivendor/common/widgets/custom_toast.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
+import 'package:gazzer_userapp/common/widgets/custom_toast.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';

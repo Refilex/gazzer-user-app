@@ -1,39 +1,39 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/footer_view_widget.dart';
+import 'package:gazzer_userapp/common/widgets/menu_drawer_widget.dart';
+import 'package:gazzer_userapp/common/widgets/not_logged_in_screen.dart';
+import 'package:gazzer_userapp/common/widgets/web_page_title_widget.dart';
+import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/bottom_section_widget.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/checkout_screen_shimmer_view.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/order_place_button.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/top_section_widget.dart';
+import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
+import 'package:gazzer_userapp/features/home/controllers/home_controller.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
+import 'package:gazzer_userapp/features/location/domain/models/zone_response_model.dart';
+import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
+import 'package:gazzer_userapp/helper/auth_helper.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_app_bar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/not_logged_in_screen.dart';
-import 'package:stackfood_multivendor/common/widgets/web_page_title_widget.dart';
-import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/bottom_section_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/checkout_screen_shimmer_view.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/order_place_button.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/top_section_widget.dart';
-import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
-import 'package:stackfood_multivendor/features/home/controllers/home_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/features/location/domain/models/zone_response_model.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/helper/auth_helper.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<CartModel>? cartList;
@@ -284,12 +284,43 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
                   deliveryCharge = PriceConverter.toFixed(deliveryCharge);
 
+                  // Group the cartList by restaurant
+                  Map<String, List<CartModel>> restaurantGroupedCartList = {};
+                  for (var cartItem in _cartList!) {
+                    String restaurantName = cartItem.product!.restaurantName!;
+                    if (!restaurantGroupedCartList
+                        .containsKey(restaurantName)) {
+                      restaurantGroupedCartList[restaurantName] = [];
+                    }
+                    restaurantGroupedCartList[restaurantName]!.add(cartItem);
+                  }
+
+                  // Calculate delivery charge for grouped orders
+                  double groupedDeliveryCharge =
+                      restaurantGroupedCartList.length > 1
+                          ? deliveryCharge +
+                              (restaurantGroupedCartList.length - 1) *
+                                  Get.find<SplashController>()
+                                      .configModel!
+                                      .deliveryFeeMultiVendor!
+                          : deliveryCharge;
+
+                  calcTotal() {
+                    if (couponController.coupon?.couponType ==
+                        "free_delivery") {
+                      deliveryCharge = 0;
+                      return orderAmount + deliveryCharge;
+                    } else {
+                      return orderAmount + groupedDeliveryCharge;
+                    }
+                  }
+
                   double extraPackagingCharge =
                       _calculateExtraPackagingCharge(checkoutController);
 
                   double total = _calculateTotal(
                       subTotal,
-                      deliveryCharge,
+                      groupedDeliveryCharge,
                       discount,
                       couponDiscount,
                       taxIncluded,
@@ -351,9 +382,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                   Expanded(
                                                       flex: 6,
                                                       child: TopSectionWidget(
+                                                        cartList: _cartList!,
                                                         charge: charge,
                                                         deliveryCharge:
-                                                            deliveryCharge,
+                                                            groupedDeliveryCharge,
                                                         locationController:
                                                             locationController,
                                                         tomorrowClosed:
@@ -416,7 +448,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                       taxIncluded: taxIncluded,
                                                       tax: tax,
                                                       deliveryCharge:
-                                                          deliveryCharge,
+                                                          groupedDeliveryCharge,
                                                       checkoutController:
                                                           checkoutController,
                                                       locationController:
@@ -464,9 +496,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                                 TopSectionWidget(
+                                                  cartList: _cartList!,
                                                   charge: charge,
                                                   deliveryCharge:
-                                                      deliveryCharge,
+                                                      groupedDeliveryCharge,
                                                   locationController:
                                                       locationController,
                                                   tomorrowClosed:
@@ -521,7 +554,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                   taxIncluded: taxIncluded,
                                                   tax: tax,
                                                   deliveryCharge:
-                                                      deliveryCharge,
+                                                      groupedDeliveryCharge,
                                                   checkoutController:
                                                       checkoutController,
                                                   locationController:
@@ -573,10 +606,11 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                       color: Theme.of(context).cardColor,
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(0.1),
-                                            blurRadius: 10)
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.1),
+                                          blurRadius: 10,
+                                        ),
                                       ],
                                     ),
                                     child: Column(
@@ -588,37 +622,29 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                               vertical: Dimensions
                                                   .paddingSizeExtraSmall),
                                           child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'total_amount'.tr,
-                                                  style: robotoMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeLarge,
-                                                      color: Theme.of(context)
-                                                          .primaryColor),
-                                                ),
-                                                PriceConverter
-                                                    .convertAnimationPrice(
-                                                  (subTotal + deliveryCharge) +
-                                                      ((_cartList!.length
-                                                                  .toDouble() -
-                                                              1) *
-                                                          Get.find<
-                                                                  SplashController>()
-                                                              .configModel!
-                                                              .deliveryFeeMultiVendor!),
-                                                  textStyle:
-                                                      robotoMedium.copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeLarge,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                ),
-                                              ]),
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'total_amount'.tr,
+                                                style: robotoMedium.copyWith(
+                                                    fontSize: Dimensions
+                                                        .fontSizeLarge,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                              ),
+                                              PriceConverter
+                                                  .convertAnimationPrice(
+                                                calcTotal(),
+                                                textStyle:
+                                                    robotoMedium.copyWith(
+                                                        fontSize: Dimensions
+                                                            .fontSizeLarge,
+                                                        color: Theme.of(context)
+                                                            .primaryColor),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                         OrderPlaceButton(
                                           checkoutController:
@@ -627,11 +653,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                               locationController,
                                           todayClosed: todayClosed,
                                           tomorrowClosed: tomorrowClosed,
-                                          orderAmount: orderAmount,
-                                          deliveryCharge: deliveryCharge,
+                                          orderAmount: calcTotal(),
+                                          deliveryCharge: couponController
+                                                      .coupon?.couponType ==
+                                                  "free_delivery"
+                                              ? deliveryCharge = 0
+                                              : deliveryCharge =
+                                                  groupedDeliveryCharge,
                                           tax: tax,
                                           discount: discount,
-                                          total: total,
+                                          total: calcTotal(),
                                           maxCodOrderAmount: maxCodOrderAmount,
                                           subscriptionQty: subscriptionQty,
                                           cartList: _cartList!,
@@ -672,6 +703,43 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               setState(() {});
             }),
     );
+  }
+
+  double calculateTotalAmount() {
+    // Group cart items by restaurant
+    Map<String, List<CartModel>> restaurantGroupedCartList = {};
+
+    for (var cartItem in _cartList!) {
+      String restaurantName = cartItem.product!.restaurantName!;
+      if (!restaurantGroupedCartList.containsKey(restaurantName)) {
+        restaurantGroupedCartList[restaurantName] = [];
+      }
+      restaurantGroupedCartList[restaurantName]!.add(cartItem);
+    }
+
+    // Calculate total without extra fees for same restaurant
+    double totalAmount = 0.0;
+
+    for (var entries in restaurantGroupedCartList.entries) {
+      List<CartModel> items = entries.value;
+      double restaurantTotalPrice = _calculatePrice(items);
+      double restaurantTotalAddOns = _calculateAddonsPrice(items);
+
+      double restaurantTotal =
+          _calculateSubTotal(restaurantTotalPrice, restaurantTotalAddOns);
+      totalAmount += restaurantTotal;
+    }
+
+    // Add base delivery charge and any additional charges
+    double additionalDeliveryFee = (restaurantGroupedCartList.length - 1) *
+        Get.find<SplashController>()
+            .configModel!
+            .deliveryFeeMultiVendor!
+            .toDouble(); // Convert to double
+
+    totalAmount += 15 + additionalDeliveryFee;
+
+    return totalAmount;
   }
 
   double? _getDeliveryCharge(
@@ -755,9 +823,11 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   double _calculatePrice(List<CartModel>? cartList) {
     double price = 0;
     double variationPrice = 0;
-    for (var cartModel in cartList!) {
-      price = price + (cartModel.product!.price! * cartModel.quantity!);
 
+    for (var cartModel in cartList!) {
+      price += (cartModel.price! * cartModel.quantity!);
+
+      // Calculate variation price
       for (int index = 0;
           index < cartModel.product!.variations!.length;
           index++) {
@@ -772,13 +842,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
         }
       }
     }
+
     return PriceConverter.toFixed(price + variationPrice);
   }
 
   double _calculateAddonsPrice(List<CartModel>? cartList) {
     double addonPrice = 0;
+
     for (var cartModel in cartList!) {
       List<AddOns> addOnList = [];
+
       for (var addOnId in cartModel.addOnIds!) {
         for (AddOns addOns in cartModel.product!.addOns!) {
           if (addOns.id == addOnId.id) {
@@ -787,11 +860,13 @@ class CheckoutScreenState extends State<CheckoutScreen> {
           }
         }
       }
+
       for (int index = 0; index < addOnList.length; index++) {
-        addonPrice = addonPrice +
+        addonPrice +=
             (addOnList[index].price! * cartModel.addOnIds![index].quantity!);
       }
     }
+
     return PriceConverter.toFixed(addonPrice);
   }
 

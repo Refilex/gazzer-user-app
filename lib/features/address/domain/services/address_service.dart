@@ -1,8 +1,8 @@
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/address/domain/reposotories/address_repo_interface.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/address/domain/reposotories/address_repo_interface.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:get/get.dart';
 
 import 'address_service_interface.dart';

@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/features/business/domain/models/package_model.dart';
-import 'package:stackfood_multivendor/features/business/widgets/curve_clipper_widget.dart';
-import 'package:stackfood_multivendor/features/business/widgets/package_widget.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
+import 'package:gazzer_userapp/features/business/domain/models/package_model.dart';
+import 'package:gazzer_userapp/features/business/widgets/curve_clipper_widget.dart';
+import 'package:gazzer_userapp/features/business/widgets/package_widget.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,27 +1,29 @@
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart'
-    as place_order_model;
-import 'package:stackfood_multivendor/features/checkout/domain/models/pricing_view_model.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/payment_method_bottom_sheet.dart';
-import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart'
+    as place_order_model;
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/pricing_view_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/services/paymob.dart';
+import 'package:gazzer_userapp/features/checkout/screens/pay.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/payment_method_bottom_sheet.dart';
+import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
+import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
+import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
+import 'package:gazzer_userapp/helper/date_converter.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:get/get.dart';
 
 class OrderPlaceButton extends StatelessWidget {
@@ -30,7 +32,7 @@ class OrderPlaceButton extends StatelessWidget {
   final bool todayClosed;
   final bool tomorrowClosed;
   final double orderAmount;
-  final double? deliveryCharge;
+  final double deliveryCharge;
   final double tax;
   final double? discount;
   final double total;
@@ -60,7 +62,7 @@ class OrderPlaceButton extends StatelessWidget {
       required this.todayClosed,
       required this.tomorrowClosed,
       required this.orderAmount,
-      this.deliveryCharge,
+      required this.deliveryCharge,
       required this.tax,
       this.discount,
       required this.total,
@@ -96,7 +98,7 @@ class OrderPlaceButton extends StatelessWidget {
                 : 'confirm_order'.tr,
             radius: Dimensions.radiusDefault,
             isLoading: checkoutController.isLoading,
-            onPressed: () {
+            onPressed: () async {
               DateTime scheduleStartDate = _processScheduleStartDate();
               DateTime scheduleEndDate = _processScheduleEndDate();
               bool isAvailable =
@@ -140,16 +142,33 @@ class OrderPlaceButton extends StatelessWidget {
                       discount: discount!,
                       taxIncluded: taxIncluded,
                       tax: tax,
-                      deliveryCharge: deliveryCharge!,
+                      deliveryCharge: deliveryCharge,
                       total: total,
                       taxPercent: taxPercent,
                     ),
                   ));
+                } else if (checkoutController.paymentMethodIndex == 2) {
+                  checkoutController.loading();
+                  String? checkoutUrl =
+                      await Paymob().getPaymobIntention(amount: orderAmount);
+                  Get.to(() => PayScreen(
+                      url: checkoutUrl!,
+                      checkoutController: checkoutController,
+                      carts: carts,
+                      totalPrice: orderAmount,
+                      scheduleStartDate: scheduleStartDate,
+                      extraPackagingAmount: extraPackagingAmount,
+                      discount: discount!,
+                      tax: tax,
+                      subscriptionQty: subscriptionQty,
+                      fromCart: fromCart,
+                      deliveryCharge: deliveryCharge,
+                      days: days));
                 } else {
                   checkoutController.placeOrder(
                       placeOrderBody,
                       checkoutController.restaurant!.zoneId!,
-                      total,
+                      orderAmount,
                       maxCodOrderAmount,
                       fromCart,
                       isCashOnDeliveryActive);
@@ -274,6 +293,13 @@ class OrderPlaceButton extends StatelessWidget {
               isWalletActive: isWalletActive,
               totalPrice: total,
               isOfflinePaymentActive: isOfflinePaymentActive,
+              deliveryCharge: deliveryCharge,
+              fromCart: fromCart,
+              discount: discount!,
+              tax: tax,
+              cartList: cartList,
+              checkoutController: checkoutController,
+              extraPackagingAmount: extraPackagingAmount,
             )));
       } else {
         showModalBottomSheet(
@@ -286,6 +312,13 @@ class OrderPlaceButton extends StatelessWidget {
             isWalletActive: isWalletActive,
             totalPrice: total,
             isOfflinePaymentActive: isOfflinePaymentActive,
+            deliveryCharge: deliveryCharge,
+            fromCart: fromCart,
+            discount: discount!,
+            tax: tax,
+            cartList: cartList,
+            checkoutController: checkoutController,
+            extraPackagingAmount: extraPackagingAmount,
           ),
         );
       }
@@ -391,12 +424,15 @@ class OrderPlaceButton extends StatelessWidget {
             variations.add(place_order_model.OrderVariation(
                 name: cart.product!.variations![i].name,
                 values: place_order_model.OrderVariationValue(label: [])));
+            // ,qty: 0
             for (int j = 0;
                 j < cart.product!.variations![i].variationValues!.length;
                 j++) {
               if (cart.variations![i][j]!) {
                 variations[variations.length - 1].values!.label!.add(
                     cart.product!.variations![i].variationValues![j].level);
+                //I will try it later
+                // variations[variations.length - 1].values!.qty = cart.price!.toInt();
                 if (cart.product!.variations![i].variationValues![j].optionId !=
                     null) {
                   optionIds.add(cart
@@ -464,7 +500,7 @@ class OrderPlaceButton extends StatelessWidget {
                   checkoutController.selectedTimeSlot == 0)
               ? null
               : DateConverter.dateToDateAndTime(scheduleStartDate),
-      orderAmount: total,
+      orderAmount: orderAmount,
       orderNote: checkoutController.noteController.text,
       orderType: checkoutController.orderType,
       paymentMethod: checkoutController.paymentMethodIndex == 0
@@ -532,6 +568,7 @@ class OrderPlaceButton extends StatelessWidget {
       isBuyNow: fromCart ? 0 : 1,
       guestEmail: isGuestLogIn ? finalAddress.email : null,
       extraPackagingAmount: extraPackagingAmount,
+      deliveryCharge: deliveryCharge,
     );
   }
 }

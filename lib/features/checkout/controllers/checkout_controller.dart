@@ -1,33 +1,34 @@
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/features/address/controllers/address_controller.dart';
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/features/address/widgets/address_card_widget.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/offline_method_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/timeslote_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/services/checkout_service_interface.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/order_successfull_dialog_widget.dart';
-import 'package:stackfood_multivendor/features/checkout/widgets/partial_pay_dialog.dart';
-import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
-import 'package:stackfood_multivendor/features/loyalty/controllers/loyalty_controller.dart';
-import 'package:stackfood_multivendor/features/profile/controllers/profile_controller.dart';
-import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/helper/address_helper.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/app_constants.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_dropdown_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_dropdown_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/address/widgets/address_card_widget.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/offline_method_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/timeslote_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/services/checkout_service_interface.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/order_successfull_dialog_widget.dart';
+import 'package:gazzer_userapp/features/checkout/widgets/partial_pay_dialog.dart';
+import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
+import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
+import 'package:gazzer_userapp/features/loyalty/controllers/loyalty_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/screens/order_screen.dart';
+import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
+import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/address_helper.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/app_constants.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:universal_html/html.dart' as html;
@@ -263,6 +264,11 @@ class CheckoutController extends GetxController implements GetxService {
 
   void setGuestAddress(AddressModel? address) {
     _guestAddress = address;
+    update();
+  }
+
+  void loading() {
+    _isLoading = !_isLoading;
     update();
   }
 
@@ -716,12 +722,19 @@ class CheckoutController extends GetxController implements GetxService {
       String? contactNumber) async {
     if (isSuccess) {
       // Get.find<OrderController>().getRunningOrders(1, notify: false);
+      checkoutServiceInterface.sendNotificationRequest(
+          orderID,
+          Get.find<AuthController>().isLoggedIn()
+              ? null
+              : Get.find<AuthController>().getGuestId());
       if (fromCart) {
         Get.find<CartController>().clearCartList();
       }
       _setGuestAddress(null);
       stopLoader();
-      if (paymentMethodIndex == 0 || paymentMethodIndex == 1) {
+      if (paymentMethodIndex == 0 ||
+          paymentMethodIndex == 1 ||
+          paymentMethodIndex == 2) {
         double total = ((amount / 100) *
             Get.find<SplashController>()
                 .configModel!
@@ -739,8 +752,12 @@ class CheckoutController extends GetxController implements GetxService {
                       child: OrderSuccessfulDialogWidget(
                           orderID: orderID, contactNumber: contactNumber)))));
         } else {
-          Get.offNamed(RouteHelper.getOrderSuccessRoute(
-              orderID, 'success', amount, contactNumber));
+          paymentMethodIndex == 2
+              ? Get.off(OrderScreen(
+                  isScreen: true,
+                ))
+              : Get.offNamed(RouteHelper.getOrderSuccessRoute(
+                  orderID, 'success', amount, contactNumber));
         }
       } else {
         if (GetPlatform.isWeb) {

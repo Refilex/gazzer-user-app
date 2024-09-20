@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
+import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/coupon/controllers/coupon_controller.dart';
-import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
 
 class CheckoutButtonWidget extends StatelessWidget {
   final CartController cartController;
@@ -28,6 +28,21 @@ class CheckoutButtonWidget extends StatelessWidget {
     double percentage = 0;
     bool isDesktop = ResponsiveHelper.isDesktop(context);
 
+    // Calculate the total subtotal for all items
+    double totalSubtotal = cartController.cartList.fold(
+      0,
+      (sum, item) =>
+          sum +
+          (((cartController.itemPrice +
+                  cartController.variationPrice +
+                  cartController.addOns) /
+              cartController.cartList.length)),
+    );
+
+    //  cartController.cartList.length == 1 ?   : cartController.cartList.fold(
+    // 0,
+    // (sum, item) => sum + (item.price! * item.quantity!),
+    // )
     return Container(
       width: Dimensions.webMaxWidth,
       padding: const EdgeInsets.symmetric(
@@ -47,7 +62,7 @@ class CheckoutButtonWidget extends StatelessWidget {
               !Get.find<RestaurantController>().restaurant!.freeDelivery! &&
               Get.find<SplashController>().configModel!.freeDeliveryOver !=
                   null) {
-            percentage = cartController.subTotal /
+            percentage = totalSubtotal /
                 Get.find<SplashController>().configModel!.freeDeliveryOver!;
           }
           return Column(mainAxisSize: MainAxisSize.min, children: [
@@ -70,8 +85,8 @@ class CheckoutButtonWidget extends StatelessWidget {
                     Get.find<SplashController>()
                         .configModel!
                         .freeDeliveryOver! -
-                        cartController.subTotal,
-                    textStyle: robotoMedium.copyWith(
+                              totalSubtotal,
+                          textStyle: robotoMedium.copyWith(
                         color: Theme.of(context).primaryColor),
                   ),
                   const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -99,10 +114,11 @@ class CheckoutButtonWidget extends StatelessWidget {
                       style: robotoMedium.copyWith(
                           color: Theme.of(context).primaryColor)),
                   PriceConverter.convertAnimationPrice(
-                            cartController.subTotal,
-                            textStyle: robotoRegular.copyWith(
-                                color: Theme.of(context).primaryColor)),
-                ],
+                          totalSubtotal,
+                          textStyle: robotoRegular.copyWith(
+                              color: Theme.of(context).primaryColor),
+                        ),
+                      ],
               ),
             )
                 : const SizedBox(),

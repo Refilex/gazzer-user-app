@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/widgets/product_bottom_sheet_widget.dart';
+import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
+import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/product/domain/services/product_service_interface.dart';
+import 'package:gazzer_userapp/helper/price_converter.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/common/models/product_model.dart';
-import 'package:stackfood_multivendor/common/widgets/product_bottom_sheet_widget.dart';
-import 'package:stackfood_multivendor/features/cart/controllers/cart_controller.dart';
-import 'package:stackfood_multivendor/features/cart/domain/models/cart_model.dart';
-import 'package:stackfood_multivendor/features/checkout/domain/models/place_order_body_model.dart';
-import 'package:stackfood_multivendor/features/product/domain/services/product_service_interface.dart';
-import 'package:stackfood_multivendor/helper/price_converter.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 
 class ProductController extends GetxController implements GetxService {
   final ProductServiceInterface productServiceInterface;
@@ -238,10 +238,12 @@ class ProductController extends GetxController implements GetxService {
   }
 
   void productDirectlyAddToCart(Product? product, BuildContext context,
-      {bool inStore = false, bool isCampaign = false}) {
+      {bool inStore = false, bool isCampaign = false, ProductController? productController}) {
     if (product!.variations == null ||
         (product.variations != null && product.variations!.isEmpty)) {
-      double price = product.price!;
+      double price = productController != null
+          ? product.price! * productController.quantity!
+          : product.price!;
       double discount = product.discount!;
       double discountPrice = PriceConverter.convertWithDiscount(
           price, discount, product.discountType)!;
@@ -312,6 +314,58 @@ class ProductController extends GetxController implements GetxService {
             child: ProductBottomSheetWidget(
                 product: product, isCampaign: false)),
       );
+    }
+  }
+
+  void productDirectlyUpdateInCart(
+    Product? product,
+    BuildContext context, {
+    ProductController? productController,
+  }) {
+    if (product != null) {
+      double price = productController != null
+          ? product.price! * productController.quantity!
+          : product.price!;
+      double discount = product.discount!;
+      double discountPrice = PriceConverter.convertWithDiscount(
+          price, discount, product.discountType)!;
+
+      CartModel cartModel = CartModel(
+        null,
+        price,
+        discountPrice,
+        (price - discountPrice),
+        productController != null ? productController.quantity! : 1,
+        [],
+        // Add-ons if any
+        [],
+        // Variations if any
+        false,
+        product,
+        [],
+        // Variations list if any
+        product.cartQuantityLimit,
+        [], // Add-ons if any
+      );
+
+      OnlineCart onlineCart = OnlineCart(
+        null,
+        product.id,
+        null,
+        discountPrice.toString(),
+        [],
+        // Add-ons if any
+        productController != null ? productController.quantity! : 1,
+        [],
+        // Variations if any
+        [],
+        // Add-ons if any
+        [],
+        // Any other required data
+        'Food',
+      );
+
+      Get.find<CartController>().updateCartOnline(onlineCart);
     }
   }
 }

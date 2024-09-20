@@ -1,23 +1,24 @@
 import 'dart:convert';
+
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:stackfood_multivendor/common/models/response_model.dart';
-import 'package:stackfood_multivendor/common/widgets/validate_check.dart';
-import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/auth/screens/sign_up_screen.dart';
-import 'package:stackfood_multivendor/features/auth/widgets/trams_conditions_check_box_widget.dart';
-import 'package:stackfood_multivendor/features/auth/widgets/social_login_widget.dart';
-import 'package:stackfood_multivendor/features/verification/screens/forget_pass_screen.dart';
-import 'package:stackfood_multivendor/helper/custom_validator.dart';
-import 'package:stackfood_multivendor/helper/responsive_helper.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_button_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/response_model.dart';
+import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_text_field_widget.dart';
+import 'package:gazzer_userapp/common/widgets/validate_check.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/auth/screens/sign_up_screen.dart';
+import 'package:gazzer_userapp/features/auth/widgets/social_login_widget.dart';
+import 'package:gazzer_userapp/features/auth/widgets/trams_conditions_check_box_widget.dart';
+import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/features/verification/screens/forget_pass_screen.dart';
+import 'package:gazzer_userapp/helper/custom_validator.dart';
+import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:get/get.dart';
 
 class SignInWidget extends StatefulWidget {
@@ -155,7 +156,7 @@ class SignInWidgetState extends State<SignInWidget> {
                             RouteHelper.getForgotPassRoute(false, null));
                       }
                     },
-                    child: Text('${'forgot_password'.tr}?',
+                    child: Text('forgot_password'.tr,
                         style: robotoRegular.copyWith(
                             color: Theme.of(context).hintColor)),
                   ),

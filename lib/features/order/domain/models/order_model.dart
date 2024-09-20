@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
-import 'package:stackfood_multivendor/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
 
 class PaginatedOrderModel {
   int? totalSize;
@@ -88,6 +88,7 @@ class OrderModel {
   OfflinePayment? offlinePayment;
   double? extraPackagingAmount;
   double? referrerBonusAmount;
+  String? totalDeliveryTime;
 
   OrderModel({
     this.id,
@@ -142,7 +143,7 @@ class OrderModel {
     this.offlinePayment,
     this.extraPackagingAmount,
     this.referrerBonusAmount,
-  });
+      this.totalDeliveryTime});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -231,6 +232,7 @@ class OrderModel {
         : null;
     extraPackagingAmount = json['extra_packaging_amount']?.toDouble();
     referrerBonusAmount = json['ref_bonus_amount']?.toDouble();
+    totalDeliveryTime = json['total_delivery_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -298,6 +300,7 @@ class OrderModel {
     }
     data['extra_packaging_amount'] = extraPackagingAmount;
     data['ref_bonus_amount'] = referrerBonusAmount;
+    data['total_delivery_time'] = totalDeliveryTime;
     return data;
   }
 }

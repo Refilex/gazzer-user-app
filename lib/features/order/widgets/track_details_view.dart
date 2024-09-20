@@ -1,16 +1,15 @@
-import 'package:stackfood_multivendor/common/widgets/rating_bar_widget.dart';
-import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
-import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
-import 'package:stackfood_multivendor/features/splash/controllers/splash_controller.dart';
-import 'package:stackfood_multivendor/features/order/domain/models/order_model.dart';
-import 'package:stackfood_multivendor/helper/date_converter.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/images.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/features/order/widgets/address_details_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_image_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/custom_snackbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_image_widget.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/common/widgets/rating_bar_widget.dart';
+import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/order/controllers/order_controller.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/widgets/address_details_widget.dart';
+import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/images.dart';
+import 'package:gazzer_userapp/util/styles.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -51,26 +50,11 @@ class TrackDetailsView extends StatelessWidget {
               child: Column(children: [
                 Text('estimate_delivery_time'.tr, style: robotoRegular),
                 Center(
-                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text(
-                      DateConverter.differenceInMinute(
-                                  track.restaurant!.deliveryTime,
-                                  track.createdAt,
-                                  track.processingTime,
-                                  track.scheduleAt) <
-                              5
-                          ? '1 - 5'
-                          : '${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt) - 5} '
-                              '- ${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt)}',
-                      style: robotoBold.copyWith(
-                          fontSize: Dimensions.fontSizeOverLarge),
-                      textDirection: TextDirection.ltr,
-                    ),
-                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                    Text('min'.tr,
-                        style: robotoBold.copyWith(
-                            fontSize: Dimensions.fontSizeOverLarge)),
-                  ]),
+                  child: Text(
+                    track.totalDeliveryTime!,
+                    style: robotoBold.copyWith(
+                        fontSize: Dimensions.fontSizeOverLarge),
+                  ),
                 ),
               ]),
             )
@@ -86,26 +70,11 @@ class TrackDetailsView extends StatelessWidget {
               const SizedBox(height: Dimensions.paddingSizeLarge),
               Text('estimate_delivery_time'.tr, style: robotoRegular),
               Center(
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Text(
-                    DateConverter.differenceInMinute(
-                                track.restaurant!.deliveryTime,
-                                track.createdAt,
-                                track.processingTime,
-                                track.scheduleAt) <
-                            5
-                        ? '1 - 5'
-                        : '${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt) - 5} '
-                            '- ${DateConverter.differenceInMinute(track.restaurant!.deliveryTime, track.createdAt, track.processingTime, track.scheduleAt)}',
-                    style: robotoBold.copyWith(
-                        fontSize: Dimensions.fontSizeOverLarge),
-                    textDirection: TextDirection.ltr,
-                  ),
-                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                  Text('min'.tr,
-                      style: robotoBold.copyWith(
-                          fontSize: Dimensions.fontSizeOverLarge)),
-                ]),
+                child: Text(
+                  track.totalDeliveryTime!,
+                  style: robotoBold.copyWith(
+                      fontSize: Dimensions.fontSizeOverLarge),
+                ),
               ),
               Divider(
                   color: Theme.of(context).disabledColor.withOpacity(0.3),

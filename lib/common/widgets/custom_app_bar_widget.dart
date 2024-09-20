@@ -1,9 +1,9 @@
-import 'package:stackfood_multivendor/common/widgets/web_menu_bar.dart';
-import 'package:stackfood_multivendor/helper/route_helper.dart';
-import 'package:stackfood_multivendor/util/dimensions.dart';
-import 'package:stackfood_multivendor/util/styles.dart';
-import 'package:stackfood_multivendor/common/widgets/cart_widget.dart';
-import 'package:stackfood_multivendor/common/widgets/veg_filter_widget.dart';
+import 'package:gazzer_userapp/common/widgets/web_menu_bar.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
+import 'package:gazzer_userapp/util/dimensions.dart';
+import 'package:gazzer_userapp/util/styles.dart';
+import 'package:gazzer_userapp/common/widgets/cart_widget.dart';
+import 'package:gazzer_userapp/common/widgets/veg_filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
