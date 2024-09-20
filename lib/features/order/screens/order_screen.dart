@@ -3,6 +3,7 @@ import 'package:gazzer_userapp/features/order/widgets/guest_track_order_input_vi
 import 'package:gazzer_userapp/features/order/widgets/order_view_widget.dart';
 import 'package:gazzer_userapp/helper/auth_helper.dart';
 import 'package:gazzer_userapp/helper/responsive_helper.dart';
+import 'package:gazzer_userapp/helper/route_helper.dart';
 import 'package:gazzer_userapp/util/dimensions.dart';
 import 'package:gazzer_userapp/util/styles.dart';
 import 'package:gazzer_userapp/common/widgets/custom_app_bar_widget.dart';
@@ -11,8 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key});
+  OrderScreen({super.key, required this.isScreen});
 
+  bool isScreen;
   @override
   OrderScreenState createState() => OrderScreenState();
 }
@@ -45,7 +47,12 @@ class OrderScreenState extends State<OrderScreen>
     return Scaffold(
       appBar: CustomAppBarWidget(
           title: 'my_orders'.tr,
-          isBackButtonExist: ResponsiveHelper.isDesktop(context)),
+        isBackButtonExist:
+            widget.isScreen || ResponsiveHelper.isDesktop(context),
+        onBackPressed: () {
+          Get.offNamed(RouteHelper.main);
+        },
+      ),
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
       body: isLoggedIn

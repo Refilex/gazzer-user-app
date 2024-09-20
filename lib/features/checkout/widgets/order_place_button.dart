@@ -10,6 +10,8 @@ import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_
     as place_order_model;
 import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:gazzer_userapp/features/checkout/domain/models/pricing_view_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/services/paymob.dart';
+import 'package:gazzer_userapp/features/checkout/screens/pay.dart';
 import 'package:gazzer_userapp/features/checkout/widgets/payment_method_bottom_sheet.dart';
 import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
 import 'package:gazzer_userapp/features/location/controllers/location_controller.dart';
@@ -96,7 +98,7 @@ class OrderPlaceButton extends StatelessWidget {
                 : 'confirm_order'.tr,
             radius: Dimensions.radiusDefault,
             isLoading: checkoutController.isLoading,
-            onPressed: () {
+            onPressed: () async {
               DateTime scheduleStartDate = _processScheduleStartDate();
               DateTime scheduleEndDate = _processScheduleEndDate();
               bool isAvailable =
@@ -145,6 +147,23 @@ class OrderPlaceButton extends StatelessWidget {
                       taxPercent: taxPercent,
                     ),
                   ));
+                } else if (checkoutController.paymentMethodIndex == 2) {
+                  checkoutController.loading();
+                  String? checkoutUrl =
+                      await Paymob().getPaymobIntention(amount: orderAmount);
+                  Get.to(() => PayScreen(
+                      url: checkoutUrl!,
+                      checkoutController: checkoutController,
+                      carts: carts,
+                      totalPrice: orderAmount,
+                      scheduleStartDate: scheduleStartDate,
+                      extraPackagingAmount: extraPackagingAmount,
+                      discount: discount!,
+                      tax: tax,
+                      subscriptionQty: subscriptionQty,
+                      fromCart: fromCart,
+                      deliveryCharge: deliveryCharge,
+                      days: days));
                 } else {
                   checkoutController.placeOrder(
                       placeOrderBody,

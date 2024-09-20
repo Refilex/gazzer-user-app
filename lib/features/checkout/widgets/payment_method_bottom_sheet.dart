@@ -218,6 +218,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                               onTap: () {
                                                 checkoutController
                                                     .setPaymentMethod(0);
+                                                Get.back();
                                               },
                                             ),
                                           )
@@ -234,67 +235,10 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                               isSelected: checkoutController
                                                       .paymentMethodIndex ==
                                                   2,
-                                              onTap: () async {
-                                                if (!Get.find<CartController>()
-                                                        .cartList
-                                                        .first
-                                                        .product!
-                                                        .scheduleOrder! &&
-                                                    Get.find<CartController>()
-                                                        .availableList
-                                                        .contains(false)) {
-                                                  showCustomSnackBar(
-                                                      'one_or_more_product_unavailable'
-                                                          .tr);
-                                                } else if (Get.find<
-                                                                RestaurantController>()
-                                                            .restaurant!
-                                                            .freeDelivery ==
-                                                        null ||
-                                                    Get.find<RestaurantController>()
-                                                            .restaurant!
-                                                            .cutlery ==
-                                                        null) {
-                                                  showCustomSnackBar(
-                                                      'restaurant_is_unavailable'
-                                                          .tr);
-                                                } else {
-                                                  setState(() {
-                                                    isLoading = true;
-                                                  });
-                                                  String? checkoutUrl =
-                                                      await Paymob()
-                                                          .getPaymobIntention(
-                                                              amount: widget
-                                                                  .totalPrice);
-                                                  Get.to(() => PayScreen(
-                                                        url: checkoutUrl!,
-                                                        checkoutController:
-                                                            checkoutController,
-                                                        carts: carts,
-                                                        totalPrice:
-                                                            widget.totalPrice,
-                                                        scheduleStartDate:
-                                                            scheduleStartDate,
-                                                        extraPackagingAmount: widget
-                                                            .extraPackagingAmount,
-                                                        discount:
-                                                            widget.discount,
-                                                        tax: widget.tax,
-                                                        subscriptionQty: widget
-                                                            .subscriptionQty
-                                                            .toString(),
-                                                        fromCart:
-                                                            widget.fromCart,
-                                                        deliveryCharge: widget
-                                                            .deliveryCharge,
-                                                        days: days,
-                                                      ))?.then((value) {
-                                                    setState(() {
-                                                      isLoading = false;
-                                                    });
-                                                  });
-                                                }
+                                              onTap: () {
+                                                checkoutController
+                                                    .setPaymentMethod(2);
+                                                Get.back();
                                               },
                                             ),
                                           )
@@ -317,6 +261,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                           if (canSelectWallet) {
                                             checkoutController
                                                 .setPaymentMethod(1);
+                                            Get.back();
                                           } else if (checkoutController
                                               .isPartialPay) {
                                             showCustomSnackBar(
@@ -334,10 +279,6 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                         },
                                       )
                                     : const SizedBox(),
-                                isLoading
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : const SizedBox(),
                               ],
                             )
                           : const SizedBox(),
@@ -346,16 +287,16 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                   ),
                 ),
               ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.paddingSizeSmall),
-                  child: CustomButtonWidget(
-                    buttonText: 'select'.tr,
-                    onPressed: () => Get.back(),
-                  ),
-                ),
-              ),
+              // SafeArea(
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(
+              //         vertical: Dimensions.paddingSizeSmall),
+              //     child: CustomButtonWidget(
+              //       buttonText: 'select'.tr,
+              //       onPressed: () => Get.back(),
+              //     ),
+              //   ),
+              // ),
             ]),
           );
         });
