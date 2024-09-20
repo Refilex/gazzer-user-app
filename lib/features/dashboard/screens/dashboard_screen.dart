@@ -73,7 +73,9 @@ class DashboardScreenState extends State<DashboardScreen> {
       const HomeScreen(),
       const FavouriteScreen(),
       const CartScreen(fromNav: true),
-      const OrderScreen(),
+      OrderScreen(
+        isScreen: false,
+      ),
       const MenuScreen()
     ];
 

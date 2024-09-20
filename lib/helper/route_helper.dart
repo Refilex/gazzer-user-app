@@ -1,9 +1,28 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/models/product_model.dart';
+import 'package:gazzer_userapp/common/models/restaurant_model.dart';
 import 'package:gazzer_userapp/common/widgets/image_viewer_screen_widget.dart';
 import 'package:gazzer_userapp/common/widgets/not_found_widget.dart';
+import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/address/screens/add_address_screen.dart';
+import 'package:gazzer_userapp/features/address/screens/address_screen.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
+import 'package:gazzer_userapp/features/auth/domain/models/social_log_in_body_model.dart';
+import 'package:gazzer_userapp/features/auth/screens/delivery_man_registration_screen.dart';
+import 'package:gazzer_userapp/features/auth/screens/restaurant_registration_screen.dart';
+import 'package:gazzer_userapp/features/auth/screens/sign_in_screen.dart';
+import 'package:gazzer_userapp/features/auth/screens/sign_up_screen.dart';
+import 'package:gazzer_userapp/features/business/screens/business_plan_screen.dart';
+import 'package:gazzer_userapp/features/business/screens/subscription_success_screen.dart';
 import 'package:gazzer_userapp/features/cart/screens/cart_screen.dart';
+import 'package:gazzer_userapp/features/category/screens/category_product_screen.dart';
+import 'package:gazzer_userapp/features/category/screens/category_screen.dart';
+import 'package:gazzer_userapp/features/chat/domain/models/conversation_model.dart';
+import 'package:gazzer_userapp/features/chat/screens/chat_screen.dart';
+import 'package:gazzer_userapp/features/chat/screens/conversation_screen.dart';
 import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
 import 'package:gazzer_userapp/features/checkout/domain/models/pricing_view_model.dart';
 import 'package:gazzer_userapp/features/checkout/screens/checkout_screen.dart';
@@ -11,21 +30,31 @@ import 'package:gazzer_userapp/features/checkout/screens/offline_payment_screen.
 import 'package:gazzer_userapp/features/checkout/screens/order_successful_screen.dart';
 import 'package:gazzer_userapp/features/checkout/screens/payment_screen.dart';
 import 'package:gazzer_userapp/features/checkout/screens/payment_webview_screen.dart';
+import 'package:gazzer_userapp/features/coupon/screens/coupon_screen.dart';
+import 'package:gazzer_userapp/features/cuisine/screens/cuisine_restaurant_screen.dart';
+import 'package:gazzer_userapp/features/cuisine/screens/cuisine_screen.dart';
+import 'package:gazzer_userapp/features/dashboard/screens/dashboard_screen.dart';
 import 'package:gazzer_userapp/features/home/screens/map_view_screen.dart';
 import 'package:gazzer_userapp/features/html/enums/html_type.dart';
 import 'package:gazzer_userapp/features/html/screens/html_viewer_screen.dart';
+import 'package:gazzer_userapp/features/interest/screens/interest_screen.dart';
 import 'package:gazzer_userapp/features/language/screens/language_screen.dart';
 import 'package:gazzer_userapp/features/location/screens/access_location_screen.dart';
 import 'package:gazzer_userapp/features/location/screens/map_screen.dart';
 import 'package:gazzer_userapp/features/location/screens/pick_map_screen.dart';
+import 'package:gazzer_userapp/features/loyalty/screens/loyalty_screen.dart';
 import 'package:gazzer_userapp/features/notification/domain/models/notification_body_model.dart';
 import 'package:gazzer_userapp/features/notification/screens/notification_screen.dart';
 import 'package:gazzer_userapp/features/onboard/screens/onboarding_screen.dart';
+import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
 import 'package:gazzer_userapp/features/order/screens/guest_track_order_screen.dart';
 import 'package:gazzer_userapp/features/order/screens/order_details_screen.dart';
 import 'package:gazzer_userapp/features/order/screens/order_screen.dart';
 import 'package:gazzer_userapp/features/order/screens/order_tracking_screen.dart';
 import 'package:gazzer_userapp/features/order/screens/refund_request_screen.dart';
+import 'package:gazzer_userapp/features/product/domain/models/basic_campaign_model.dart';
+import 'package:gazzer_userapp/features/product/screens/item_campaign_screen.dart';
+import 'package:gazzer_userapp/features/product/screens/popular_food_screen.dart';
 import 'package:gazzer_userapp/features/profile/screens/profile_screen.dart';
 import 'package:gazzer_userapp/features/profile/screens/update_profile_screen.dart';
 import 'package:gazzer_userapp/features/refer%20and%20earn/screens/refer_and_earn_screen.dart';
@@ -38,33 +67,6 @@ import 'package:gazzer_userapp/features/review/screens/rate_review_screen.dart';
 import 'package:gazzer_userapp/features/review/screens/review_screen.dart';
 import 'package:gazzer_userapp/features/search/screens/search_screen.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
-import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
-import 'package:gazzer_userapp/features/product/domain/models/basic_campaign_model.dart';
-import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
-import 'package:gazzer_userapp/common/models/product_model.dart';
-import 'package:gazzer_userapp/common/models/restaurant_model.dart';
-import 'package:gazzer_userapp/features/address/screens/add_address_screen.dart';
-import 'package:gazzer_userapp/features/address/screens/address_screen.dart';
-import 'package:gazzer_userapp/features/auth/domain/models/social_log_in_body_model.dart';
-import 'package:gazzer_userapp/features/auth/screens/delivery_man_registration_screen.dart';
-import 'package:gazzer_userapp/features/auth/screens/restaurant_registration_screen.dart';
-import 'package:gazzer_userapp/features/auth/screens/sign_in_screen.dart';
-import 'package:gazzer_userapp/features/auth/screens/sign_up_screen.dart';
-import 'package:gazzer_userapp/features/business/screens/business_plan_screen.dart';
-import 'package:gazzer_userapp/features/business/screens/subscription_success_screen.dart';
-import 'package:gazzer_userapp/features/category/screens/category_product_screen.dart';
-import 'package:gazzer_userapp/features/category/screens/category_screen.dart';
-import 'package:gazzer_userapp/features/chat/domain/models/conversation_model.dart';
-import 'package:gazzer_userapp/features/chat/screens/chat_screen.dart';
-import 'package:gazzer_userapp/features/chat/screens/conversation_screen.dart';
-import 'package:gazzer_userapp/features/coupon/screens/coupon_screen.dart';
-import 'package:gazzer_userapp/features/cuisine/screens/cuisine_restaurant_screen.dart';
-import 'package:gazzer_userapp/features/cuisine/screens/cuisine_screen.dart';
-import 'package:gazzer_userapp/features/dashboard/screens/dashboard_screen.dart';
-import 'package:gazzer_userapp/features/interest/screens/interest_screen.dart';
-import 'package:gazzer_userapp/features/loyalty/screens/loyalty_screen.dart';
-import 'package:gazzer_userapp/features/product/screens/item_campaign_screen.dart';
-import 'package:gazzer_userapp/features/product/screens/popular_food_screen.dart';
 import 'package:gazzer_userapp/features/splash/domain/models/deep_link_body.dart';
 import 'package:gazzer_userapp/features/splash/screens/splash_screen.dart';
 import 'package:gazzer_userapp/features/support/screens/support_screen.dart';
@@ -75,8 +77,6 @@ import 'package:gazzer_userapp/features/verification/screens/verification_screen
 import 'package:gazzer_userapp/features/wallet/screens/wallet_screen.dart';
 import 'package:gazzer_userapp/helper/address_helper.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta_seo/meta_seo.dart';
 
@@ -784,7 +784,11 @@ class RouteHelper {
         name: businessPlan,
         page: () =>
             BusinessPlanScreen(restaurantId: int.parse(Get.parameters['id']!))),
-    GetPage(name: order, page: () => getRoute(const OrderScreen())),
+    GetPage(
+        name: order,
+        page: () => getRoute(OrderScreen(
+              isScreen: false,
+            ))),
     GetPage(name: cuisine, page: () => getRoute(const CuisineScreen())),
     GetPage(
         name: cuisineRestaurant,

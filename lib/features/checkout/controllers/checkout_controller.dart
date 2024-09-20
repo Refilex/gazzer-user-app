@@ -19,6 +19,7 @@ import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dar
 import 'package:gazzer_userapp/features/language/controllers/localization_controller.dart';
 import 'package:gazzer_userapp/features/loyalty/controllers/loyalty_controller.dart';
 import 'package:gazzer_userapp/features/order/domain/models/order_model.dart';
+import 'package:gazzer_userapp/features/order/screens/order_screen.dart';
 import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
 import 'package:gazzer_userapp/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:gazzer_userapp/features/splash/controllers/splash_controller.dart';
@@ -263,6 +264,11 @@ class CheckoutController extends GetxController implements GetxService {
 
   void setGuestAddress(AddressModel? address) {
     _guestAddress = address;
+    update();
+  }
+
+  void loading() {
+    _isLoading = !_isLoading;
     update();
   }
 
@@ -746,8 +752,12 @@ class CheckoutController extends GetxController implements GetxService {
                       child: OrderSuccessfulDialogWidget(
                           orderID: orderID, contactNumber: contactNumber)))));
         } else {
-          Get.offNamed(RouteHelper.getOrderSuccessRoute(
-              orderID, 'success', amount, contactNumber));
+          paymentMethodIndex == 2
+              ? Get.off(OrderScreen(
+                  isScreen: true,
+                ))
+              : Get.offNamed(RouteHelper.getOrderSuccessRoute(
+                  orderID, 'success', amount, contactNumber));
         }
       } else {
         if (GetPlatform.isWeb) {
