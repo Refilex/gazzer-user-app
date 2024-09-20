@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
@@ -13,7 +12,7 @@ import 'package:gazzer_userapp/helper/address_helper.dart';
 import 'package:gazzer_userapp/helper/date_converter.dart';
 import 'package:gazzer_userapp/util/app_constants.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class PayScreen extends StatefulWidget {
   final String url;
@@ -50,84 +49,54 @@ class PayScreen extends StatefulWidget {
 }
 
 class _PayScreenState extends State<PayScreen> {
-  InAppWebViewController? _webViewController;
-  final StreamController<String> _urlStreamController =
-      StreamController<String>();
+  late final WebViewController _controller;
 
   @override
   void initState() {
     super.initState();
-    _urlStreamController.add(widget.url);
-  }
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            debugPrint("Navigating to: ${request.url}");
 
-  @override
-  void dispose() {
-    _urlStreamController.close();
-    super.dispose();
+            if (request.url.contains("payment_token")) {
+              startPaymentProcess();
+              return NavigationDecision.prevent;
+            } else if (request.url.contains("payment-status") &&
+                !request.url.contains("payment_token")) {
+              backToApp();
+              showCustomSnackBar("Payment failed".tr, isError: true);
+              return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
+            }
+          },
+          onPageFinished: (String url) {
+            debugPrint("Page finished loading: $url");
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.url));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("payment".tr),
+        title: Text("Payment".tr),
         leading: IconButton(
           onPressed: () {
-            backToApp(_webViewController!);
+            backToApp();
           },
           icon: const Icon(Icons.close),
         ),
         centerTitle: true,
       ),
-      body: StreamBuilder<String>(
-        stream: _urlStreamController.stream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData) {
-            return const Center(child: Text('No data available'));
-          }
-
-          final url = snapshot.data ?? widget.url;
-          return InAppWebView(
-            initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(url))),
-            initialSettings: InAppWebViewSettings(javaScriptEnabled: true),
-            onWebViewCreated: (controller) {
-              _webViewController = controller;
-              disableDetailsButton(controller);
-            },
-            onLoadStop: (controller, url) async {
-              debugPrint("url: $url\n");
-              debugPrint("query: ${url!.query}\n");
-              debugPrint("query param: ${url.queryParameters}\n");
-
-              url.queryParameters.forEach((key, value) {
-                debugPrint("Key: $key, Value: $value");
-              });
-
-              _urlStreamController.add(url.toString());
-              if (url.queryParameters.containsKey("success") &&
-                  url.queryParameters["success"] == "true") {
-                startPaymentProcess();
-              } else if (!url.queryParameters.containsKey("success")) {
-                backToApp(controller);
-                showCustomSnackBar("failed".tr);
-              }
-              disableDetailsButton(controller);
-            },
-          );
-        },
-      ),
+      body: WebViewWidget(controller: _controller),
     );
   }
-
-  //("")
 
   void startPaymentProcess() {
     widget.checkoutController.placeOrder(
@@ -222,16 +191,13 @@ class _PayScreenState extends State<PayScreen> {
     );
   }
 
-  void backToApp(InAppWebViewController controller) {
-    controller.clearFormData();
-    controller.clearHistory();
-    controller.removeAllUserScripts();
+  void backToApp() {
     widget.checkoutController.loading();
     Get.back();
   }
 
-  Future<void> disableDetailsButton(InAppWebViewController controller) async {
-    await controller.evaluateJavascript(source: """
+  Future<void> disableDetailsButton(WebViewController controller) async {
+    await controller.runJavaScript("""
       (function autoCalledFunction() {
       const element = document.querySelector('p.flex.cursor-pointer.justify-center.py-4.text-blue-500.font-semibold.text-sm');
                   if (element && element.innerText.includes('View order details')) {
