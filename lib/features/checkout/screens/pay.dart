@@ -57,12 +57,17 @@ class _PayScreenState extends State<PayScreen> {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel("PaymobPayment", onMessageReceived: (message) {
-        debugPrint(message.message);
-        var jsonData = jsonDecode(message.message);
-        if (jsonData['success'] == 'true') {
+       // var jsonData = jsonDecode(message.message);
+        if (message.message.contains('payment-status')) {
+
+          debugPrint('PAYMENT FINISHED');
+
           // Your code
-        } else if (jsonData['success'] == 'false') {
-          // Your code
+
+        } else {
+
+          debugPrint('PAYMENT NOT FINISHED OR MAY BE WINDOW CLOSED OR URL CHAINED');
+
         }
       })
       ..setNavigationDelegate(
@@ -80,6 +85,7 @@ class _PayScreenState extends State<PayScreen> {
           },
           onPageFinished: (String url) {
             debugPrint("Page finished loading: $url");
+            injectJavaScriptForSpaUrlChanges();
             disableDetailsButton(_controller);
           },
           onWebResourceError: (WebResourceError error) {
@@ -91,6 +97,22 @@ class _PayScreenState extends State<PayScreen> {
         debugPrint(message.message);
       })
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  void injectJavaScriptForSpaUrlChanges() {
+    // Inject JavaScript that listens for URL changes in the SPA
+    _controller.runJavaScript('''
+    (function() {
+      let lastUrl = location.href;
+      new MutationObserver(() => {
+        const currentUrl = location.href;
+        if (lastUrl !== currentUrl) {
+          lastUrl = currentUrl;
+          window.PaymobPayment.postMessage(JSON.stringify({ url: currentUrl }));
+        }
+      }).observe(document, { subtree: true, childList: true });
+    })();
+  ''');
   }
 
   @override
@@ -125,16 +147,16 @@ class _PayScreenState extends State<PayScreen> {
         scheduleAt: !widget.checkoutController.restaurant!.scheduleOrder!
             ? null
             : (widget.checkoutController.selectedDateSlot == 0 &&
-                    widget.checkoutController.selectedTimeSlot == 0)
-                ? null
-                : DateConverter.dateToDateAndTime(widget.scheduleStartDate),
+            widget.checkoutController.selectedTimeSlot == 0)
+            ? null
+            : DateConverter.dateToDateAndTime(widget.scheduleStartDate),
         orderAmount: widget.totalPrice,
         orderNote: widget.checkoutController.noteController.text,
         orderType: widget.checkoutController.orderType,
         paymentMethod: 'digital_payment',
         couponCode: (Get.find<CouponController>().discount! > 0 ||
-                (Get.find<CouponController>().coupon != null &&
-                    Get.find<CouponController>().freeDelivery))
+            (Get.find<CouponController>().coupon != null &&
+                Get.find<CouponController>().freeDelivery))
             ? Get.find<CouponController>().coupon!.code
             : null,
         restaurantId: widget.checkoutController.restaurant!.id,
@@ -143,12 +165,12 @@ class _PayScreenState extends State<PayScreen> {
         longitude: AddressHelper.getAddressFromSharedPref()!.longitude,
         addressType: AddressHelper.getAddressFromSharedPref()!.addressType,
         contactPersonName:
-            AddressHelper.getAddressFromSharedPref()!.contactPersonName ??
-                '${Get.find<ProfileController>().userInfoModel!.fName} '
-                    '${Get.find<ProfileController>().userInfoModel!.lName}',
+        AddressHelper.getAddressFromSharedPref()!.contactPersonName ??
+            '${Get.find<ProfileController>().userInfoModel!.fName} '
+                '${Get.find<ProfileController>().userInfoModel!.lName}',
         contactPersonNumber:
-            AddressHelper.getAddressFromSharedPref()!.contactPersonNumber ??
-                Get.find<ProfileController>().userInfoModel!.phone,
+        AddressHelper.getAddressFromSharedPref()!.contactPersonNumber ??
+            Get.find<ProfileController>().userInfoModel!.phone,
         discountAmount: widget.discount,
         taxAmount: widget.tax,
         cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
@@ -162,30 +184,30 @@ class _PayScreenState extends State<PayScreen> {
             ? AddressHelper.getAddressFromSharedPref()!.floor ?? ''
             : widget.checkoutController.floorController.text.trim(),
         dmTips: (widget.checkoutController.orderType == 'take_away' ||
-                widget.checkoutController.subscriptionOrder ||
-                widget.checkoutController.selectedTips == 0)
+            widget.checkoutController.subscriptionOrder ||
+            widget.checkoutController.selectedTips == 0)
             ? ''
             : widget.checkoutController.tips.toString(),
         subscriptionOrder:
-            widget.checkoutController.subscriptionOrder ? '1' : '0',
+        widget.checkoutController.subscriptionOrder ? '1' : '0',
         subscriptionType: widget.checkoutController.subscriptionType,
         subscriptionQuantity: widget.subscriptionQty.toString(),
         subscriptionDays: widget.days,
         subscriptionStartAt: widget.checkoutController.subscriptionOrder
             ? DateConverter.dateToDateAndTime(
-                widget.checkoutController.subscriptionRange!.start)
+            widget.checkoutController.subscriptionRange!.start)
             : '',
         subscriptionEndAt: widget.checkoutController.subscriptionOrder
             ? DateConverter.dateToDateAndTime(
-                widget.checkoutController.subscriptionRange!.end)
+            widget.checkoutController.subscriptionRange!.end)
             : '',
         unavailableItemNote: Get.find<CartController>().notAvailableIndex != -1
             ? Get.find<CartController>()
-                .notAvailableList[Get.find<CartController>().notAvailableIndex]
+            .notAvailableList[Get.find<CartController>().notAvailableIndex]
             : '',
         deliveryInstruction: widget.checkoutController.selectedInstruction != -1
             ? AppConstants.deliveryInstructionList[
-                widget.checkoutController.selectedInstruction]
+        widget.checkoutController.selectedInstruction]
             : '',
         partialPayment: widget.checkoutController.isPartialPay ? 1 : 0,
         guestId: Get.find<AuthController>().isGuestLoggedIn()
