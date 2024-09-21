@@ -23,8 +23,9 @@ class Paymob {
 
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
-        if (data.isNotEmpty && data[0]['checkout_url'] != null) {
+        if (data.isNotEmpty) {
           debugPrint("checkout_url: ${data[0]['checkout_url']}");
+          debugPrint("payment_id: ${data[0]['payment_id']}");
           return data[0]['checkout_url'];
         }
       } else {

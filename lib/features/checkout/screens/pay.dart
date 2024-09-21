@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
@@ -56,47 +56,60 @@ class _PayScreenState extends State<PayScreen> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel("PaymobPayment", onMessageReceived: (message) {
+        debugPrint(message.message);
+        var jsonData = jsonDecode(message.message);
+        if (jsonData['success'] == 'true') {
+          // Your code
+        } else if (jsonData['success'] == 'false') {
+          // Your code
+        }
+      })
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
             debugPrint("Navigating to: ${request.url}");
 
-            if (request.url.contains("success=false")) {
-              debugPrint("failed");
+            if (request.url.contains("payment-status")) {
+              debugPrint("Payment status detected. Waiting for response...");
               backToApp();
-              showCustomSnackBar("Payment failed".tr, isError: true);
               return NavigationDecision.prevent;
-            } else if (request.url.contains("success=true")) {
-              debugPrint("success");
-              startPaymentProcess();
-              return NavigationDecision.prevent;
-            } else {
-              return NavigationDecision.navigate;
             }
+            debugPrint("Allowing navigation to: ${request.url}");
+            return NavigationDecision.navigate;
           },
           onPageFinished: (String url) {
             debugPrint("Page finished loading: $url");
             disableDetailsButton(_controller);
           },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint("Web resource error: ${error.description}");
+          },
         ),
       )
+      ..setOnConsoleMessage((message) {
+        debugPrint(message.message);
+      })
       ..loadRequest(Uri.parse(widget.url));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Payment".tr),
-        leading: IconButton(
-          onPressed: () {
-            backToApp();
-          },
-          icon: const Icon(Icons.close),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("payment".tr),
+          leading: IconButton(
+            onPressed: () {
+              backToApp();
+            },
+            icon: const Icon(Icons.close),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
+        body: WebViewWidget(controller: _controller),
       ),
-      body: WebViewWidget(controller: _controller),
     );
   }
 
