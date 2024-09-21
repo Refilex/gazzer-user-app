@@ -61,13 +61,14 @@ class _PayScreenState extends State<PayScreen> {
           onNavigationRequest: (NavigationRequest request) {
             debugPrint("Navigating to: ${request.url}");
 
-            if (request.url.contains("payment_token")) {
-              startPaymentProcess();
-              return NavigationDecision.prevent;
-            } else if (request.url.contains("payment-status") &&
-                !request.url.contains("payment_token")) {
+            if (request.url.contains("success=false")) {
+              debugPrint("failed");
               backToApp();
               showCustomSnackBar("Payment failed".tr, isError: true);
+              return NavigationDecision.prevent;
+            } else if (request.url.contains("success=true")) {
+              debugPrint("success");
+              startPaymentProcess();
               return NavigationDecision.prevent;
             } else {
               return NavigationDecision.navigate;
@@ -75,6 +76,7 @@ class _PayScreenState extends State<PayScreen> {
           },
           onPageFinished: (String url) {
             debugPrint("Page finished loading: $url");
+            disableDetailsButton(_controller);
           },
         ),
       )
@@ -203,7 +205,7 @@ class _PayScreenState extends State<PayScreen> {
                   if (element && element.innerText.includes('View order details')) {
                       element.style.display = 'none';
                   }
-          })(); 
+          })();
             """);
   }
 }
