@@ -149,8 +149,9 @@ class OrderPlaceButton extends StatelessWidget {
                   ));
                 } else if (checkoutController.paymentMethodIndex == 2) {
                   checkoutController.loading();
-                  String? checkoutUrl =
+                  Map<String, String>? result =
                       await Paymob().getPaymobIntention(amount: orderAmount);
+                  String? checkoutUrl = result?['checkout_url'];
                   Get.to(() => PayScreen(
                       url: checkoutUrl!,
                       checkoutController: checkoutController,
@@ -569,6 +570,7 @@ class OrderPlaceButton extends StatelessWidget {
       guestEmail: isGuestLogIn ? finalAddress.email : null,
       extraPackagingAmount: extraPackagingAmount,
       deliveryCharge: deliveryCharge,
+      paymentId: "Not digital payment order",
     );
   }
 }

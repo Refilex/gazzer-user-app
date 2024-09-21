@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/services/paymob.dart';
 import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
 import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
 import 'package:gazzer_userapp/helper/address_helper.dart';
@@ -50,37 +51,44 @@ class PayScreen extends StatefulWidget {
 
 class _PayScreenState extends State<PayScreen> {
   late final WebViewController _controller;
+  String? paymentId;
+  String? paymentStatus;
+  String? paymentMessage;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
+    Paymob().getPaymobIntention(amount: widget.totalPrice).then((result) {
+      paymentId = result?['payment_id'];
+    });
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel("PaymobPayment", onMessageReceived: (message) {
-       // var jsonData = jsonDecode(message.message);
         if (message.message.contains('payment-status')) {
-
           debugPrint('PAYMENT FINISHED');
-
-          // Your code
-
+          debugPrint("Your payment id is: $paymentId");
+          Paymob().checkPaymentStatus(paymentId: paymentId!).then((result) {
+            paymentStatus = result?['payment_status'];
+            paymentMessage = result?['message'];
+            if (paymentStatus == "success") {
+              startPaymentProcess(paymentId);
+            } else {
+              backToApp();
+              showCustomSnackBar(paymentMessage ?? "failed".tr);
+            }
+          });
         } else {
-
-          debugPrint('PAYMENT NOT FINISHED OR MAY BE WINDOW CLOSED OR URL CHAINED');
-
+          debugPrint(
+              'PAYMENT NOT FINISHED OR MAY BE WINDOW CLOSED OR URL CHAINED');
         }
       })
       ..setNavigationDelegate(
         NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) {
-            debugPrint("Navigating to: ${request.url}");
-
-            if (request.url.contains("payment-status")) {
-              debugPrint("Payment status detected. Waiting for response...");
-              backToApp();
+          onNavigationRequest: (request) {
+            if (request.url.contains("success=true")) {
+              startPaymentProcess(paymentId);
               return NavigationDecision.prevent;
             }
-            debugPrint("Allowing navigation to: ${request.url}");
             return NavigationDecision.navigate;
           },
           onPageFinished: (String url) {
@@ -135,7 +143,7 @@ class _PayScreenState extends State<PayScreen> {
     );
   }
 
-  void startPaymentProcess() {
+  void startPaymentProcess(paymentId) {
     widget.checkoutController.placeOrder(
       PlaceOrderBodyModel(
         cart: widget.carts,
@@ -147,16 +155,16 @@ class _PayScreenState extends State<PayScreen> {
         scheduleAt: !widget.checkoutController.restaurant!.scheduleOrder!
             ? null
             : (widget.checkoutController.selectedDateSlot == 0 &&
-            widget.checkoutController.selectedTimeSlot == 0)
-            ? null
-            : DateConverter.dateToDateAndTime(widget.scheduleStartDate),
+                    widget.checkoutController.selectedTimeSlot == 0)
+                ? null
+                : DateConverter.dateToDateAndTime(widget.scheduleStartDate),
         orderAmount: widget.totalPrice,
         orderNote: widget.checkoutController.noteController.text,
         orderType: widget.checkoutController.orderType,
         paymentMethod: 'digital_payment',
         couponCode: (Get.find<CouponController>().discount! > 0 ||
-            (Get.find<CouponController>().coupon != null &&
-                Get.find<CouponController>().freeDelivery))
+                (Get.find<CouponController>().coupon != null &&
+                    Get.find<CouponController>().freeDelivery))
             ? Get.find<CouponController>().coupon!.code
             : null,
         restaurantId: widget.checkoutController.restaurant!.id,
@@ -165,12 +173,12 @@ class _PayScreenState extends State<PayScreen> {
         longitude: AddressHelper.getAddressFromSharedPref()!.longitude,
         addressType: AddressHelper.getAddressFromSharedPref()!.addressType,
         contactPersonName:
-        AddressHelper.getAddressFromSharedPref()!.contactPersonName ??
-            '${Get.find<ProfileController>().userInfoModel!.fName} '
-                '${Get.find<ProfileController>().userInfoModel!.lName}',
+            AddressHelper.getAddressFromSharedPref()!.contactPersonName ??
+                '${Get.find<ProfileController>().userInfoModel!.fName} '
+                    '${Get.find<ProfileController>().userInfoModel!.lName}',
         contactPersonNumber:
-        AddressHelper.getAddressFromSharedPref()!.contactPersonNumber ??
-            Get.find<ProfileController>().userInfoModel!.phone,
+            AddressHelper.getAddressFromSharedPref()!.contactPersonNumber ??
+                Get.find<ProfileController>().userInfoModel!.phone,
         discountAmount: widget.discount,
         taxAmount: widget.tax,
         cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
@@ -184,30 +192,30 @@ class _PayScreenState extends State<PayScreen> {
             ? AddressHelper.getAddressFromSharedPref()!.floor ?? ''
             : widget.checkoutController.floorController.text.trim(),
         dmTips: (widget.checkoutController.orderType == 'take_away' ||
-            widget.checkoutController.subscriptionOrder ||
-            widget.checkoutController.selectedTips == 0)
+                widget.checkoutController.subscriptionOrder ||
+                widget.checkoutController.selectedTips == 0)
             ? ''
             : widget.checkoutController.tips.toString(),
         subscriptionOrder:
-        widget.checkoutController.subscriptionOrder ? '1' : '0',
+            widget.checkoutController.subscriptionOrder ? '1' : '0',
         subscriptionType: widget.checkoutController.subscriptionType,
         subscriptionQuantity: widget.subscriptionQty.toString(),
         subscriptionDays: widget.days,
         subscriptionStartAt: widget.checkoutController.subscriptionOrder
             ? DateConverter.dateToDateAndTime(
-            widget.checkoutController.subscriptionRange!.start)
+                widget.checkoutController.subscriptionRange!.start)
             : '',
         subscriptionEndAt: widget.checkoutController.subscriptionOrder
             ? DateConverter.dateToDateAndTime(
-            widget.checkoutController.subscriptionRange!.end)
+                widget.checkoutController.subscriptionRange!.end)
             : '',
         unavailableItemNote: Get.find<CartController>().notAvailableIndex != -1
             ? Get.find<CartController>()
-            .notAvailableList[Get.find<CartController>().notAvailableIndex]
+                .notAvailableList[Get.find<CartController>().notAvailableIndex]
             : '',
         deliveryInstruction: widget.checkoutController.selectedInstruction != -1
             ? AppConstants.deliveryInstructionList[
-        widget.checkoutController.selectedInstruction]
+                widget.checkoutController.selectedInstruction]
             : '',
         partialPayment: widget.checkoutController.isPartialPay ? 1 : 0,
         guestId: Get.find<AuthController>().isGuestLoggedIn()
@@ -219,6 +227,7 @@ class _PayScreenState extends State<PayScreen> {
             : null,
         extraPackagingAmount: widget.extraPackagingAmount,
         deliveryCharge: widget.deliveryCharge,
+        paymentId: paymentId,
       ),
       widget.checkoutController.restaurant!.zoneId!,
       widget.totalPrice,

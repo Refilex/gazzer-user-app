@@ -41,6 +41,7 @@ class PlaceOrderBodyModel {
   int? _isBuyNow;
   String? _guestEmail;
   double? _extraPackagingAmount;
+  String? _paymentId;
 
   PlaceOrderBodyModel({
     required List<OnlineCart> cart,
@@ -81,6 +82,7 @@ class PlaceOrderBodyModel {
     required int isBuyNow,
     required String? guestEmail,
     required double extraPackagingAmount,
+    required String paymentId,
   }) {
     _cart = cart;
     _couponDiscountAmount = couponDiscountAmount;
@@ -120,6 +122,7 @@ class PlaceOrderBodyModel {
     _isBuyNow = isBuyNow;
     _guestEmail = guestEmail;
     _extraPackagingAmount = extraPackagingAmount;
+    _paymentId = paymentId;
   }
 
   List<OnlineCart>? get cart => _cart;
@@ -255,6 +258,7 @@ class PlaceOrderBodyModel {
     _extraPackagingAmount = json['extra_packaging_amount'] != null
         ? double.parse(json['extra_packaging_amount'].toString())
         : null;
+    _paymentId = json['payment_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -309,6 +313,7 @@ class PlaceOrderBodyModel {
       data['contact_person_email'] = _guestEmail!;
     }
     data['extra_packaging_amount'] = _extraPackagingAmount.toString();
+    data['payment_id'] = _paymentId;
     return data;
   }
 }
