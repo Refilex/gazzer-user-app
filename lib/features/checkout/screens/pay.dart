@@ -17,6 +17,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class PayScreen extends StatefulWidget {
   final String url;
+  final String paymentId;
   final CheckoutController checkoutController;
   final List<OnlineCart> carts;
   final double totalPrice;
@@ -32,6 +33,7 @@ class PayScreen extends StatefulWidget {
   PayScreen({
     super.key,
     required this.url,
+    required this.paymentId,
     required this.checkoutController,
     required this.carts,
     required this.totalPrice,
@@ -51,27 +53,26 @@ class PayScreen extends StatefulWidget {
 
 class _PayScreenState extends State<PayScreen> {
   late final WebViewController _controller;
-  String? paymentId;
   String? paymentStatus;
   String? paymentMessage;
 
   @override
   initState() {
     super.initState();
-    Paymob().getPaymobIntention(amount: widget.totalPrice).then((result) {
-      paymentId = result?['payment_id'];
-    });
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel("PaymobPayment", onMessageReceived: (message) {
         if (message.message.contains('payment-status')) {
           debugPrint('PAYMENT FINISHED');
-          debugPrint("Your payment id is: $paymentId");
-          Paymob().checkPaymentStatus(paymentId: paymentId!).then((result) {
+
+          debugPrint("Your payment id is: $widget.paymentId");
+          Paymob()
+              .checkPaymentStatus(paymentId: widget.paymentId)
+              .then((result) {
             paymentStatus = result?['payment_status'];
             paymentMessage = result?['message'];
             if (paymentStatus == "success") {
-              startPaymentProcess(paymentId);
+              startPaymentProcess(widget.paymentId);
             } else {
               backToApp();
               showCustomSnackBar(paymentMessage ?? "failed".tr);
@@ -86,7 +87,7 @@ class _PayScreenState extends State<PayScreen> {
         NavigationDelegate(
           onNavigationRequest: (request) {
             if (request.url.contains("success=true")) {
-              startPaymentProcess(paymentId);
+              startPaymentProcess(widget.paymentId);
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;

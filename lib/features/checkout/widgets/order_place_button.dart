@@ -152,7 +152,9 @@ class OrderPlaceButton extends StatelessWidget {
                   Map<String, String>? result =
                       await Paymob().getPaymobIntention(amount: orderAmount);
                   String? checkoutUrl = result?['checkout_url'];
+                  String? paymentId = result?['payment_id'];
                   Get.to(() => PayScreen(
+                      paymentId: paymentId!,
                       url: checkoutUrl!,
                       checkoutController: checkoutController,
                       carts: carts,
