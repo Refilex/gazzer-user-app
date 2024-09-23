@@ -615,12 +615,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
           required: true,
           nextFocus: _houseNode,
           controller: _streetNumberController,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'street_number_is_required'.tr;
-            }
-            return null;
-          },
         ),
         const SizedBox(height: Dimensions.paddingSizeOverLarge),
         Row(children: [
@@ -633,12 +627,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               focusNode: _houseNode,
               nextFocus: _floorNode,
               controller: _houseController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'house_is_required'.tr;
-                }
-                return null;
-              },
             ),
           ),
           const SizedBox(width: Dimensions.paddingSizeLarge),
@@ -651,12 +639,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               focusNode: _floorNode,
               inputAction: TextInputAction.done,
               controller: _floorController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'floor_is_required'.tr;
-                }
-                return null;
-              },
             ),
           ),
         ]),
@@ -734,8 +716,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       showCustomSnackBar('house_is_required'.tr);
     } else if (_floorController.text.isEmpty) {
       showCustomSnackBar('floor_is_required'.tr);
-    } else if (_streetNumberController.text.isEmpty) {
-      showCustomSnackBar('House is required'.tr);
     } else if (!isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
     } else {
@@ -749,11 +729,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         latitude: locationController.position.latitude.toString(),
         longitude: locationController.position.longitude.toString(),
         zoneId: locationController.zoneID,
-        road: _streetNumberController.text.trim(),
+        road: _streetNumberController.text,
         house: _houseController.text.trim(),
         floor: _floorController.text.trim(),
       );
-
       return addressModel;
     }
     return null;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gazzer_userapp/common/widgets/custom_button_widget.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
 import 'package:gazzer_userapp/features/address/domain/models/address_model.dart';
+import 'package:gazzer_userapp/features/address/screens/address_screen.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
 import 'package:gazzer_userapp/features/cart/domain/models/cart_model.dart';
@@ -261,8 +263,10 @@ class OrderPlaceButton extends StatelessWidget {
       bool datePicked, bool isAvailable) {
     if (isGuestLogIn &&
         checkoutController.guestAddress == null &&
-        checkoutController.orderType != 'take_away') {
+            checkoutController.orderType != 'take_away' ||
+        Get.find<AddressController>().addressList!.isEmpty) {
       showCustomSnackBar('please_setup_your_delivery_address_first'.tr);
+      Get.off(const AddressScreen());
       return true;
     } else if (isGuestLogIn &&
         checkoutController.orderType == 'take_away' &&
@@ -392,14 +396,16 @@ class OrderPlaceButton extends StatelessWidget {
       String number = checkoutController.countryDialCode! +
           guestNumberTextEditingController.text;
       finalAddress = AddressModel(
-        contactPersonName: guestNameTextEditingController.text,
-        contactPersonNumber: number,
-        address: AddressHelper.getAddressFromSharedPref()!.address!,
-        latitude: AddressHelper.getAddressFromSharedPref()!.latitude,
-        longitude: AddressHelper.getAddressFromSharedPref()!.longitude,
-        zoneId: AddressHelper.getAddressFromSharedPref()!.zoneId,
-        email: guestEmailController.text,
-      );
+          contactPersonName: guestNameTextEditingController.text,
+          contactPersonNumber: number,
+          address: AddressHelper.getAddressFromSharedPref()!.address!,
+          latitude: AddressHelper.getAddressFromSharedPref()!.latitude,
+          longitude: AddressHelper.getAddressFromSharedPref()!.longitude,
+          zoneId: AddressHelper.getAddressFromSharedPref()!.zoneId,
+          email: guestEmailController.text,
+          floor: finalAddress!.floor,
+          road: finalAddress.road,
+          house: finalAddress.house);
     }
 
     if (!isGuestLogIn && finalAddress!.contactPersonNumber == 'null') {
@@ -532,14 +538,17 @@ class OrderPlaceButton extends StatelessWidget {
       taxAmount: tax,
       cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
       road: isGuestLogIn
-          ? finalAddress.road ?? ''
-          : checkoutController.streetNumberController.text.trim(),
+          ? finalAddress.road ??
+              "${Get.find<AddressController>().addressList?[0].road}"
+          : "${Get.find<AddressController>().addressList?[0].road}",
       house: isGuestLogIn
-          ? finalAddress.house ?? ''
-          : checkoutController.houseController.text.trim(),
+          ? finalAddress.house ??
+              '${Get.find<AddressController>().addressList?[0].house}'
+          : "${Get.find<AddressController>().addressList?[0].house}",
       floor: isGuestLogIn
-          ? finalAddress.floor ?? ''
-          : checkoutController.floorController.text.trim(),
+          ? finalAddress.floor ??
+              '${Get.find<AddressController>().addressList?[0].floor}'
+          : "${Get.find<AddressController>().addressList?[0].floor}",
       dmTips: (checkoutController.orderType == 'take_away' ||
               checkoutController.subscriptionOrder ||
               checkoutController.selectedTips == 0)
@@ -572,7 +581,6 @@ class OrderPlaceButton extends StatelessWidget {
       guestEmail: isGuestLogIn ? finalAddress.email : null,
       extraPackagingAmount: extraPackagingAmount,
       deliveryCharge: deliveryCharge,
-      paymentId: "Not digital payment order",
     );
   }
 }

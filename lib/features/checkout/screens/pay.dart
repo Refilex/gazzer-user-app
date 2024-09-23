@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
@@ -184,14 +185,17 @@ class _PayScreenState extends State<PayScreen> {
         taxAmount: widget.tax,
         cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
         road: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.road ?? ''
-            : widget.checkoutController.streetNumberController.text.trim(),
+            ? AddressHelper.getAddressFromSharedPref()!.road ??
+                '${Get.find<AddressController>().addressList?[0].road}'
+            : '${Get.find<AddressController>().addressList?[0].road}',
         house: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.house ?? ''
-            : widget.checkoutController.houseController.text.trim(),
+            ? AddressHelper.getAddressFromSharedPref()!.house ??
+                '${Get.find<AddressController>().addressList?[0].house}'
+            : '${Get.find<AddressController>().addressList?[0].house}',
         floor: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.floor ?? ''
-            : widget.checkoutController.floorController.text.trim(),
+            ? AddressHelper.getAddressFromSharedPref()!.floor ??
+                '${Get.find<AddressController>().addressList?[0].floor}'
+            : '${Get.find<AddressController>().addressList?[0].floor}',
         dmTips: (widget.checkoutController.orderType == 'take_away' ||
                 widget.checkoutController.subscriptionOrder ||
                 widget.checkoutController.selectedTips == 0)

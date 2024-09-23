@@ -82,7 +82,7 @@ class PlaceOrderBodyModel {
     required int isBuyNow,
     required String? guestEmail,
     required double extraPackagingAmount,
-    required String paymentId,
+    String? paymentId,
   }) {
     _cart = cart;
     _couponDiscountAmount = couponDiscountAmount;
