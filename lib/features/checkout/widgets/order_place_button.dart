@@ -266,7 +266,7 @@ class OrderPlaceButton extends StatelessWidget {
             checkoutController.orderType != 'take_away' ||
         Get.find<AddressController>().addressList!.isEmpty) {
       showCustomSnackBar('please_setup_your_delivery_address_first'.tr);
-      Get.off(const AddressScreen());
+      Get.to(const AddressScreen());
       return true;
     } else if (isGuestLogIn &&
         checkoutController.orderType == 'take_away' &&

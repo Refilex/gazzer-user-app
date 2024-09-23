@@ -744,7 +744,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         .then((response) {
       if (response.isSuccess) {
         Get.back(result: addressModel);
-        //Get.offAllNamed(RouteHelper.getAddressRoute());
+        Get.back();
         showCustomSnackBar('new_address_added_successfully'.tr, isError: false);
       } else {
         showCustomSnackBar(response.message);
@@ -757,6 +757,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         .updateAddress(addressModel, widget.address!.id)
         .then((response) {
       if (response.isSuccess) {
+        Get.back();
         Get.back();
         showCustomSnackBar(response.message, isError: false);
       } else {
