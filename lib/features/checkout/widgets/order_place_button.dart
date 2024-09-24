@@ -262,7 +262,7 @@ class OrderPlaceButton extends StatelessWidget {
   bool _showsWarningMessage(BuildContext context, bool isGuestLogIn,
       bool datePicked, bool isAvailable) {
     if (isGuestLogIn &&
-        checkoutController.guestAddress == null &&
+            checkoutController.guestAddress == null &&
             checkoutController.orderType != 'take_away' ||
         Get.find<AddressController>().addressList!.isEmpty) {
       showCustomSnackBar('please_setup_your_delivery_address_first'.tr);
@@ -537,18 +537,9 @@ class OrderPlaceButton extends StatelessWidget {
       discountAmount: discount,
       taxAmount: tax,
       cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
-      road: isGuestLogIn
-          ? finalAddress.road ??
-              "${Get.find<AddressController>().addressList?[0].road}"
-          : "${Get.find<AddressController>().addressList?[0].road}",
-      house: isGuestLogIn
-          ? finalAddress.house ??
-              '${Get.find<AddressController>().addressList?[0].house}'
-          : "${Get.find<AddressController>().addressList?[0].house}",
-      floor: isGuestLogIn
-          ? finalAddress.floor ??
-              '${Get.find<AddressController>().addressList?[0].floor}'
-          : "${Get.find<AddressController>().addressList?[0].floor}",
+      road: "${Get.find<AddressController>().addressList?[0].road}",
+      house: "${Get.find<AddressController>().addressList?[0].house}",
+      floor: "${Get.find<AddressController>().addressList?[0].floor}",
       dmTips: (checkoutController.orderType == 'take_away' ||
               checkoutController.subscriptionOrder ||
               checkoutController.selectedTips == 0)

@@ -184,18 +184,9 @@ class _PayScreenState extends State<PayScreen> {
         discountAmount: widget.discount,
         taxAmount: widget.tax,
         cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
-        road: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.road ??
-                '${Get.find<AddressController>().addressList?[0].road}'
-            : '${Get.find<AddressController>().addressList?[0].road}',
-        house: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.house ??
-                '${Get.find<AddressController>().addressList?[0].house}'
-            : '${Get.find<AddressController>().addressList?[0].house}',
-        floor: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.floor ??
-                '${Get.find<AddressController>().addressList?[0].floor}'
-            : '${Get.find<AddressController>().addressList?[0].floor}',
+        road: '${Get.find<AddressController>().addressList?[0].road}',
+        house: '${Get.find<AddressController>().addressList?[0].house}',
+        floor: '${Get.find<AddressController>().addressList?[0].floor}',
         dmTips: (widget.checkoutController.orderType == 'take_away' ||
                 widget.checkoutController.subscriptionOrder ||
                 widget.checkoutController.selectedTips == 0)
