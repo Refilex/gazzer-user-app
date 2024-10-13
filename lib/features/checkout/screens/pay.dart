@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gazzer_userapp/common/widgets/custom_snackbar_widget.dart';
+import 'package:gazzer_userapp/features/address/controllers/address_controller.dart';
 import 'package:gazzer_userapp/features/auth/controllers/auth_controller.dart';
 import 'package:gazzer_userapp/features/cart/controllers/cart_controller.dart';
 import 'package:gazzer_userapp/features/checkout/controllers/checkout_controller.dart';
 import 'package:gazzer_userapp/features/checkout/domain/models/place_order_body_model.dart';
+import 'package:gazzer_userapp/features/checkout/domain/services/paymob.dart';
 import 'package:gazzer_userapp/features/coupon/controllers/coupon_controller.dart';
 import 'package:gazzer_userapp/features/profile/controllers/profile_controller.dart';
 import 'package:gazzer_userapp/helper/address_helper.dart';
@@ -16,6 +18,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class PayScreen extends StatefulWidget {
   final String url;
+  final String paymentId;
   final CheckoutController checkoutController;
   final List<OnlineCart> carts;
   final double totalPrice;
@@ -31,6 +34,7 @@ class PayScreen extends StatefulWidget {
   PayScreen({
     super.key,
     required this.url,
+    required this.paymentId,
     required this.checkoutController,
     required this.carts,
     required this.totalPrice,
@@ -50,55 +54,98 @@ class PayScreen extends StatefulWidget {
 
 class _PayScreenState extends State<PayScreen> {
   late final WebViewController _controller;
+  String? paymentStatus;
+  String? paymentMessage;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel("PaymobPayment", onMessageReceived: (message) {
+        if (message.message.contains('payment-status')) {
+          debugPrint('PAYMENT FINISHED');
+
+          debugPrint("Your payment id is: $widget.paymentId");
+          Paymob()
+              .checkPaymentStatus(paymentId: widget.paymentId)
+              .then((result) {
+            paymentStatus = result?['payment_status'];
+            paymentMessage = result?['message'];
+            if (paymentStatus == "success") {
+              startPaymentProcess(widget.paymentId);
+            } else {
+              backToApp();
+              showCustomSnackBar(paymentMessage ?? "failed".tr);
+            }
+          });
+        } else {
+          debugPrint(
+              'PAYMENT NOT FINISHED OR MAY BE WINDOW CLOSED OR URL CHAINED');
+        }
+      })
       ..setNavigationDelegate(
         NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) {
-            debugPrint("Navigating to: ${request.url}");
-
-            if (request.url.contains("payment_token")) {
-              startPaymentProcess();
+          onNavigationRequest: (request) {
+            if (request.url.contains("success=true")) {
+              startPaymentProcess(widget.paymentId);
               return NavigationDecision.prevent;
-            } else if (request.url.contains("payment-status") &&
-                !request.url.contains("payment_token")) {
-              backToApp();
-              showCustomSnackBar("Payment failed".tr, isError: true);
-              return NavigationDecision.prevent;
-            } else {
-              return NavigationDecision.navigate;
             }
+            return NavigationDecision.navigate;
           },
           onPageFinished: (String url) {
             debugPrint("Page finished loading: $url");
+            injectJavaScriptForSpaUrlChanges();
+            disableDetailsButton(_controller);
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint("Web resource error: ${error.description}");
           },
         ),
       )
+      ..setOnConsoleMessage((message) {
+        debugPrint(message.message);
+      })
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  void injectJavaScriptForSpaUrlChanges() {
+    // Inject JavaScript that listens for URL changes in the SPA
+    _controller.runJavaScript('''
+    (function() {
+      let lastUrl = location.href;
+      new MutationObserver(() => {
+        const currentUrl = location.href;
+        if (lastUrl !== currentUrl) {
+          lastUrl = currentUrl;
+          window.PaymobPayment.postMessage(JSON.stringify({ url: currentUrl }));
+        }
+      }).observe(document, { subtree: true, childList: true });
+    })();
+  ''');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Payment".tr),
-        leading: IconButton(
-          onPressed: () {
-            backToApp();
-          },
-          icon: const Icon(Icons.close),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("payment".tr),
+          leading: IconButton(
+            onPressed: () {
+              backToApp();
+            },
+            icon: const Icon(Icons.close),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
+        body: WebViewWidget(controller: _controller),
       ),
-      body: WebViewWidget(controller: _controller),
     );
   }
 
-  void startPaymentProcess() {
+  void startPaymentProcess(paymentId) {
     widget.checkoutController.placeOrder(
       PlaceOrderBodyModel(
         cart: widget.carts,
@@ -137,15 +184,9 @@ class _PayScreenState extends State<PayScreen> {
         discountAmount: widget.discount,
         taxAmount: widget.tax,
         cutlery: Get.find<CartController>().addCutlery ? 1 : 0,
-        road: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.road ?? ''
-            : widget.checkoutController.streetNumberController.text.trim(),
-        house: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.house ?? ''
-            : widget.checkoutController.houseController.text.trim(),
-        floor: Get.find<AuthController>().isGuestLoggedIn()
-            ? AddressHelper.getAddressFromSharedPref()!.floor ?? ''
-            : widget.checkoutController.floorController.text.trim(),
+        road: '${Get.find<AddressController>().addressList?[0].road}',
+        house: '${Get.find<AddressController>().addressList?[0].house}',
+        floor: '${Get.find<AddressController>().addressList?[0].floor}',
         dmTips: (widget.checkoutController.orderType == 'take_away' ||
                 widget.checkoutController.subscriptionOrder ||
                 widget.checkoutController.selectedTips == 0)
@@ -182,6 +223,7 @@ class _PayScreenState extends State<PayScreen> {
             : null,
         extraPackagingAmount: widget.extraPackagingAmount,
         deliveryCharge: widget.deliveryCharge,
+        paymentId: paymentId,
       ),
       widget.checkoutController.restaurant!.zoneId!,
       widget.totalPrice,
@@ -203,7 +245,7 @@ class _PayScreenState extends State<PayScreen> {
                   if (element && element.innerText.includes('View order details')) {
                       element.style.display = 'none';
                   }
-          })(); 
+          })();
             """);
   }
 }

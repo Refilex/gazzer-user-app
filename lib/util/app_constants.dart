@@ -9,8 +9,6 @@ class AppConstants {
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
   static const String webHostedUrl = 'https://carrot.refilex.com';
-  // https://carrot.refilex.com
-  // https://stackfood-admin.6amtech.com
   static const String baseUrl = 'https://carrot.refilex.com';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';

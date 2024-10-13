@@ -593,10 +593,18 @@ class ProductWidget extends StatelessWidget {
                                         ]),
                                       )
                                     : InkWell(
-                                        onTap: () =>
-                                            Get.find<ProductController>()
-                                                .productDirectlyAddToCart(
-                                                    product, context),
+                                        onTap: () {
+                                          // Get.find<ProductController>()
+                                          //       .productDirectlyAddToCart(
+                                          //           product, context);
+                                          Get.bottomSheet(
+                                            ProductBottomSheetWidget(
+                                                product: product,
+                                                isCampaign: false),
+                                            backgroundColor: Colors.transparent,
+                                            isScrollControlled: true,
+                                          );
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: Theme.of(context).cardColor,

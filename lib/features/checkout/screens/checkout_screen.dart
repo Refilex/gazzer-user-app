@@ -86,13 +86,13 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   Future<void> initCall() async {
     bool isLoggedIn = AuthHelper.isLoggedIn();
 
-    Get.find<CheckoutController>().streetNumberController.text =
-        AddressHelper.getAddressFromSharedPref()!.road ?? '';
-    Get.find<CheckoutController>().houseController.text =
-        AddressHelper.getAddressFromSharedPref()!.house ?? '';
-    Get.find<CheckoutController>().floorController.text =
-        AddressHelper.getAddressFromSharedPref()!.floor ?? '';
-    Get.find<CheckoutController>().couponController.text = '';
+    // Get.find<CheckoutController>().streetNumberController.text =
+    //     AddressHelper.getAddressFromSharedPref()!.road ?? '';
+    // Get.find<CheckoutController>().houseController.text =
+    //     AddressHelper.getAddressFromSharedPref()!.house ?? '';
+    // Get.find<CheckoutController>().floorController.text =
+    //     AddressHelper.getAddressFromSharedPref()!.floor ?? '';
+    // Get.find<CheckoutController>().couponController.text = '';
 
     Get.find<CheckoutController>().getDmTipMostTapped();
     Get.find<CheckoutController>()
