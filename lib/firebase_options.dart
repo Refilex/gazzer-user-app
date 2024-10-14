@@ -49,30 +49,28 @@ class DefaultFirebaseOptions {
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyCeaw_gVN0iQwFHyuF8pQ6PbVDmSVQw8AY',
     appId: '1:1049699819506:web:a4b5e3bedc729aab89956b',
-    messagingSenderId: '1049699819506',
-    projectId: 'stackfood-bd3ee',
-    authDomain: 'stackfood-bd3ee.firebaseapp.com',
-    storageBucket: 'stackfood-bd3ee.appspot.com',
+    messagingSenderId: '671839887516',
+    projectId: 'gazzer-app',
+    authDomain: 'gazzer-app.firebaseapp.com',
+    storageBucket: 'gazzer-app.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBScz65YN8J9YoKdtKPl4ecCB3Vkc7iNL8',
-    appId: '1:1049699819506:android:c80cf797b22c81f089956b',
-    messagingSenderId: '1049699819506',
-    projectId: 'stackfood-bd3ee',
-    storageBucket: 'stackfood-bd3ee.appspot.com',
+    apiKey: 'AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw',
+    appId: '1:671839887516:ios:bcc4b83bd99284ed798d59',
+    messagingSenderId: '671839887516',
+    projectId: 'gazzer-app',
+    storageBucket: 'gazzer-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBScz65YN8J9YoKdtKPl4ecCB3Vkc7iNL8',
-    appId: '1:1049699819506:ios:32a527342150777389956b',
-    messagingSenderId: '1049699819506',
-    projectId: 'stackfood-bd3ee',
-    storageBucket: 'stackfood-bd3ee.appspot.com',
-    androidClientId:
-        '1049699819506-8dga73jjtr36sd82cd5ijhgcu0p14p3g.apps.googleusercontent.com',
-    iosClientId:
-        '1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr.apps.googleusercontent.com',
-    iosBundleId: 'com.sixamtech.stackFood',
+    apiKey: 'AIzaSyAeUvxAgSWFBS5186lnImZC5YP6AHWLeF4',
+    appId: '1:671839887516:ios:bcc4b83bd99284ed798d59',
+    messagingSenderId: '671839887516',
+    projectId: 'gazzer-app',
+    storageBucket: 'gazzer-app.appspot.com',
+    androidClientId:  '671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com',
+    iosClientId:  '671839887516-mdar4q19ic4lo5kq756cs25tllmaavs1.apps.googleusercontent.com',
+    iosBundleId: 'com.refilex.gazzer.userapp',
   );
 }

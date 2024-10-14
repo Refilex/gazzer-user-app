@@ -12,7 +12,12 @@
           "package_name": "com.refilex.gazzer.deliveryapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "671839887516-c7d3fu7cphtjnfv8tmbtdaedgtepe009.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.refilex.gazzer.deliveryapp"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,12 @@
           "package_name": "com.refilex.gazzer.userapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw"
@@ -39,7 +61,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "671839887516-c7d3fu7cphtjnfv8tmbtdaedgtepe009.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.refilex.gazzer.deliveryapp"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +84,12 @@
           "package_name": "com.refilex.gazzer.vendorapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw"
@@ -58,7 +97,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "671839887516-c7d3fu7cphtjnfv8tmbtdaedgtepe009.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.refilex.gazzer.deliveryapp"
+              }
+            }
+          ]
         }
       }
     }
