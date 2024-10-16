@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:671839887516:android:943c43dfaadfac33798d59",
+        "mobilesdk_app_id": "1:671839887516:android:d49c9933f86e73f8798d59",
         "android_client_info": {
-          "package_name": "com.refilex.gazzer.deliveryapp"
+          "package_name": "com.refilex.gazzer.delivery"
         }
       },
       "oauth_client": [
@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "671839887516-c7d3fu7cphtjnfv8tmbtdaedgtepe009.apps.googleusercontent.com",
+              "client_id": "671839887516-76hqbc7u2ndb4hkeh62v8u1euurf5824.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.refilex.gazzer.deliveryapp"
+                "bundle_id": "com.refilex.gazzer.user"
               }
             }
           ]
@@ -43,9 +43,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:671839887516:android:2cd563c7493816c8798d59",
+        "mobilesdk_app_id": "1:671839887516:android:1f9fd48dbf2401c4798d59",
         "android_client_info": {
-          "package_name": "com.refilex.gazzer.userapp"
+          "package_name": "com.refilex.gazzer.user"
         }
       },
       "oauth_client": [
@@ -67,10 +67,10 @@
               "client_type": 3
             },
             {
-              "client_id": "671839887516-c7d3fu7cphtjnfv8tmbtdaedgtepe009.apps.googleusercontent.com",
+              "client_id": "671839887516-76hqbc7u2ndb4hkeh62v8u1euurf5824.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.refilex.gazzer.deliveryapp"
+                "bundle_id": "com.refilex.gazzer.user"
               }
             }
           ]
@@ -79,9 +79,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:671839887516:android:d4948b23c25f791f798d59",
+        "mobilesdk_app_id": "1:671839887516:android:fb2795da83180a82798d59",
         "android_client_info": {
-          "package_name": "com.refilex.gazzer.vendorapp"
+          "package_name": "com.refilex.gazzer.vendor"
         }
       },
       "oauth_client": [
@@ -103,10 +103,10 @@
               "client_type": 3
             },
             {
-              "client_id": "671839887516-c7d3fu7cphtjnfv8tmbtdaedgtepe009.apps.googleusercontent.com",
+              "client_id": "671839887516-76hqbc7u2ndb4hkeh62v8u1euurf5824.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.refilex.gazzer.deliveryapp"
+                "bundle_id": "com.refilex.gazzer.user"
               }
             }
           ]

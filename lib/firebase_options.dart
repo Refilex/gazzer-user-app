@@ -71,6 +71,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'gazzer-app.appspot.com',
     androidClientId:  '671839887516-4l42p8bd1b3inrmsc2qcb7h22hub47jk.apps.googleusercontent.com',
     iosClientId:  '671839887516-mdar4q19ic4lo5kq756cs25tllmaavs1.apps.googleusercontent.com',
-    iosBundleId: 'com.refilex.gazzer.userapp',
+    iosBundleId: 'com.refilex.gazzer.user',
   );
 }
