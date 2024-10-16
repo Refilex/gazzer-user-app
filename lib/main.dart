@@ -53,7 +53,7 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
       apiKey: 'AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw',
-      appId: '1:671839887516:android:2cd563c7493816c8798d59',
+      appId: '1:671839887516:web:e833f8876cf34767798d59',
       messagingSenderId: '671839887516',
       projectId: 'gazzer-app',
     ));
@@ -62,7 +62,7 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
         apiKey: 'AIzaSyCfxGdnL_KhgbNDY7mFQh-tHHBqIaxisYw',
-        appId: '1:671839887516:android:2cd563c7493816c8798d59',
+        appId: '1:671839887516:ios:618e228fb0241c82798d59',
         messagingSenderId: '671839887516',
         projectId: 'gazzer-app',
       ),
