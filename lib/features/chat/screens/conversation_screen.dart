@@ -260,7 +260,7 @@ class _ConversationScreenState extends State<ConversationScreen>
                                                     fontSize: Dimensions
                                                         .fontSizeDefault),
                                             tabs: [
-                                              Tab(text: 'restaurants'.tr),
+                                              // Tab(text: 'restaurants'.tr),
                                               Tab(text: 'delivery_man'.tr),
                                             ],
                                             onTap: (int index) {

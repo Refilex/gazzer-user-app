@@ -98,17 +98,6 @@ class AllRestaurantFilterWidget extends StatelessWidget {
             isSelected: restaurantController.discount == 1,
           ),
           const SizedBox(width: Dimensions.paddingSizeSmall),
-          RestaurantsFilterButtonWidget(
-            buttonText: 'veg'.tr,
-            onTap: () => restaurantController.setVeg(),
-            isSelected: restaurantController.veg == 1,
-          ),
-          const SizedBox(width: Dimensions.paddingSizeSmall),
-          RestaurantsFilterButtonWidget(
-            buttonText: 'non_veg'.tr,
-            onTap: () => restaurantController.setNonVeg(),
-            isSelected: restaurantController.nonVeg == 1,
-          ),
           const SizedBox(width: Dimensions.paddingSizeSmall),
           ResponsiveHelper.isDesktop(context)
               ? const FilterViewWidget()
